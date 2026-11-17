@@ -22,7 +22,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 
-    <link rel="stylesheet" href="styles.css?v=1.0.0" />
+    <link rel="stylesheet" href="styles.css?v=1.0.1" />
     <title>Project Nox — Central Oficial do Ecossistema</title>
   </head>
   <body>
@@ -67,7 +67,7 @@
           <div class="nav-anchors">
             <a class="nav-anchor" href="#ecossistema">Ecossistema</a>
             <a class="nav-anchor" href="#instalacao">Instalação</a>
-            <a class="nav-anchor" href="#automacoes">Automações</a>
+            <a class="nav-anchor" href="#arquitetura">Arquitetura</a>
             <a class="nav-anchor" href="#repositorios">Repositórios</a>
             <a class="nav-anchor" href="#comunidade">Comunidade</a>
           </div>
@@ -471,6 +471,44 @@
           </div>
         </section>
 
+        <!-- Tecnologias, Arquitetura & Roadmap -->
+        <section id="arquitetura" aria-labelledby="arquitetura-title">
+          <div class="section-header">
+            <span class="section-eyebrow">Stack &amp; Evolução</span>
+            <h2 class="section-title" id="arquitetura-title">Tecnologias, arquitetura e status do ecossistema</h2>
+            <p class="section-desc">
+              Visão transparente da infraestrutura real em operação e da separação clara entre recursos em produção, frentes em desenvolvimento e objetivos planejados.
+            </p>
+          </div>
+
+          <div class="grid-2" style="margin-bottom:20px;">
+            <article class="card">
+              <div class="card-head">
+                <h3>Stack de Produção</h3>
+                <span class="pill green">Em Operação</span>
+              </div>
+              <ul class="feature-list">
+                <li><strong>Frontend &amp; Edge:</strong> SvelteKit (SSR no Cloudflare Workers) e GitHub Pages estático para a Central Oficial e o Tracker.</li>
+                <li><strong>Banco de Dados &amp; Pooling:</strong> YugabyteDB / YSQL (Sandbox Aeon) com Cloudflare Hyperdrive e driver <code>pg</code>.</li>
+                <li><strong>Mídia &amp; Extensões:</strong> Armazenamento particionado via Telegram Bot API e extensões Kotlin/Gradle em Protobuf v2 (<code>index.pb</code>).</li>
+                <li><strong>Automações:</strong> GitHub Actions para compilação/assinatura de APKs, triagem de issues e sync do Tracker a cada 15 minutos.</li>
+              </ul>
+            </article>
+
+            <article class="card">
+              <div class="card-head">
+                <h3>Status e Desenvolvimento Futuro</h3>
+                <span class="pill gold">Transparência</span>
+              </div>
+              <ul class="feature-list">
+                <li><strong>Em Produção:</strong> Plataforma web de mangá, catálogos de mangá (Mihon) e anime (Aniyomi), Importer 24/7, Central de Tickets, Tracker e Central Oficial.</li>
+                <li><strong>Em Desenvolvimento:</strong> Personalização e aprimoramento contínuo dos catálogos de extensões de mangá e anime e evolução da skill <code>nox-extension-developer</code>.</li>
+                <li><strong>Planejado:</strong> Expansão da documentação técnica unificada, guias de contribuição e melhorias contínuas na centralização do ecossistema.</li>
+              </ul>
+            </article>
+          </div>
+        </section>
+
         <!-- Diretório Completo de Repositórios & Documentação -->
         <section id="repositorios" aria-labelledby="repos-title">
           <div class="section-header">
@@ -641,6 +679,9 @@
             </div>
 
             <div class="card" style="background:rgba(6,7,12,0.75);">
+              <div class="banner-frame" style="margin-bottom:4px;">
+                <img src="assets/nox-entre-no-servidor.png" alt="Entre no servidor oficial do Project Nox" width="1280" height="640" loading="lazy" />
+              </div>
               <h3>Conecte-se e contribua</h3>
               <p>Participe das comunidades oficiais para tirar dúvidas, acompanhar novidades e colaborar com o ecossistema.</p>
               <div class="card-actions" style="flex-direction:column;">
