@@ -1,6 +1,23 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Project Nox — endereço atualizado</title><script>
-const projects = new Set(['project-nox-tracker', 'project-nox-scan-staff']);
-const first = location.pathname.split('/')[1];
-if (projects.has(first)) location.replace('https://projectnox-org.github.io' + location.pathname + location.search + location.hash);
-</script></head><body><main><h1>Endereço atualizado</h1><p>Acesse a <a href="https://github.com/ProjectNox-org">organização Project Nox</a>.</p></main></body></html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Nox — Página não encontrada</title>
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="stylesheet" href="/styles.css?v=1.0.0" />
+  </head>
+  <body>
+    <main style="min-height:100vh;display:grid;place-items:center;padding:24px;">
+      <section class="card" style="max-width:520px;text-align:center;align-items:center;">
+        <img src="/assets/logo-header.png" alt="Project Nox" width="56" height="56" />
+        <h1>Página não encontrada</h1>
+        <p>O endereço acessado não existe na Central Oficial do Project Nox.</p>
+        <div class="card-actions" style="justify-content:center;">
+          <a class="button primary" href="https://projectnox-org.github.io/">Ir para Central Oficial</a>
+          <a class="button gold" href="https://projectnox-org.github.io/project-nox-tracker/">Abrir Tracker Oficial</a>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
