@@ -3,13 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Central oficial do ecossistema Project Nox: plataforma web de mangás, extensões para Mihon e Aniyomi, tutoriais de instalação, automações, documentação, Tracker e comunidade." />
-    <meta property="og:title" content="Project Nox — Central Oficial do Ecossistema" />
-    <meta property="og:description" content="Plataforma web de leitura, extensões de mangá e anime, tutoriais, ferramentas open source e acompanhamento de tickets em tempo real." />
+    <meta
+      name="description"
+      content="Central Oficial do Project Nox: iniciativa independente de tecnologia, desenvolvimento de software e código aberto sob GNU AGPL-3.0, fundada por Awerkori."
+    />
+    <meta property="og:title" content="Project Nox — Central Oficial" />
+    <meta
+      property="og:description"
+      content="Iniciativa independente de tecnologia e código aberto dedicada à criação de projetos autorais, plataformas digitais, ferramentas e automações."
+    />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://projectnox-org.github.io/" />
-    <meta property="og:image" content="https://projectnox-org.github.io/assets/nox-banner.png" />
-    <meta name="theme-color" content="#06070c" />
+    <meta property="og:image" content="https://projectnox-org.github.io/assets/brand/nox-emblem.webp" />
+    <meta name="theme-color" content="#04060d" />
 
     <!-- Favicons -->
     <link rel="icon" href="favicon.ico" sizes="any" />
@@ -20,700 +26,879 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
 
-    <link rel="stylesheet" href="styles.css?v=1.0.1" />
-    <title>Project Nox — Central Oficial do Ecossistema</title>
+    <link rel="stylesheet" href="styles.css?v=3.0.0" />
+    <title>Project Nox — Central Oficial</title>
   </head>
   <body>
     <a class="skip-link" href="#conteudo-principal">Pular para o conteúdo</a>
-
-    <!-- Shared Particle Canvas & Ambient Atmospheric System -->
-    <div class="particle-system" id="particle-system" aria-hidden="true">
-      <div class="ambient-mesh"></div>
-      <div class="ambient-glow glow-top"></div>
-      <div class="ambient-glow glow-side"></div>
-      <div class="ambient-glow glow-bottom-left"></div>
-      <canvas class="particle-canvas"></canvas>
-      <div class="night-vignette"></div>
+    <div class="cosmic-backdrop" aria-hidden="true">
+      <div class="cosmic-orb"></div>
     </div>
 
-    <div class="app-content">
-      <!-- Unified Site Header -->
+    <div class="app-shell">
+      <!-- 1. Cabeçalho Institucional -->
       <header class="site-header">
-        <a class="brand" href="./" aria-label="Project Nox, Central Oficial">
-          <div class="brand-symbol-wrap">
-            <img src="assets/logo-header.png" alt="Project Nox" class="header-symbol" width="32" height="32" />
-          </div>
-          <div class="brand-text">
-            <div class="brand-title-row">
-              <span class="brand-project">PROJECT</span>
-              <span class="brand-nox">NOX</span>
-              <span class="brand-badge">CENTRAL OFICIAL</span>
+        <div class="container header-inner">
+          <a class="brand" href="./" aria-label="Project Nox, Central Oficial">
+            <span class="brand-mark">
+              <img src="assets/brand/nox-emblem.webp" alt="" width="30" height="30" />
+            </span>
+            <span class="brand-text">
+              <span class="brand-title-row">
+                <span class="brand-name">PROJECT NOX</span>
+                <span class="brand-badge">CENTRAL OFICIAL</span>
+              </span>
+              <span class="brand-sub">Tecnologia &amp; Código Aberto</span>
+            </span>
+          </a>
+
+          <button
+            class="nav-toggle"
+            id="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="nav-links"
+            aria-label="Abrir menu de navegação"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+
+          <nav class="nav-links" id="nav-links" aria-label="Navegação principal">
+            <div class="nav-anchors">
+              <a class="nav-anchor" href="#historia">História</a>
+              <a class="nav-anchor" href="#transparencia">Código Aberto</a>
+              <a class="nav-anchor" href="#repositorios">Repositórios</a>
+              <a class="nav-anchor" href="#suporte">Suporte</a>
+              <a class="nav-anchor" href="#comunidade">Comunidade</a>
             </div>
-            <span class="brand-sub">Ecossistema & Documentação</span>
-          </div>
-        </a>
-
-        <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links" aria-label="Abrir menu de navegação">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
-
-        <nav class="nav-links" id="nav-links" aria-label="Navegação principal">
-          <div class="nav-anchors">
-            <a class="nav-anchor" href="#ecossistema">Ecossistema</a>
-            <a class="nav-anchor" href="#instalacao">Instalação</a>
-            <a class="nav-anchor" href="#arquitetura">Arquitetura</a>
-            <a class="nav-anchor" href="#repositorios">Repositórios</a>
-            <a class="nav-anchor" href="#comunidade">Comunidade</a>
-          </div>
-
-          <a class="nav-portal-link" href="https://projectnox-org.github.io/project-nox-tracker/">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-            </svg>
-            <span>Tracker Oficial</span>
-          </a>
-
-          <a class="community-link fluxer-link" href="https://web.canary.fluxer.app/invite/q456UCVt" target="_blank" rel="noopener noreferrer" aria-label="Entrar no Fluxer do Project Nox">
-            <svg class="community-icon" viewBox="90 120 332 272" aria-hidden="true" focusable="false">
-              <path d="M187.53 266.057C171.987 266.057 157.206 269.562 143.187 276.571C129.321 283.581 118.044 294.781 109.359 310.171C103.743 320.3 100.041 332.574 98.2529 346.993C96.5986 360.334 107.829 371.2 121.271 371.2C135.049 371.2 145.336 359.626 148.673 346.259C150.564 338.68 153.612 332.67 157.815 328.229C165.891 319.695 176.101 315.429 188.444 315.429C196.673 315.429 204.216 317.486 211.073 321.6C217.93 325.562 226.844 332.343 237.815 341.943C254.577 356.724 269.359 367.467 282.159 374.171C294.959 380.724 309.13 384 324.673 384C340.216 384 354.997 380.495 369.016 373.486C383.035 366.476 394.387 355.276 403.073 339.886C408.811 329.718 412.521 317.389 414.202 302.899C415.745 289.597 404.498 278.857 391.106 278.857C377.243 278.858 366.904 290.561 363.218 303.927C361.421 310.442 358.706 315.952 355.073 320.457C347.454 329.905 337.016 334.629 323.759 334.629C315.53 334.629 308.063 332.647 301.359 328.686C294.806 324.571 285.816 317.714 274.387 308.114C257.473 293.943 242.615 283.429 229.815 276.571C217.168 269.562 203.073 266.057 187.53 266.057Z" fill="currentColor"/>
-              <path d="M187.53 128C171.987 128 157.206 131.505 143.187 138.514C129.321 145.524 118.044 156.724 109.359 172.114C103.743 182.243 100.041 194.517 98.2529 208.935C96.5985 222.276 107.829 233.142 121.271 233.143C135.049 233.143 145.336 221.569 148.673 208.202C150.564 200.623 153.612 194.613 157.815 190.171C165.891 181.638 176.101 177.371 188.444 177.371C196.673 177.371 204.216 179.429 211.073 183.543C217.93 187.505 226.844 194.286 237.815 203.886C254.577 218.667 269.359 229.41 282.159 236.114C294.959 242.667 309.13 245.943 324.673 245.943C340.216 245.943 354.997 242.438 369.016 235.429C383.035 228.419 394.387 217.219 403.073 201.829C408.811 191.661 412.521 179.332 414.202 164.842C415.745 151.539 404.498 140.8 391.106 140.8C377.243 140.8 366.904 152.504 363.218 165.87C361.421 172.385 358.706 177.895 355.073 182.4C347.454 191.848 337.016 196.571 323.759 196.571C315.53 196.571 308.063 194.59 301.359 190.629C294.806 186.514 285.816 179.657 274.387 170.057C257.473 155.886 242.615 145.371 229.815 138.514C217.168 131.505 203.073 128 187.53 128Z" fill="currentColor"/>
-            </svg>
-            <span>Fluxer</span>
-          </a>
-
-          <a class="community-link discord-link" href="https://discord.com/invite/qNAMYUEmGj" target="_blank" rel="noopener noreferrer" aria-label="Entrar no Discord do Project Nox">
-            <svg class="community-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M19.54 4.46A16.5 16.5 0 0 0 15.4 3.2l-.5 1.02a15.3 15.3 0 0 0-5.8 0L8.6 3.2a16.5 16.5 0 0 0-4.14 1.26C1.84 8.4 1.13 12.24 1.48 16.03A16.65 16.65 0 0 0 6.56 18.6l1.23-1.68a10.33 10.33 0 0 1-1.94-.93l.47-.36a11.92 11.92 0 0 0 11.36 0l.47.36c-.62.37-1.27.69-1.94.93l1.23 1.68a16.62 16.62 0 0 0 5.08-2.57c.41-4.4-.7-8.2-2.98-11.57ZM8.68 13.7c-1.1 0-2-1.01-2-2.25s.88-2.25 2-2.25 2.02 1.01 2 2.25c0 1.24-.88 2.25-2 2.25Zm6.64 0c-1.1 0-2-1.01-2-2.25s.88-2.25 2-2.25 2.02 1.01 2 2.25c0 1.24-.88 2.25-2 2.25Z" fill="currentColor"/>
-            </svg>
-            <span>Discord</span>
-          </a>
-
-          <a class="button primary" href="https://github.com/ProjectNox-org/project-nox-requests/issues/new/choose" target="_blank" rel="noopener noreferrer">
-            Abrir Ticket
-          </a>
-        </nav>
+            <a
+              class="button primary sm"
+              href="https://github.com/ProjectNox-org/project-nox-requests/issues/new/choose"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Abrir ticket de extensão
+            </a>
+          </nav>
+        </div>
       </header>
 
       <main id="conteudo-principal">
-        <!-- Hero Section -->
-        <section class="hero" aria-labelledby="hero-title">
-          <div>
-            <div class="hero-eyebrow">Organização Oficial · Ecossistema Open Source</div>
-            <h1 id="hero-title">Project Nox</h1>
-            <p class="hero-subtitle">
-              Ecossistema gratuito e de código aberto sob licença AGPL-3.0 que reúne plataforma web de leitura de mangás, extensões oficiais para Mihon e Aniyomi, pipelines automatizados e acompanhamento transparente de demandas da comunidade.
-            </p>
-            <div class="hero-actions">
-              <a class="button primary" href="https://manga.project-nox-awerkori.workers.dev" target="_blank" rel="noopener noreferrer">
-                Acessar Leitor Web
-              </a>
-              <a class="button gold" href="https://projectnox-org.github.io/project-nox-tracker/">
-                Abrir Tracker Oficial
-              </a>
-              <a class="button secondary" href="#instalacao">
-                Instalar Extensões
-              </a>
-            </div>
-            <div class="hero-meta">
-              <span class="hero-meta-item"><span class="hero-meta-dot" aria-hidden="true"></span> Fundado por Awerkori</span>
-              <span class="hero-meta-item">Licença GNU AGPL-3.0</span>
-              <span class="hero-meta-item">Foco em Mangá, Anime & Ferramentas</span>
-            </div>
-          </div>
-
-          <div class="hero-visual">
-            <div class="banner-frame">
-              <img src="assets/nox-banner.png" alt="Project Nox — plataforma web, extensões Mihon e Aniyomi e repositórios oficiais" width="1280" height="640" />
-            </div>
-            <div class="quick-stats" aria-label="Resumo da organização">
-              <div class="quick-stat">
-                <span class="quick-stat-val">10</span>
-                <span class="quick-stat-label">Repositórios Ativos</span>
-              </div>
-              <div class="quick-stat">
-                <span class="quick-stat-val">index.pb</span>
-                <span class="quick-stat-label">Catálogo Protobuf v2</span>
-              </div>
-              <div class="quick-stat">
-                <span class="quick-stat-val">24/7</span>
-                <span class="quick-stat-label">Ingestão & Sync</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- História & Objetivos -->
-        <section id="historia" aria-labelledby="historia-title">
-          <div class="section-header">
-            <span class="section-eyebrow">Propósito & Arquitetura</span>
-            <h2 class="section-title" id="historia-title">História e objetivos do Project Nox</h2>
-            <p class="section-desc">
-              Criado por Awerkori, o Project Nox nasceu para oferecer uma infraestrutura confiável, aberta e bem documentada para leitura de mangás e consumo de animes pela comunidade lusófona.
-            </p>
-          </div>
-          <div class="grid-3">
-            <article class="card">
-              <div class="card-head">
-                <div class="card-icon" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-                </div>
-                <span class="pill">Código Aberto</span>
-              </div>
-              <h3>Transparência AGPL-3.0</h3>
-              <p>Todo o código-fonte das extensões, da plataforma web, do daemon de ingestão e das automações é público e auditável na organização ProjectNox-org.</p>
-            </article>
-
-            <article class="card">
-              <div class="card-head">
-                <div class="card-icon gold" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                </div>
-                <span class="pill gold">Desempenho</span>
-              </div>
-              <h3>Entrega no Edge e Protobuf</h3>
-              <p>Leitura web renderizada no Edge via Cloudflare Workers e catálogos móveis distribuídos em Protobuf binário (<code>index.pb</code>) com legado JSON sincronizado.</p>
-            </article>
-
-            <article class="card">
-              <div class="card-head">
-                <div class="card-icon" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                </div>
-                <span class="pill green">Comunidade</span>
-              </div>
-              <h3>Priorização por Demanda</h3>
-              <p>Solicitações de novas extensões, correções de bugs e mudanças de domínio são organizadas via GitHub Issues e acompanhadas em tempo real no Tracker.</p>
-            </article>
-          </div>
-        </section>
-
-        <!-- Ecossistema Principal -->
-        <section id="ecossistema" aria-labelledby="ecossistema-title">
-          <div class="section-header">
-            <span class="section-eyebrow">Pilares Oficiais</span>
-            <h2 class="section-title" id="ecossistema-title">Plataformas e catálogos do ecossistema</h2>
-            <p class="section-desc">
-              Cada projeto possui responsabilidade bem definida e repositório dedicado dentro da organização ProjectNox-org.
-            </p>
-          </div>
-
-          <div class="grid-2">
-            <article class="card">
-              <div class="card-head">
-                <div class="card-icon gold" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-                </div>
-                <span class="pill gold">Plataforma Web</span>
-              </div>
-              <h3>Project Nox · Plataforma de Mangá</h3>
-              <p>Leitor web oficial em SvelteKit com SSR no Edge via Cloudflare Workers, persistência em YugabyteDB (YSQL) via Hyperdrive e entrega de mídia particionada via Telegram Bot API.</p>
-              <ul class="feature-list">
-                <li>Leitura contínua (cascata vertical) e página por página com atalhos de teclado.</li>
-                <li>Sincronização de progresso, histórico na nuvem, conquistas e sistema integrado de Scans/Staff.</li>
-                <li>Espelho alternativo disponível em <code>project-nox-manga.project-nox-awerkori.workers.dev</code>.</li>
-              </ul>
-              <div class="card-actions">
-                <a class="button primary" href="https://manga.project-nox-awerkori.workers.dev" target="_blank" rel="noopener noreferrer">Abrir Leitor Web</a>
-                <a class="button secondary" href="https://github.com/ProjectNox-org/project-nox-manga" target="_blank" rel="noopener noreferrer">Código-fonte</a>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="card-head">
-                <div class="card-icon" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-                </div>
-                <span class="pill">Mihon & Forks</span>
-              </div>
-              <h3>Extensões de Mangá</h3>
-              <p>Catálogo compilado e assinado para leitores móveis compatíveis (Mihon e forks), com pipeline automatizado a partir das fontes em Kotlin em <code>manga-fonte-extensoes</code>.</p>
-              <ul class="feature-list">
-                <li>Formato principal <code>index.pb</code> (Protobuf v2) para carregamento rápido e menor consumo de dados.</li>
-                <li>Compatibilidade mantida com <code>index.json</code> e <code>index.min.json</code>.</li>
-                <li>APKs assinados digitalmente com chave consistente para atualizações transparentes.</li>
-              </ul>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/manga-extensoes" target="_blank" rel="noopener noreferrer">Distribuição</a>
-                <a class="button secondary" href="https://github.com/ProjectNox-org/manga-fonte-extensoes" target="_blank" rel="noopener noreferrer">Código-fonte Kotlin</a>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="card-head">
-                <div class="card-icon" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                </div>
-                <span class="pill">Aniyomi & Forks</span>
-              </div>
-              <h3>Extensões de Anime</h3>
-              <p>Catálogo oficial para Aniyomi e forks com extractors embutidos para streams HLS/M3U8, resoluções selecionáveis e suporte completo a esquema Protobuf v2 (incluindo <code>isTorrent</code> e <code>sources</code>).</p>
-              <ul class="feature-list">
-                <li>Catálogo principal em <code>index.pb</code> com sincronização automática de <code>index.json</code> e <code>index.min.json</code>.</li>
-                <li>Compilação, assinatura e publicação automatizadas via <code>anime-fonte-extensoes</code>.</li>
-                <li>Metadados de repositório e chave de assinatura expostos em <code>repo.json</code>.</li>
-              </ul>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/anime-extensoes" target="_blank" rel="noopener noreferrer">Distribuição</a>
-                <a class="button secondary" href="https://github.com/ProjectNox-org/anime-fonte-extensoes" target="_blank" rel="noopener noreferrer">Código-fonte Kotlin</a>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="card-head">
-                <div class="card-icon gold" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                </div>
-                <span class="pill gold">Painel ao Vivo</span>
-              </div>
-              <h3>Project Nox · Tracker Oficial</h3>
-              <p>Painel público interativo que sincroniza automaticamente todas as solicitações abertas e fechadas de <code>project-nox-requests</code> com filtros, busca e estatísticas de resolução.</p>
-              <ul class="feature-list">
-                <li>Atualização automática a cada 15 minutos via GitHub Actions (<code>update-data.yml</code>).</li>
-                <li>Separação clara entre estado nativo (Aberto/Fechado) e status editorial.</li>
-                <li>Ordenação por demanda comunitária (reações 👍), data de criação e atualização.</li>
-              </ul>
-              <div class="card-actions">
-                <a class="button gold" href="https://projectnox-org.github.io/project-nox-tracker/">Acessar Tracker</a>
-                <a class="button secondary" href="https://github.com/ProjectNox-org/project-nox-tracker" target="_blank" rel="noopener noreferrer">Repositório</a>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <!-- Instalação & Tutoriais -->
-        <section id="instalacao" aria-labelledby="instalacao-title">
-          <div class="section-header">
-            <span class="section-eyebrow">Guia Prático</span>
-            <h2 class="section-title" id="instalacao-title">Instalação, configuração e tutoriais</h2>
-            <p class="section-desc">
-              Adicione os repositórios oficiais de extensões no seu aplicativo em segundos. Use o formato <strong>Protobuf (<code>index.pb</code>)</strong> sempre que seu aplicativo suportar; os formatos JSON permanecem sincronizados para clientes legados.
-            </p>
-          </div>
-
-          <div class="install-shell">
-            <div class="tab-bar" role="tablist" aria-label="Selecionar tipo de extensão">
-              <button class="tab-btn" role="tab" id="tab-manga" aria-selected="true" aria-controls="panel-manga" type="button">Mangá (Mihon &amp; Forks)</button>
-              <button class="tab-btn" role="tab" id="tab-anime" aria-selected="false" aria-controls="panel-anime" tabindex="-1" type="button">Anime (Aniyomi &amp; Forks)</button>
-            </div>
-
-            <!-- Panel Mangá -->
-            <div class="tab-panel" id="panel-manga" role="tabpanel" aria-labelledby="tab-manga">
-              <div class="install-grid">
-                <div class="url-list">
-                  <div class="url-item recommended">
-                    <div class="url-label-row">
-                      <span class="url-label">Protobuf (<code>index.pb</code>)</span>
-                      <span class="pill green">Recomendado</span>
-                    </div>
-                    <div class="copy-row">
-                      <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.pb</code>
-                      <button class="copy-btn" type="button" data-copy="https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.pb">Copiar</button>
-                    </div>
-                  </div>
-
-                  <div class="url-item">
-                    <div class="url-label-row">
-                      <span class="url-label">JSON Legado (<code>index.json</code>)</span>
-                      <span class="pill">Compatibilidade</span>
-                    </div>
-                    <div class="copy-row">
-                      <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.json</code>
-                      <button class="copy-btn" type="button" data-copy="https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.json">Copiar</button>
-                    </div>
-                  </div>
-
-                  <div class="url-item">
-                    <div class="url-label-row">
-                      <span class="url-label">JSON Compacto (<code>index.min.json</code>)</span>
-                      <span class="pill">Legado Compacto</span>
-                    </div>
-                    <div class="copy-row">
-                      <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.min.json</code>
-                      <button class="copy-btn" type="button" data-copy="https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.min.json">Copiar</button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <a class="button primary" href="tachiyomi://add-repo?url=https%3A%2F%2Fraw.githubusercontent.com%2FProjectNox-org%2Fmanga-extensoes%2Frepo%2Findex.min.json">
-                      Adicionar Automaticamente no Celular (Android)
-                    </a>
-                  </div>
-                </div>
-
-                <div class="steps-box">
-                  <h4>Como configurar no Mihon ou fork</h4>
-                  <ol class="step-list">
-                    <li>Abra o aplicativo e acesse <strong>Mais</strong> → <strong>Configurações</strong> → <strong>Navegar</strong>.</li>
-                    <li>Entre em <strong>Repositórios de extensões</strong> e toque em <strong>Adicionar</strong>.</li>
-                    <li>Cole a URL <code>index.pb</code> (ou use o botão de adição automática no navegador do Android).</li>
-                    <li>Volte à aba <strong>Extensões</strong>, puxe para atualizar e instale as fontes desejadas.</li>
-                  </ol>
-                </div>
+        <!-- 2. Banner Oficial Animado & 3. Apresentação do Project Nox -->
+        <section class="hero-stage" aria-labelledby="hero-title">
+          <div class="container">
+            <div class="banner-showcase">
+              <div class="banner-inner">
+                <picture>
+                  <source media="(max-width: 767px)" srcset="assets/brand/nox-hero-mobile-dark.svg" />
+                  <img
+                    src="assets/brand/nox-hero-dark.svg"
+                    alt="Project Nox — Iniciativa independente de tecnologia e código aberto"
+                    width="1200"
+                    height="300"
+                  />
+                </picture>
               </div>
             </div>
 
-            <!-- Panel Anime -->
-            <div class="tab-panel" id="panel-anime" role="tabpanel" aria-labelledby="tab-anime" hidden>
-              <div class="install-grid">
-                <div class="url-list">
-                  <div class="url-item recommended">
-                    <div class="url-label-row">
-                      <span class="url-label">Protobuf (<code>index.pb</code>)</span>
-                      <span class="pill green">Recomendado</span>
-                    </div>
-                    <div class="copy-row">
-                      <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.pb</code>
-                      <button class="copy-btn" type="button" data-copy="https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.pb">Copiar</button>
-                    </div>
-                  </div>
-
-                  <div class="url-item">
-                    <div class="url-label-row">
-                      <span class="url-label">JSON Legado (<code>index.json</code>)</span>
-                      <span class="pill">Compatibilidade</span>
-                    </div>
-                    <div class="copy-row">
-                      <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.json</code>
-                      <button class="copy-btn" type="button" data-copy="https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.json">Copiar</button>
-                    </div>
-                  </div>
-
-                  <div class="url-item">
-                    <div class="url-label-row">
-                      <span class="url-label">JSON Compacto (<code>index.min.json</code>)</span>
-                      <span class="pill">Legado Compacto</span>
-                    </div>
-                    <div class="copy-row">
-                      <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.min.json</code>
-                      <button class="copy-btn" type="button" data-copy="https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.min.json">Copiar</button>
-                    </div>
-                  </div>
-
-                  <div>
-                    <a class="button primary" href="aniyomi://add-repo?url=https%3A%2F%2Fraw.githubusercontent.com%2FProjectNox-org%2Fanime-extensoes%2Frepo%2Findex.min.json">
-                      Adicionar Automaticamente no Celular (Android)
-                    </a>
-                  </div>
-                </div>
-
-                <div class="steps-box">
-                  <h4>Como configurar no Aniyomi ou fork</h4>
-                  <ol class="step-list">
-                    <li>Abra o Aniyomi e vá em <strong>Mais</strong> → <strong>Configurações</strong> → <strong>Navegar</strong>.</li>
-                    <li>Toque em <strong>Repositórios de extensões de anime</strong> → <strong>Adicionar</strong>.</li>
-                    <li>Cole a URL <code>index.pb</code> (ou toque no botão automático acima no Android).</li>
-                    <li>Atualize a lista de extensões de anime e confie nos APKs assinados do Project Nox.</li>
-                  </ol>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Importer, Bots & Automações -->
-        <section id="automacoes" aria-labelledby="automacoes-title">
-          <div class="section-header">
-            <span class="section-eyebrow">Infraestrutura & Ferramentas</span>
-            <h2 class="section-title" id="automacoes-title">Importer, automações e ferramentas para devs</h2>
-            <p class="section-desc">
-              Serviços de segundo plano, pipelines de compilação contínua e ferramentas de inteligência artificial que mantêm o ecossistema atualizado.
-            </p>
-          </div>
-
-          <div class="grid-3">
-            <article class="card">
-              <div class="card-head">
-                <div class="card-icon" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-                </div>
-                <span class="pill">Daemon 24/7</span>
-              </div>
-              <h3>Project Nox · Importer</h3>
-              <p>Serviço autônomo em Node.js 22 que rastreia fontes, valida cabeçalhos binários de imagens, deduplica por SHA-256, envia blobs em shards do Telegram e persiste metadados no YugabyteDB (YSQL).</p>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/project-nox-importer" target="_blank" rel="noopener noreferrer">Ver Repositório</a>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="card-head">
-                <div class="card-icon gold" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                </div>
-                <span class="pill gold">Skill IA</span>
-              </div>
-              <h3>Nox Extension Developer</h3>
-              <p>Skill gratuita e open source que orienta agentes de IA na criação, correção e compilação de extensões seguindo os padrões oficiais Keiyoushi (Mangá), Yuzono (Anime) e LNReader (Novel).</p>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/nox-extension-developer" target="_blank" rel="noopener noreferrer">Documentação &amp; Guia</a>
-              </div>
-            </article>
-
-            <article class="card">
-              <div class="card-head">
-                <div class="card-icon" aria-hidden="true">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                </div>
-                <span class="pill green">GitHub Actions</span>
-              </div>
-              <h3>Pipelines &amp; Bots CI/CD</h3>
-              <p>Automação completa de build e assinatura de APKs, geração/validação de catálogos Protobuf + JSON, triagem automática de issues (<code>label-issues.yml</code>) e publicação contínua do Tracker.</p>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/project-nox-requests" target="_blank" rel="noopener noreferrer">Fluxo de Tickets</a>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <!-- Tecnologias, Arquitetura & Roadmap -->
-        <section id="arquitetura" aria-labelledby="arquitetura-title">
-          <div class="section-header">
-            <span class="section-eyebrow">Stack &amp; Evolução</span>
-            <h2 class="section-title" id="arquitetura-title">Tecnologias, arquitetura e status do ecossistema</h2>
-            <p class="section-desc">
-              Visão transparente da infraestrutura real em operação e da separação clara entre recursos em produção, frentes em desenvolvimento e objetivos planejados.
-            </p>
-          </div>
-
-          <div class="grid-2" style="margin-bottom:20px;">
-            <article class="card">
-              <div class="card-head">
-                <h3>Stack de Produção</h3>
-                <span class="pill green">Em Operação</span>
-              </div>
-              <ul class="feature-list">
-                <li><strong>Frontend &amp; Edge:</strong> SvelteKit (SSR no Cloudflare Workers) e GitHub Pages estático para a Central Oficial e o Tracker.</li>
-                <li><strong>Banco de Dados &amp; Pooling:</strong> YugabyteDB / YSQL (Sandbox Aeon) com Cloudflare Hyperdrive e driver <code>pg</code>.</li>
-                <li><strong>Mídia &amp; Extensões:</strong> Armazenamento particionado via Telegram Bot API e extensões Kotlin/Gradle em Protobuf v2 (<code>index.pb</code>).</li>
-                <li><strong>Automações:</strong> GitHub Actions para compilação/assinatura de APKs, triagem de issues e sync do Tracker a cada 15 minutos.</li>
-              </ul>
-            </article>
-
-            <article class="card">
-              <div class="card-head">
-                <h3>Status e Desenvolvimento Futuro</h3>
-                <span class="pill gold">Transparência</span>
-              </div>
-              <ul class="feature-list">
-                <li><strong>Em Produção:</strong> Plataforma web de mangá, catálogos de mangá (Mihon) e anime (Aniyomi), Importer 24/7, Central de Tickets, Tracker e Central Oficial.</li>
-                <li><strong>Em Desenvolvimento:</strong> Personalização e aprimoramento contínuo dos catálogos de extensões de mangá e anime e evolução da skill <code>nox-extension-developer</code>.</li>
-                <li><strong>Planejado:</strong> Expansão da documentação técnica unificada, guias de contribuição e melhorias contínuas na centralização do ecossistema.</li>
-              </ul>
-            </article>
-          </div>
-        </section>
-
-        <!-- Diretório Completo de Repositórios & Documentação -->
-        <section id="repositorios" aria-labelledby="repos-title">
-          <div class="section-header">
-            <span class="section-eyebrow">Diretório Oficial</span>
-            <h2 class="section-title" id="repos-title">Repositórios e documentação</h2>
-            <p class="section-desc">
-              Todos os repositórios ativos da organização <strong>ProjectNox-org</strong>, com acesso direto ao código e à documentação técnica.
-            </p>
-          </div>
-
-          <div class="filter-bar" role="group" aria-label="Filtrar repositórios por categoria">
-            <button class="filter-chip" type="button" data-category="all" aria-pressed="true">Todos (10)</button>
-            <button class="filter-chip" type="button" data-category="web" aria-pressed="false">Web &amp; Portal</button>
-            <button class="filter-chip" type="button" data-category="extensions" aria-pressed="false">Extensões</button>
-            <button class="filter-chip" type="button" data-category="tools" aria-pressed="false">Ferramentas &amp; IA</button>
-            <button class="filter-chip" type="button" data-category="community" aria-pressed="false">Comunidade &amp; Tickets</button>
-          </div>
-
-          <div class="grid-3">
-            <article class="card repo-card" data-category="web">
-              <div class="card-head">
-                <h3>project-nox-manga</h3>
-                <span class="pill gold">AGPL-3.0</span>
-              </div>
-              <p>Plataforma web oficial e leitor de mangás em SvelteKit, Cloudflare Workers e YugabyteDB (YSQL).</p>
-              <div class="repo-meta"><span>branch: main</span><span>SvelteKit / Edge</span></div>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/project-nox-manga" target="_blank" rel="noopener noreferrer">Repositório</a>
-                <a class="button secondary" href="https://github.com/ProjectNox-org/project-nox-manga#readme" target="_blank" rel="noopener noreferrer">Docs</a>
-              </div>
-            </article>
-
-            <article class="card repo-card" data-category="extensions">
-              <div class="card-head">
-                <h3>manga-extensoes</h3>
-                <span class="pill">AGPL-3.0</span>
-              </div>
-              <p>Catálogo compilado e distribuição oficial de extensões de mangá para Mihon e forks.</p>
-              <div class="repo-meta"><span>branch: repo</span><span>index.pb / JSON</span></div>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/manga-extensoes" target="_blank" rel="noopener noreferrer">Repositório</a>
-                <a class="button secondary" href="https://github.com/ProjectNox-org/manga-extensoes#readme" target="_blank" rel="noopener noreferrer">Docs</a>
-              </div>
-            </article>
-
-            <article class="card repo-card" data-category="extensions">
-              <div class="card-head">
-                <h3>manga-fonte-extensoes</h3>
-                <span class="pill">AGPL-3.0</span>
-              </div>
-              <p>Código-fonte em Kotlin e pipeline de compilação e publicação das extensões de mangá.</p>
-              <div class="repo-meta"><span>branch: main</span><span>Kotlin / Gradle</span></div>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/manga-fonte-extensoes" target="_blank" rel="noopener noreferrer">Repositório</a>
-                <a class="button secondary" href="https://github.com/ProjectNox-org/manga-fonte-extensoes#readme" target="_blank" rel="noopener noreferrer">Docs</a>
-              </div>
-            </article>
-
-            <article class="card repo-card" data-category="extensions">
-              <div class="card-head">
-                <h3>anime-extensoes</h3>
-                <span class="pill">AGPL-3.0</span>
-              </div>
-              <p>Catálogo oficial de extensões de anime para Aniyomi e forks com Protobuf v2 e JSON legado.</p>
-              <div class="repo-meta"><span>branch: repo</span><span>index.pb / JSON</span></div>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/anime-extensoes" target="_blank" rel="noopener noreferrer">Repositório</a>
-                <a class="button secondary" href="https://github.com/ProjectNox-org/anime-extensoes#readme" target="_blank" rel="noopener noreferrer">Docs</a>
-              </div>
-            </article>
-
-            <article class="card repo-card" data-category="extensions">
-              <div class="card-head">
-                <h3>anime-fonte-extensoes</h3>
-                <span class="pill">AGPL-3.0</span>
-              </div>
-              <p>Código-fonte em Kotlin, extractors e pipeline CI de publicação automática das extensões de anime.</p>
-              <div class="repo-meta"><span>branch: main</span><span>Kotlin / Gradle</span></div>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/anime-fonte-extensoes" target="_blank" rel="noopener noreferrer">Repositório</a>
-                <a class="button secondary" href="https://github.com/ProjectNox-org/anime-fonte-extensoes#readme" target="_blank" rel="noopener noreferrer">Docs</a>
-              </div>
-            </article>
-
-            <article class="card repo-card" data-category="tools">
-              <div class="card-head">
-                <h3>project-nox-importer</h3>
-                <span class="pill">AGPL-3.0</span>
-              </div>
-              <p>Serviço autônomo 24/7 de ingestão, validação binária, deduplicação SHA-256 e carga no YSQL.</p>
-              <div class="repo-meta"><span>branch: main</span><span>Node.js 22 / YSQL</span></div>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/project-nox-importer" target="_blank" rel="noopener noreferrer">Repositório</a>
-                <a class="button secondary" href="https://github.com/ProjectNox-org/project-nox-importer#readme" target="_blank" rel="noopener noreferrer">Docs</a>
-              </div>
-            </article>
-
-            <article class="card repo-card" data-category="tools">
-              <div class="card-head">
-                <h3>nox-extension-developer</h3>
-                <span class="pill gold">AGPL-3.0</span>
-              </div>
-              <p>Skill gratuita para agentes de IA criarem e corrigirem extensões Keiyoushi, Yuzono e LNReader.</p>
-              <div class="repo-meta"><span>branch: main</span><span>Agent Skill</span></div>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/nox-extension-developer" target="_blank" rel="noopener noreferrer">Repositório</a>
-                <a class="button secondary" href="https://github.com/ProjectNox-org/nox-extension-developer#readme" target="_blank" rel="noopener noreferrer">Docs</a>
-              </div>
-            </article>
-
-            <article class="card repo-card" data-category="community">
-              <div class="card-head">
-                <h3>project-nox-requests</h3>
-                <span class="pill green">AGPL-3.0</span>
-              </div>
-              <p>Central de solicitações, reporte de problemas e pedidos de novas extensões de mangá e anime.</p>
-              <div class="repo-meta"><span>branch: main</span><span>GitHub Issues</span></div>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/project-nox-requests" target="_blank" rel="noopener noreferrer">Repositório</a>
-                <a class="button secondary" href="https://github.com/ProjectNox-org/project-nox-requests/issues/new/choose" target="_blank" rel="noopener noreferrer">Abrir Ticket</a>
-              </div>
-            </article>
-
-            <article class="card repo-card" data-category="community">
-              <div class="card-head">
-                <h3>project-nox-tracker</h3>
-                <span class="pill green">AGPL-3.0</span>
-              </div>
-              <p>Painel web interativo para acompanhamento em tempo real do status e pedidos de extensões.</p>
-              <div class="repo-meta"><span>branch: main</span><span>GitHub Pages</span></div>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/project-nox-tracker" target="_blank" rel="noopener noreferrer">Repositório</a>
-                <a class="button gold" href="https://projectnox-org.github.io/project-nox-tracker/">Abrir Tracker</a>
-              </div>
-            </article>
-
-            <article class="card repo-card" data-category="web">
-              <div class="card-head">
-                <h3>ProjectNox-org.github.io &amp; .github</h3>
-                <span class="pill">Institucional</span>
-              </div>
-              <p>Portal oficial da organização no GitHub Pages e identidade institucional / guia de contribuição em <code>.github</code>.</p>
-              <div class="repo-meta"><span>branch: main</span><span>Portal &amp; Docs</span></div>
-              <div class="card-actions">
-                <a class="button secondary" href="https://github.com/ProjectNox-org/ProjectNox-org.github.io" target="_blank" rel="noopener noreferrer">Portal</a>
-                <a class="button secondary" href="https://github.com/ProjectNox-org/.github/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Contribuir</a>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <!-- Central de Tickets, Tracker & Comunidade -->
-        <section id="comunidade" aria-labelledby="comunidade-title">
-          <div class="tracker-spotlight">
-            <div>
-              <span class="section-eyebrow">Suporte, Tickets &amp; Comunidade</span>
-              <h2 class="section-title" id="comunidade-title" style="margin-top:6px;">Central de Solicitações e Comunidade</h2>
-              <p class="section-desc" style="margin:10px 0 18px;">
-                Precisa pedir uma nova extensão, reportar um bug ou acompanhar o andamento do seu chamado? Use o Tracker oficial ou abra um ticket diretamente com os formulários padronizados.
+            <div class="hero-intro">
+              <span class="eyebrow">Organização Independente · Código Aberto</span>
+              <h1 class="hero-intro-title" id="hero-title">
+                Tecnologia, software livre e soluções digitais em evolução contínua
+              </h1>
+              <p class="hero-intro-desc">
+                O <strong>Project Nox</strong> é uma iniciativa independente de tecnologia, desenvolvimento de software e código aberto, dedicada à criação de projetos autorais, ferramentas, plataformas digitais, automações e soluções abertas para a comunidade.
               </p>
-              <div class="ticket-types" aria-label="Modelos oficiais de solicitação">
-                <a class="ticket-link" href="https://github.com/ProjectNox-org/project-nox-requests/issues/new?template=01_request_extension.yml" target="_blank" rel="noopener noreferrer">Pedir Extensão</a>
-                <a class="ticket-link" href="https://github.com/ProjectNox-org/project-nox-requests/issues/new?template=02_report_broken.yml" target="_blank" rel="noopener noreferrer">Reportar Bug</a>
-                <a class="ticket-link" href="https://github.com/ProjectNox-org/project-nox-requests/issues/new?template=03_report_url_change.yml" target="_blank" rel="noopener noreferrer">Mudança de Domínio</a>
-                <a class="ticket-link" href="https://github.com/ProjectNox-org/project-nox-requests/issues/new?template=04_report_dead_source.yml" target="_blank" rel="noopener noreferrer">Fonte Morta</a>
-                <a class="ticket-link" href="https://github.com/ProjectNox-org/project-nox-requests/issues/new?template=05_request_feature.yml" target="_blank" rel="noopener noreferrer">Sugerir Melhoria</a>
+
+              <div class="hero-actions">
+                <a class="button primary" href="#historia">Conheça o Project Nox</a>
+                <a class="button gold" href="#repositorios">Explore nossos repositórios</a>
+                <a
+                  class="button secondary"
+                  href="https://github.com/ProjectNox-org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Organização no GitHub
+                </a>
+              </div>
+
+              <div class="hero-founder-strip">
+                <span><span class="meta-dot" aria-hidden="true"></span>Fundado por <strong>Awerkori</strong></span>
+                <span aria-hidden="true">·</span>
+                <span>Licenciamento GNU AGPL-3.0</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 4. Nossa História, Evolução e Objetivos -->
+        <section class="section section-divider" id="historia" aria-labelledby="historia-title">
+          <div class="container">
+            <div class="section-header reveal">
+              <span class="eyebrow">Trajetória &amp; Propósito</span>
+              <h2 class="section-title" id="historia-title">Nossa história, evolução e objetivos</h2>
+              <p class="section-desc">
+                Fundado por <strong>Awerkori</strong>, o Project Nox cresce a partir da experimentação prática, mantendo sua identidade aberta a novas tecnologias, ideias e frentes de atuação.
+              </p>
+            </div>
+
+            <div class="trajectory-grid">
+              <article class="trajectory-card reveal">
+                <span class="step-badge">01 · Origem</span>
+                <h3>Nossa origem</h3>
+                <p>
+                  O Project Nox nasceu como uma iniciativa independente voltada à criação de ferramentas e soluções digitais para a comunidade, tendo suas primeiras atividades relacionadas a mangás, animes e extensões.
+                </p>
+              </article>
+
+              <article class="trajectory-card reveal">
+                <span class="step-badge">02 · Evolução</span>
+                <h3>Nossa evolução</h3>
+                <p>
+                  Com o amadurecimento da iniciativa, o Project Nox expandiu sua atuação para plataformas web, automações, ferramentas de desenvolvimento, integrações e soluções de inteligência artificial.
+                </p>
+              </article>
+
+              <article class="trajectory-card reveal">
+                <span class="step-badge">03 · Propósito</span>
+                <h3>Nosso propósito</h3>
+                <p>
+                  Desenvolver soluções tecnológicas úteis, acessíveis e transparentes, permitindo que a comunidade utilize, estude, aperfeiçoe e contribua com nossos projetos.
+                </p>
+              </article>
+
+              <article class="trajectory-card reveal">
+                <span class="step-badge">04 · Futuro</span>
+                <h3>Nosso futuro</h3>
+                <p>
+                  Continuar evoluindo como uma organização independente de tecnologia, aberta a novos projetos, ideias, áreas de atuação e contribuições.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- 5. Código Aberto e Transparência — GNU AGPL-3.0 -->
+        <section class="section section-divider" id="transparencia" aria-labelledby="transparencia-title">
+          <div class="container">
+            <div class="section-header reveal">
+              <span class="eyebrow">Software Livre &amp; Transparência</span>
+              <h2 class="section-title" id="transparencia-title">Código aberto sob GNU AGPL-3.0</h2>
+              <p class="section-desc">
+                Construir, compartilhar e evoluir juntos exige clareza jurídica e acesso irrestrito ao código-fonte.
+              </p>
+            </div>
+
+            <div class="philosophy-strip reveal">
+              <picture>
+                <source media="(max-width: 767px)" srcset="assets/brand/nox-philosophy-mobile-dark.svg" />
+                <img
+                  src="assets/brand/nox-philosophy-dark.svg"
+                  alt="Princípios do Project Nox: Construir, Compartilhar, Evoluir"
+                  width="840"
+                  height="96"
+                />
+              </picture>
+            </div>
+
+            <div class="license-banner reveal">
+              <div>
+                <strong style="color: var(--text-primary); font-size: 1.02rem;">
+                  Todos os repositórios da organização ProjectNox-org adotam a GNU AGPL-3.0
+                </strong>
+                <p>
+                  A escolha da GNU Affero General Public License v3.0 reforça o compromisso com transparência e colaboração, garantindo que melhorias permaneçam abertas à comunidade — preservando integralmente licenças e atribuições de terceiros (incluindo <strong>Apache-2.0</strong> quando aplicável).
+                </p>
+              </div>
+              <a
+                class="button secondary sm"
+                href="https://www.gnu.org/licenses/agpl-3.0.html"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Texto oficial da GNU AGPL-3.0
+              </a>
+            </div>
+
+            <div class="grid-2">
+              <article class="card reveal">
+                <div class="card-head">
+                  <h3>O que a licença permite</h3>
+                  <span class="pill green">Liberdades</span>
+                </div>
+                <ul class="check-list">
+                  <li>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Utilizar o software gratuitamente ou comercialmente, respeitando a licença.</span>
+                  </li>
+                  <li>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Estudar o código-fonte.</span>
+                  </li>
+                  <li>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Modificar e adaptar o software.</span>
+                  </li>
+                  <li>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Compartilhar e redistribuir o software.</span>
+                  </li>
+                  <li>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Criar versões derivadas.</span>
+                  </li>
+                  <li>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                    <span>Contribuir com melhorias.</span>
+                  </li>
+                </ul>
+              </article>
+
+              <article class="card reveal">
+                <div class="card-head">
+                  <h3>Principais obrigações</h3>
+                  <span class="pill gold">Transparência</span>
+                </div>
+                <ul class="check-list">
+                  <li>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span>Preservar os avisos de direitos autorais e licenciamento.</span>
+                  </li>
+                  <li>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span>Disponibilizar o código-fonte correspondente ao distribuir o software coberto, conforme os termos da licença.</span>
+                  </li>
+                  <li>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span>Manter sob a AGPL as versões derivadas abrangidas pela licença.</span>
+                  </li>
+                  <li>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    <span>Oferecer o código-fonte correspondente aos usuários que interagem remotamente, por rede, com uma versão modificada do software, conforme a AGPL.</span>
+                  </li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- 6. Diretório Completo de Repositórios -->
+        <section class="section section-divider" id="repositorios" aria-labelledby="repos-title">
+          <div class="container">
+            <div class="section-header reveal">
+              <span class="eyebrow">Diretório Completo</span>
+              <h2 class="section-title" id="repos-title">Repositórios públicos da organização</h2>
+              <p class="section-desc">
+                Documentação individual de todos os 11 repositórios públicos de <strong>ProjectNox-org</strong>, diferenciando plataformas, código-fonte, catálogos de distribuição, infraestrutura, ferramentas e governança.
+              </p>
+            </div>
+
+            <div class="directory-controls">
+              <div class="search-wrap">
+                <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <label class="sr-only" for="repo-search">Buscar repositório por nome, tecnologia ou finalidade</label>
+                <input
+                  class="search-input"
+                  id="repo-search"
+                  type="search"
+                  placeholder="Buscar repositório, tecnologia ou categoria..."
+                  autocomplete="off"
+                />
+              </div>
+
+              <div class="filter-bar" role="group" aria-label="Filtrar repositórios por categoria">
+                <button class="filter-chip" type="button" data-category="all" aria-pressed="true">Todos (11)</button>
+                <button class="filter-chip" type="button" data-category="platforms" aria-pressed="false">Plataformas &amp; Web (2)</button>
+                <button class="filter-chip" type="button" data-category="extensions" aria-pressed="false">Extensões (4)</button>
+                <button class="filter-chip" type="button" data-category="infrastructure" aria-pressed="false">Infraestrutura (1)</button>
+                <button class="filter-chip" type="button" data-category="tools" aria-pressed="false">Ferramentas &amp; IA (1)</button>
+                <button class="filter-chip" type="button" data-category="community" aria-pressed="false">Suporte (1)</button>
+                <button class="filter-chip" type="button" data-category="institutional" aria-pressed="false">Institucional (2)</button>
               </div>
             </div>
 
-            <div class="card" style="background:rgba(6,7,12,0.75);">
-              <div class="banner-frame" style="margin-bottom:4px;">
-                <img src="assets/nox-entre-no-servidor.png" alt="Entre no servidor oficial do Project Nox" width="1280" height="640" loading="lazy" />
+            <p class="directory-status" id="directory-status" aria-live="polite">
+              Exibindo todos os 11 repositórios públicos da organização.
+            </p>
+
+            <div class="grid-3" id="repo-grid">
+              <!-- 1. project-nox-manga -->
+              <article
+                class="card repo-card"
+                data-category="platforms"
+                data-search="project-nox-manga plataforma web leitor mangas sveltekit cloudflare workers agpl-3.0"
+              >
+                <div class="card-head">
+                  <div class="repo-title-group">
+                    <h3>Project Nox Manga</h3>
+                    <span class="repo-slug">project-nox-manga</span>
+                  </div>
+                  <span class="pill green">AGPL-3.0</span>
+                </div>
+                <p>Plataforma web oficial e leitor de mangás do Project Nox em SvelteKit e Cloudflare Workers.</p>
+                <p class="repo-purpose"><strong>Objetivo:</strong> Oferecer leitura web contínua ou paginada com sincronização de histórico.</p>
+                <ul class="feature-list">
+                  <li>Leitura em cascata vertical e página por página</li>
+                  <li>Progresso e histórico sincronizados na nuvem</li>
+                </ul>
+                <div class="repo-meta-row">
+                  <span class="repo-meta-chip">Plataformas &amp; Web</span>
+                  <span class="repo-meta-chip">branch: main</span>
+                  <span class="repo-meta-chip">SvelteKit</span>
+                </div>
+                <p class="repo-relations">Relação: alimentado por <code>project-nox-importer</code>.</p>
+                <div class="card-actions">
+                  <a class="button primary sm" href="https://manga.project-nox-awerkori.workers.dev" target="_blank" rel="noopener noreferrer">Abrir Serviço</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/project-nox-manga" target="_blank" rel="noopener noreferrer">Código-fonte</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/project-nox-manga#readme" target="_blank" rel="noopener noreferrer">Docs</a>
+                </div>
+              </article>
+
+              <!-- 2. project-nox-tracker -->
+              <article
+                class="card repo-card"
+                data-category="platforms"
+                data-search="project-nox-tracker tracker de extensoes painel web github actions requests agpl-3.0"
+              >
+                <div class="card-head">
+                  <div class="repo-title-group">
+                    <h3>Tracker de Extensões</h3>
+                    <span class="repo-slug">project-nox-tracker</span>
+                  </div>
+                  <span class="pill green">AGPL-3.0</span>
+                </div>
+                <p>Painel web interativo para acompanhamento em tempo real do status e pedidos de extensões do Project Nox.</p>
+                <p class="repo-purpose"><strong>Objetivo:</strong> Dar visibilidade pública às solicitações registradas em <code>project-nox-requests</code>.</p>
+                <ul class="feature-list">
+                  <li>Sincronização automática periódica via GitHub Actions</li>
+                  <li>Filtros por estado, categoria, busca e reações</li>
+                </ul>
+                <div class="repo-meta-row">
+                  <span class="repo-meta-chip">Plataformas &amp; Web</span>
+                  <span class="repo-meta-chip">branch: main</span>
+                  <span class="repo-meta-chip">HTML / JS / Python</span>
+                </div>
+                <p class="repo-relations">Relação: acompanha <code>project-nox-requests</code>.</p>
+                <div class="card-actions">
+                  <a class="button gold sm" href="https://projectnox-org.github.io/project-nox-tracker/">Tracker de Extensões</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/project-nox-tracker" target="_blank" rel="noopener noreferrer">Código-fonte</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/project-nox-tracker#readme" target="_blank" rel="noopener noreferrer">Docs</a>
+                </div>
+              </article>
+
+              <!-- 3. manga-fonte-extensoes -->
+              <article
+                class="card repo-card"
+                data-category="extensions"
+                data-search="manga-fonte-extensoes kotlin gradle mihon codigo fonte compilacao agpl-3.0"
+              >
+                <div class="card-head">
+                  <div class="repo-title-group">
+                    <h3>Fontes de Extensões de Mangá</h3>
+                    <span class="repo-slug">manga-fonte-extensoes</span>
+                  </div>
+                  <span class="pill green">AGPL-3.0</span>
+                </div>
+                <p>Código-fonte em Kotlin e pipeline de compilação das extensões de mangá do Project Nox para Mihon e forks.</p>
+                <p class="repo-purpose"><strong>Objetivo:</strong> Desenvolver, compilar e assinar APKs das extensões de mangá.</p>
+                <ul class="feature-list">
+                  <li>Implementação Kotlin compatível com padrão Mihon/Keiyoushi</li>
+                  <li>Pipeline CI automatizado de build e assinatura</li>
+                </ul>
+                <div class="repo-meta-row">
+                  <span class="repo-meta-chip">Extensões · Código</span>
+                  <span class="repo-meta-chip">branch: main</span>
+                  <span class="repo-meta-chip">Kotlin / Gradle</span>
+                </div>
+                <p class="repo-relations">Relação: publica pacotes em <code>manga-extensoes</code>.</p>
+                <div class="card-actions">
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/manga-fonte-extensoes" target="_blank" rel="noopener noreferrer">Código-fonte</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/manga-fonte-extensoes#readme" target="_blank" rel="noopener noreferrer">Docs</a>
+                </div>
+              </article>
+
+              <!-- 4. manga-extensoes -->
+              <article
+                class="card repo-card"
+                data-category="extensions"
+                data-search="manga-extensoes catalogo distribuicao mihon index.pb index.json apk agpl-3.0"
+              >
+                <div class="card-head">
+                  <div class="repo-title-group">
+                    <h3>Catálogo de Extensões de Mangá</h3>
+                    <span class="repo-slug">manga-extensoes</span>
+                  </div>
+                  <span class="pill green">AGPL-3.0</span>
+                </div>
+                <p>Catálogo compilado e distribuição oficial de extensões de mangá do Project Nox para Mihon e forks.</p>
+                <p class="repo-purpose"><strong>Objetivo:</strong> Distribuir índices <code>index.pb</code>, JSONs e APKs assinados aos aplicativos.</p>
+                <ul class="feature-list">
+                  <li>Formato principal em Protobuf (<code>index.pb</code>)</li>
+                  <li>Compatibilidade mantida com <code>index.json</code> e <code>index.min.json</code></li>
+                </ul>
+                <div class="repo-meta-row">
+                  <span class="repo-meta-chip">Extensões · Catálogo</span>
+                  <span class="repo-meta-chip">branch: repo</span>
+                  <span class="repo-meta-chip">Protobuf / JSON</span>
+                </div>
+                <p class="repo-relations">Relação: gerado a partir de <code>manga-fonte-extensoes</code>.</p>
+                <div class="card-actions">
+                  <a class="button primary sm" href="extensoes/#mihon">Instalar no Mihon</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/manga-extensoes" target="_blank" rel="noopener noreferrer">Código-fonte</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/manga-extensoes#readme" target="_blank" rel="noopener noreferrer">Docs</a>
+                </div>
+              </article>
+
+              <!-- 5. anime-fonte-extensoes -->
+              <article
+                class="card repo-card"
+                data-category="extensions"
+                data-search="anime-fonte-extensoes kotlin gradle aniyomi codigo fonte extractors agpl-3.0"
+              >
+                <div class="card-head">
+                  <div class="repo-title-group">
+                    <h3>Fontes de Extensões de Anime</h3>
+                    <span class="repo-slug">anime-fonte-extensoes</span>
+                  </div>
+                  <span class="pill green">AGPL-3.0</span>
+                </div>
+                <p>Código-fonte, CI e publicação automática de extensões de anime para Aniyomi e forks.</p>
+                <p class="repo-purpose"><strong>Objetivo:</strong> Manter extractors, compilar APKs e gerar catálogos de anime.</p>
+                <ul class="feature-list">
+                  <li>Código-fonte Kotlin com compilação contínua via CI</li>
+                  <li>Publicação sincronizada de Protobuf e JSONs legados</li>
+                </ul>
+                <div class="repo-meta-row">
+                  <span class="repo-meta-chip">Extensões · Código</span>
+                  <span class="repo-meta-chip">branch: main</span>
+                  <span class="repo-meta-chip">Kotlin / Gradle</span>
+                </div>
+                <p class="repo-relations">Relação: publica pacotes em <code>anime-extensoes</code>.</p>
+                <div class="card-actions">
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/anime-fonte-extensoes" target="_blank" rel="noopener noreferrer">Código-fonte</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/anime-fonte-extensoes#readme" target="_blank" rel="noopener noreferrer">Docs</a>
+                </div>
+              </article>
+
+              <!-- 6. anime-extensoes -->
+              <article
+                class="card repo-card"
+                data-category="extensions"
+                data-search="anime-extensoes catalogo distribuicao aniyomi index.pb index.json apk agpl-3.0"
+              >
+                <div class="card-head">
+                  <div class="repo-title-group">
+                    <h3>Catálogo de Extensões de Anime</h3>
+                    <span class="repo-slug">anime-extensoes</span>
+                  </div>
+                  <span class="pill green">AGPL-3.0</span>
+                </div>
+                <p>Catálogo oficial de extensões de anime para Aniyomi e forks com <code>index.pb</code> principal e JSON legado.</p>
+                <p class="repo-purpose"><strong>Objetivo:</strong> Servir o catálogo oficial de extensões instalável no Aniyomi.</p>
+                <ul class="feature-list">
+                  <li><code>index.pb</code> (Protobuf oficial) como formato principal</li>
+                  <li><code>index.json</code>, <code>index.min.json</code> e <code>repo.json</code> sincronizados</li>
+                </ul>
+                <div class="repo-meta-row">
+                  <span class="repo-meta-chip">Extensões · Catálogo</span>
+                  <span class="repo-meta-chip">branch: repo</span>
+                  <span class="repo-meta-chip">Protobuf / JSON</span>
+                </div>
+                <p class="repo-relations">Relação: gerado a partir de <code>anime-fonte-extensoes</code>.</p>
+                <div class="card-actions">
+                  <a class="button primary sm" href="extensoes/#aniyomi">Instalar no Aniyomi</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/anime-extensoes" target="_blank" rel="noopener noreferrer">Código-fonte</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/anime-extensoes#readme" target="_blank" rel="noopener noreferrer">Docs</a>
+                </div>
+              </article>
+
+              <!-- 7. project-nox-importer -->
+              <article
+                class="card repo-card"
+                data-category="infrastructure"
+                data-search="project-nox-importer daemon ingestao validacao storage typescript nodejs agpl-3.0"
+              >
+                <div class="card-head">
+                  <div class="repo-title-group">
+                    <h3>Project Nox Importer</h3>
+                    <span class="repo-slug">project-nox-importer</span>
+                  </div>
+                  <span class="pill green">AGPL-3.0</span>
+                </div>
+                <p>Serviço autônomo 24/7 de ingestão, validação e storage de catálogo para o Project Nox Manga.</p>
+                <p class="repo-purpose"><strong>Objetivo:</strong> Automatizar coleta, validação de integridade e atualização contínua de acervo.</p>
+                <ul class="feature-list">
+                  <li>Validação binária e deduplicação por hash</li>
+                  <li>Operação autônoma integrada ao ecossistema web</li>
+                </ul>
+                <div class="repo-meta-row">
+                  <span class="repo-meta-chip">Infraestrutura</span>
+                  <span class="repo-meta-chip">branch: main</span>
+                  <span class="repo-meta-chip">TypeScript</span>
+                </div>
+                <p class="repo-relations">Relação: serviço de suporte a <code>project-nox-manga</code>.</p>
+                <div class="card-actions">
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/project-nox-importer" target="_blank" rel="noopener noreferrer">Código-fonte</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/project-nox-importer#readme" target="_blank" rel="noopener noreferrer">Docs</a>
+                </div>
+              </article>
+
+              <!-- 8. nox-extension-developer -->
+              <article
+                class="card repo-card"
+                data-category="tools"
+                data-search="nox-extension-developer skill ia agentes keiyoushi yuzono lnreader python agpl-3.0"
+              >
+                <div class="card-head">
+                  <div class="repo-title-group">
+                    <h3>Nox Extension Developer</h3>
+                    <span class="repo-slug">nox-extension-developer</span>
+                  </div>
+                  <span class="pill green">AGPL-3.0</span>
+                </div>
+                <p>Skill para agentes de IA desenvolverem extensões de mangá, anime e novel nos padrões Keiyoushi, Yuzono e LNReader.</p>
+                <p class="repo-purpose"><strong>Objetivo:</strong> Guiar agentes na criação, revisão e manutenção de extensões com docs oficiais.</p>
+                <ul class="feature-list">
+                  <li>Cobertura de Mihon/Keiyoushi, Aniyomi/Yuzono e LNReader</li>
+                  <li>Guias estruturados e scripts auxiliares em Python</li>
+                </ul>
+                <div class="repo-meta-row">
+                  <span class="repo-meta-chip">Ferramentas &amp; IA</span>
+                  <span class="repo-meta-chip">branch: main</span>
+                  <span class="repo-meta-chip">Python / Skill</span>
+                </div>
+                <p class="repo-relations">Relação: apoia <code>manga-fonte-extensoes</code> e <code>anime-fonte-extensoes</code>.</p>
+                <div class="card-actions">
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/nox-extension-developer" target="_blank" rel="noopener noreferrer">Código-fonte</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/nox-extension-developer#readme" target="_blank" rel="noopener noreferrer">Docs</a>
+                </div>
+              </article>
+
+              <!-- 9. project-nox-requests -->
+              <article
+                class="card repo-card"
+                data-category="community"
+                data-search="project-nox-requests tickets solicitacoes issues bugs pedidos extensoes agpl-3.0"
+              >
+                <div class="card-head">
+                  <div class="repo-title-group">
+                    <h3>Central de Tickets de Extensões</h3>
+                    <span class="repo-slug">project-nox-requests</span>
+                  </div>
+                  <span class="pill green">AGPL-3.0</span>
+                </div>
+                <p>Central de solicitações, reporte de problemas e pedidos de novas extensões de mangá e anime do Project Nox.</p>
+                <p class="repo-purpose"><strong>Objetivo:</strong> Receber e organizar demandas da comunidade via GitHub Issues.</p>
+                <ul class="feature-list">
+                  <li>5 formulários dedicados para pedidos, bugs, domínios e fontes</li>
+                  <li>Triagem automática por workflows e exibição no Tracker</li>
+                </ul>
+                <div class="repo-meta-row">
+                  <span class="repo-meta-chip">Suporte</span>
+                  <span class="repo-meta-chip">branch: main</span>
+                  <span class="repo-meta-chip">GitHub Issues</span>
+                </div>
+                <p class="repo-relations">Relação: fonte de dados do <code>project-nox-tracker</code>.</p>
+                <div class="card-actions">
+                  <a class="button primary sm" href="https://github.com/ProjectNox-org/project-nox-requests/issues/new/choose" target="_blank" rel="noopener noreferrer">Abrir ticket</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/project-nox-requests" target="_blank" rel="noopener noreferrer">Código-fonte</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/project-nox-requests#readme" target="_blank" rel="noopener noreferrer">Docs</a>
+                </div>
+              </article>
+
+              <!-- 10. ProjectNox-org.github.io -->
+              <article
+                class="card repo-card"
+                data-category="institutional"
+                data-search="projectnox-org.github.io central oficial portal github pages html css js institucional agpl-3.0"
+              >
+                <div class="card-head">
+                  <div class="repo-title-group">
+                    <h3>Central Oficial (GitHub Pages)</h3>
+                    <span class="repo-slug">ProjectNox-org.github.io</span>
+                  </div>
+                  <span class="pill green">AGPL-3.0</span>
+                </div>
+                <p>Portal institucional e diretório oficial da organização Project Nox publicado no GitHub Pages.</p>
+                <p class="repo-purpose"><strong>Objetivo:</strong> Centralizar apresentação, diretório de projetos, guias e rotas de suporte.</p>
+                <ul class="feature-list">
+                  <li>Portal estático leve, acessível e responsivo</li>
+                  <li>Compatibilidade preservada para rotas públicas e redirecionamentos</li>
+                </ul>
+                <div class="repo-meta-row">
+                  <span class="repo-meta-chip">Institucional</span>
+                  <span class="repo-meta-chip">branch: main</span>
+                  <span class="repo-meta-chip">HTML / CSS / JS</span>
+                </div>
+                <p class="repo-relations">Relação: compartilha identidade visual com <code>.github</code>.</p>
+                <div class="card-actions">
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/ProjectNox-org.github.io" target="_blank" rel="noopener noreferrer">Código-fonte</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/ProjectNox-org.github.io#readme" target="_blank" rel="noopener noreferrer">Docs</a>
+                </div>
+              </article>
+
+              <!-- 11. .github -->
+              <article
+                class="card repo-card"
+                data-category="institutional"
+                data-search=".github organizacao identidade perfil contributing marca svg python institucional agpl-3.0"
+              >
+                <div class="card-head">
+                  <div class="repo-title-group">
+                    <h3>Organização &amp; Identidade (.github)</h3>
+                    <span class="repo-slug">.github</span>
+                  </div>
+                  <span class="pill green">AGPL-3.0</span>
+                </div>
+                <p>Identidade institucional, perfil da organização no GitHub, ativos oficiais da marca e guia de contribuição.</p>
+                <p class="repo-purpose"><strong>Objetivo:</strong> Definir a apresentação pública da organização e padrões comunitários.</p>
+                <ul class="feature-list">
+                  <li>Perfil oficial da organização (<code>profile/README.md</code>)</li>
+                  <li>Ativos vetoriais, emblema oficial e <code>CONTRIBUTING.md</code></li>
+                </ul>
+                <div class="repo-meta-row">
+                  <span class="repo-meta-chip">Institucional</span>
+                  <span class="repo-meta-chip">branch: main</span>
+                  <span class="repo-meta-chip">Markdown / SVG</span>
+                </div>
+                <p class="repo-relations">Relação: referência visual para <code>ProjectNox-org.github.io</code>.</p>
+                <div class="card-actions">
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/.github" target="_blank" rel="noopener noreferrer">Código-fonte</a>
+                  <a class="button secondary sm" href="https://github.com/ProjectNox-org/.github/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Docs</a>
+                </div>
+              </article>
+            </div>
+
+            <div class="empty-state" id="repo-empty" hidden>
+              <p>Nenhum repositório corresponde à busca ou ao filtro selecionado.</p>
+              <button class="button secondary sm" id="reset-filters" type="button">Limpar filtros</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 7. Documentação e Suporte -->
+        <section class="section section-divider" id="suporte" aria-labelledby="suporte-title">
+          <div class="container">
+            <div class="section-header reveal" id="instalacao">
+              <span class="eyebrow">Documentação &amp; Suporte</span>
+              <h2 class="section-title" id="suporte-title">Guias técnicos e atendimento de extensões</h2>
+              <p class="section-desc">
+                Acesse a documentação dedicada de instalação para aplicativos compatíveis ou utilize os canais oficiais de tickets e acompanhamento.
+              </p>
+            </div>
+
+            <div class="support-grid reveal">
+              <div>
+                <h3 style="margin: 0 0 10px; font-size: 1.25rem;">Tickets de extensões (Mihon, Aniyomi &amp; forks)</h3>
+                <p style="margin: 0; color: var(--text-secondary);">
+                  Chegou aqui pelo ícone de globo dentro do aplicativo? Selecione a categoria adequada abaixo para enviar sua solicitação ou consulte o <strong>Tracker de Extensões</strong> antes de abrir um chamado duplicado.
+                </p>
+
+                <div class="ticket-list" aria-label="Categorias oficiais de ticket de extensão">
+                  <a
+                    class="ticket-item"
+                    href="https://github.com/ProjectNox-org/project-nox-requests/issues/new?template=01_request_extension.yml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <strong>Solicitar nova extensão</strong>
+                    <span>Sugerir nova fonte de mangá ou anime</span>
+                  </a>
+                  <a
+                    class="ticket-item"
+                    href="https://github.com/ProjectNox-org/project-nox-requests/issues/new?template=02_report_broken.yml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <strong>Reportar problema</strong>
+                    <span>Erros de busca, listagem ou reprodução</span>
+                  </a>
+                  <a
+                    class="ticket-item"
+                    href="https://github.com/ProjectNox-org/project-nox-requests/issues/new?template=03_report_url_change.yml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <strong>Informar mudança de domínio</strong>
+                    <span>Atualizar endereço de site existente</span>
+                  </a>
+                  <a
+                    class="ticket-item"
+                    href="https://github.com/ProjectNox-org/project-nox-requests/issues/new?template=04_report_dead_source.yml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <strong>Reportar fonte indisponível</strong>
+                    <span>Sinalizar site encerrado ou offline</span>
+                  </a>
+                  <a
+                    class="ticket-item"
+                    href="https://github.com/ProjectNox-org/project-nox-requests/issues/new?template=05_request_feature.yml"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <strong>Sugerir melhoria</strong>
+                    <span>Propor aprimoramento em extensão ativa</span>
+                  </a>
+                </div>
               </div>
-              <h3>Conecte-se e contribua</h3>
-              <p>Participe das comunidades oficiais para tirar dúvidas, acompanhar novidades e colaborar com o ecossistema.</p>
-              <div class="card-actions" style="flex-direction:column;">
-                <a class="button gold" href="https://projectnox-org.github.io/project-nox-tracker/">Acessar Tracker em Tempo Real</a>
-                <a class="button secondary" href="https://discord.com/invite/qNAMYUEmGj" target="_blank" rel="noopener noreferrer">Entrar no Discord Oficial</a>
-                <a class="button secondary" href="https://web.canary.fluxer.app/invite/q456UCVt" target="_blank" rel="noopener noreferrer">Entrar no Fluxer Oficial</a>
-                <a class="button secondary" href="https://github.com/ProjectNox-org/.github/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">Guia de Contribuição</a>
-              </div>
+
+              <aside class="card" style="background: rgba(4, 6, 13, 0.72);">
+                <span class="pill gold">Acesso Rápido</span>
+                <h3>Documentação e acompanhamento</h3>
+                <p>
+                  Consulte as instruções completas de instalação (URLs <code>index.pb</code>, JSON e adição automática no Android) ou acompanhe solicitações em andamento.
+                </p>
+                <div class="card-actions" style="flex-direction: column;">
+                  <a
+                    class="button primary"
+                    href="https://github.com/ProjectNox-org/project-nox-requests/issues/new/choose"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Abrir ticket de extensão
+                  </a>
+                  <a class="button gold" href="https://projectnox-org.github.io/project-nox-tracker/">
+                    Tracker de Extensões
+                  </a>
+                  <a class="button secondary" href="extensoes/">Guia Oficial de Extensões</a>
+                  <a
+                    class="button secondary"
+                    href="https://github.com/ProjectNox-org/.github/blob/main/CONTRIBUTING.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Guia de Contribuição
+                  </a>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <!-- 8. Comunidade e Contribuição -->
+        <section class="section section-divider" id="comunidade" aria-labelledby="comunidade-title">
+          <div class="container">
+            <div class="section-header reveal">
+              <span class="eyebrow">Canais Oficiais</span>
+              <h2 class="section-title" id="comunidade-title">Comunidade e contribuição</h2>
+              <p class="section-desc">
+                Participe dos espaços oficiais do Project Nox para acompanhar atualizações, trocar ideias e colaborar com código ou documentação.
+              </p>
+            </div>
+
+            <div class="grid-3">
+              <article class="card reveal">
+                <div class="card-head">
+                  <div class="card-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.54 4.46A16.5 16.5 0 0 0 15.4 3.2l-.5 1.02a15.3 15.3 0 0 0-5.8 0L8.6 3.2a16.5 16.5 0 0 0-4.14 1.26C1.84 8.4 1.13 12.24 1.48 16.03A16.65 16.65 0 0 0 6.56 18.6l1.23-1.68a10.33 10.33 0 0 1-1.94-.93l.47-.36a11.92 11.92 0 0 0 11.36 0l.47.36c-.62.37-1.27.69-1.94.93l1.23 1.68a16.62 16.62 0 0 0 5.08-2.57c.41-4.4-.7-8.2-2.98-11.57ZM8.68 13.7c-1.1 0-2-1.01-2-2.25s.88-2.25 2-2.25 2.02 1.01 2 2.25c0 1.24-.88 2.25-2 2.25Zm6.64 0c-1.1 0-2-1.01-2-2.25s.88-2.25 2-2.25 2.02 1.01 2 2.25c0 1.24-.88 2.25-2 2.25Z"/></svg>
+                  </div>
+                  <span class="pill">Comunidade</span>
+                </div>
+                <h3>Discord Oficial</h3>
+                <p>Canal principal para avisos, suporte geral, discussões sobre projetos e contato com a comunidade.</p>
+                <div class="card-actions">
+                  <a
+                    class="button secondary sm"
+                    href="https://discord.com/invite/qNAMYUEmGj"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Entrar no Discord
+                  </a>
+                </div>
+              </article>
+
+              <article class="card reveal">
+                <div class="card-head">
+                  <div class="card-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="90 120 332 272" fill="currentColor"><path d="M187.53 266.057C171.987 266.057 157.206 269.562 143.187 276.571C129.321 283.581 118.044 294.781 109.359 310.171C103.743 320.3 100.041 332.574 98.2529 346.993C96.5986 360.334 107.829 371.2 121.271 371.2C135.049 371.2 145.336 359.626 148.673 346.259C150.564 338.68 153.612 332.67 157.815 328.229C165.891 319.695 176.101 315.429 188.444 315.429C196.673 315.429 204.216 317.486 211.073 321.6C217.93 325.562 226.844 332.343 237.815 341.943C254.577 356.724 269.359 367.467 282.159 374.171C294.959 380.724 309.13 384 324.673 384C340.216 384 354.997 380.495 369.016 373.486C383.035 366.476 394.387 355.276 403.073 339.886C408.811 329.718 412.521 317.389 414.202 302.899C415.745 289.597 404.498 278.857 391.106 278.857C377.243 278.858 366.904 290.561 363.218 303.927C361.421 310.442 358.706 315.952 355.073 320.457C347.454 329.905 337.016 334.629 323.759 334.629C315.53 334.629 308.063 332.647 301.359 328.686C294.806 324.571 285.816 317.714 274.387 308.114C257.473 293.943 242.615 283.429 229.815 276.571C217.168 269.562 203.073 266.057 187.53 266.057Z"/><path d="M187.53 128C171.987 128 157.206 131.505 143.187 138.514C129.321 145.524 118.044 156.724 109.359 172.114C103.743 182.243 100.041 194.517 98.2529 208.935C96.5985 222.276 107.829 233.142 121.271 233.143C135.049 233.143 145.336 221.569 148.673 208.202C150.564 200.623 153.612 194.613 157.815 190.171C165.891 181.638 176.101 177.371 188.444 177.371C196.673 177.371 204.216 179.429 211.073 183.543C217.93 187.505 226.844 194.286 237.815 203.886C254.577 218.667 269.359 229.41 282.159 236.114C294.959 242.667 309.13 245.943 324.673 245.943C340.216 245.943 354.997 242.438 369.016 235.429C383.035 228.419 394.387 217.219 403.073 201.829C408.811 191.661 412.521 179.332 414.202 164.842C415.745 151.539 404.498 140.8 391.106 140.8C377.243 140.8 366.904 152.504 363.218 165.87C361.421 172.385 358.706 177.895 355.073 182.4C347.454 191.848 337.016 196.571 323.759 196.571C315.53 196.571 308.063 194.59 301.359 190.629C294.806 186.514 285.816 179.657 274.387 170.057C257.473 155.886 242.615 145.371 229.815 138.514C217.168 131.505 203.073 128 187.53 128Z"/></svg>
+                  </div>
+                  <span class="pill">Comunidade</span>
+                </div>
+                <h3>Fluxer Oficial</h3>
+                <p>Espaço alternativo da comunidade Project Nox no Fluxer para interação e acompanhamento de atualizações.</p>
+                <div class="card-actions">
+                  <a
+                    class="button secondary sm"
+                    href="https://web.canary.fluxer.app/invite/q456UCVt"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Entrar no Fluxer
+                  </a>
+                </div>
+              </article>
+
+              <article class="card reveal">
+                <div class="card-head">
+                  <div class="card-icon gold" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+                  </div>
+                  <span class="pill gold">GitHub</span>
+                </div>
+                <h3>Organização &amp; Contribuição</h3>
+                <p>Explore todos os repositórios em <code>ProjectNox-org</code> e consulte o guia de contribuição antes de enviar pull requests.</p>
+                <div class="card-actions">
+                  <a
+                    class="button secondary sm"
+                    href="https://github.com/ProjectNox-org"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    GitHub ProjectNox-org
+                  </a>
+                  <a
+                    class="button secondary sm"
+                    href="https://github.com/ProjectNox-org/.github/blob/main/CONTRIBUTING.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Guia de Contribuição
+                  </a>
+                </div>
+              </article>
             </div>
           </div>
         </section>
       </main>
 
-      <!-- Unified Site Footer -->
+      <!-- 9. Rodapé Institucional -->
       <footer class="site-footer">
-        <div class="footer-content">
+        <div class="container footer-inner">
           <div class="footer-brand">
-            <img src="assets/logo-header.png" alt="" width="26" height="26" />
-            <span>&copy; 2026 Project Nox. Fundado por Awerkori.</span>
+            <img src="assets/brand/nox-emblem.webp" alt="" width="30" height="30" />
+            <div class="footer-meta">
+              <span><strong>Project Nox</strong> · Fundado por <a href="https://github.com/Awerkori" target="_blank" rel="noopener noreferrer" style="color: inherit;">Awerkori</a></span>
+              <span class="footer-sub">Iniciativa independente de código aberto · Licença GNU AGPL-3.0 (preservando atribuições de terceiros)</span>
+            </div>
           </div>
-          <div class="footer-links">
-            <a href="https://projectnox-org.github.io/">Central Oficial</a>
-            <a href="https://projectnox-org.github.io/project-nox-tracker/">Tracker Oficial</a>
-            <a href="https://web.canary.fluxer.app/invite/q456UCVt" target="_blank" rel="noopener noreferrer">Fluxer</a>
+
+          <nav class="footer-links" aria-label="Links do rodapé">
+            <a href="./">Central Oficial</a>
+            <a href="extensoes/">Guia de Extensões</a>
+            <a href="https://projectnox-org.github.io/project-nox-tracker/">Tracker de Extensões</a>
+            <a href="https://github.com/ProjectNox-org" target="_blank" rel="noopener noreferrer">GitHub</a>
             <a href="https://discord.com/invite/qNAMYUEmGj" target="_blank" rel="noopener noreferrer">Discord</a>
-            <a href="https://github.com/ProjectNox-org" target="_blank" rel="noopener noreferrer">GitHub ProjectNox-org</a>
-          </div>
+            <a href="https://web.canary.fluxer.app/invite/q456UCVt" target="_blank" rel="noopener noreferrer">Fluxer</a>
+          </nav>
         </div>
       </footer>
     </div>
 
-    <script src="particles.js?v=1.0.0" defer></script>
-    <script src="app.js?v=1.0.0" defer></script>
+    <script src="app.js?v=3.0.0" defer></script>
   </body>
 </html>

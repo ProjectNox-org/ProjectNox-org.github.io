@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 96" width="840" height="96" role="img" aria-labelledby="philTitle-dark philDesc-dark">
+  <title id="philTitle-dark">Princípios do Project Nox</title>
+  <desc id="philDesc-dark">Construir: software sólido para uso real. Compartilhar: código aberto e transparente. Evoluir: melhoria contínua com a comunidade.</desc>
+  <defs>
+    <linearGradient id="philLine-dark" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#22263D" stop-opacity="0"/>
+      <stop offset="20%" stop-color="#22263D" stop-opacity="1"/>
+      <stop offset="80%" stop-color="#22263D" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#22263D" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="1" width="840" height="1" fill="url(#philLine-dark)"/>
+  <rect x="0" y="94" width="840" height="1" fill="url(#philLine-dark)"/>
+
+  <g transform="translate(140, 0)" text-anchor="middle">
+    <text x="0" y="37" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15.5" font-weight="700" letter-spacing="1.4" fill="#F8FAFC">CONSTRUIR</text>
+    <text x="0" y="63" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#CBD5E1">Software sólido para uso real</text>
+  </g>
+  <circle cx="280" cy="48" r="2.2" fill="#D4AF37" opacity="0.8"/>
+
+  <g transform="translate(420, 0)" text-anchor="middle">
+    <text x="0" y="37" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15.5" font-weight="700" letter-spacing="1.4" fill="#B59AF5">COMPARTILHAR</text>
+    <text x="0" y="63" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#CBD5E1">Código aberto e transparente</text>
+  </g>
+  <circle cx="560" cy="48" r="2.2" fill="#D4AF37" opacity="0.8"/>
+
+  <g transform="translate(700, 0)" text-anchor="middle">
+    <text x="0" y="37" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15.5" font-weight="700" letter-spacing="1.4" fill="#F8FAFC">EVOLUIR</text>
+    <text x="0" y="63" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="#CBD5E1">Melhoria contínua com a comunidade</text>
+  </g>
+</svg>

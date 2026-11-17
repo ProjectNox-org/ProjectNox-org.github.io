@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Documentação oficial e guia de instalação das extensões do Project Nox para Mihon, Aniyomi e forks compatíveis."
+    />
+    <meta name="theme-color" content="#05070e" />
+
+    <link rel="icon" href="../favicon.ico" sizes="any" />
+    <link rel="icon" href="../assets/favicon-32x32.png" type="image/png" sizes="32x32" />
+    <link rel="icon" href="../assets/favicon-16x16.png" type="image/png" sizes="16x16" />
+    <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png" sizes="180x180" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cinzel:wght@600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="../styles.css?v=3.0.0" />
+    <title>Guia de Extensões — Project Nox</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo-principal">Pular para o conteúdo</a>
+    <div class="cosmic-backdrop" aria-hidden="true"></div>
+
+    <div class="app-shell">
+      <header class="site-header">
+        <div class="container header-inner">
+          <a class="brand" href="../" aria-label="Voltar à Central Oficial do Project Nox">
+            <span class="brand-mark">
+              <img src="../assets/brand/nox-emblem.webp" alt="" width="30" height="30" />
+            </span>
+            <span class="brand-text">
+              <span class="brand-title-row">
+                <span class="brand-name">PROJECT NOX</span>
+                <span class="brand-badge">DOCUMENTAÇÃO</span>
+              </span>
+              <span class="brand-sub">Guia de Extensões</span>
+            </span>
+          </a>
+
+          <button
+            class="nav-toggle"
+            id="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="nav-links"
+            aria-label="Abrir menu de navegação"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+
+          <nav class="nav-links" id="nav-links" aria-label="Navegação principal">
+            <div class="nav-anchors">
+              <a class="nav-anchor" href="../">Central Oficial</a>
+              <a class="nav-anchor" href="../#repositorios">Repositórios</a>
+              <a class="nav-anchor" href="./" aria-current="page">Extensões</a>
+              <a class="nav-anchor" href="https://projectnox-org.github.io/project-nox-tracker/">Tracker de Extensões</a>
+            </div>
+            <a
+              class="button primary sm"
+              href="https://github.com/ProjectNox-org/project-nox-requests/issues/new/choose"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Abrir ticket de extensão
+            </a>
+          </nav>
+        </div>
+      </header>
+
+      <main id="conteudo-principal">
+        <section class="section" aria-labelledby="ext-title">
+          <div class="container">
+            <div class="section-header">
+              <span class="eyebrow">Mihon &amp; Aniyomi</span>
+              <h1 class="section-title" id="ext-title">Instalação dos repositórios de extensões</h1>
+              <p class="section-desc">
+                Adicione os catálogos oficiais do Project Nox no seu aplicativo. Sempre que o aplicativo suportar, utilize o formato <strong>Protobuf (<code>index.pb</code>)</strong>; os índices JSON permanecem sincronizados para compatibilidade com clientes legados.
+              </p>
+            </div>
+
+            <div class="sr-only" id="copy-status" aria-live="polite"></div>
+
+            <div class="install-shell">
+              <div class="tab-bar" role="tablist" aria-label="Selecionar plataforma de extensões">
+                <button class="tab-btn" role="tab" id="tab-manga" aria-selected="true" aria-controls="panel-manga" type="button">
+                  Mangá (Mihon &amp; Forks)
+                </button>
+                <button class="tab-btn" role="tab" id="tab-anime" aria-selected="false" aria-controls="panel-anime" tabindex="-1" type="button">
+                  Anime (Aniyomi &amp; Forks)
+                </button>
+              </div>
+
+              <!-- Painel Mangá -->
+              <div class="tab-panel" id="panel-manga" role="tabpanel" aria-labelledby="tab-manga">
+                <div class="install-grid" id="mihon">
+                  <div class="url-list">
+                    <div class="url-item recommended">
+                      <div class="url-label-row">
+                        <span class="url-label">Protobuf (<code>index.pb</code>)</span>
+                        <span class="pill green">Recomendado</span>
+                      </div>
+                      <div class="copy-row">
+                        <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.pb</code>
+                        <button
+                          class="copy-btn"
+                          type="button"
+                          data-copy="https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.pb"
+                        >
+                          Copiar
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="url-item">
+                      <div class="url-label-row">
+                        <span class="url-label">JSON Legado (<code>index.json</code>)</span>
+                        <span class="pill">Compatibilidade</span>
+                      </div>
+                      <div class="copy-row">
+                        <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.json</code>
+                        <button
+                          class="copy-btn"
+                          type="button"
+                          data-copy="https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.json"
+                        >
+                          Copiar
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="url-item">
+                      <div class="url-label-row">
+                        <span class="url-label">JSON Compacto (<code>index.min.json</code>)</span>
+                        <span class="pill">Legado Compacto</span>
+                      </div>
+                      <div class="copy-row">
+                        <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.min.json</code>
+                        <button
+                          class="copy-btn"
+                          type="button"
+                          data-copy="https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.min.json"
+                        >
+                          Copiar
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <a
+                        class="button primary"
+                        href="tachiyomi://add-repo?url=https%3A%2F%2Fraw.githubusercontent.com%2FProjectNox-org%2Fmanga-extensoes%2Frepo%2Findex.min.json"
+                      >
+                        Adicionar Automaticamente no Celular (Android)
+                      </a>
+                    </div>
+                  </div>
+
+                  <div class="steps-box">
+                    <h4>Como configurar no Mihon ou fork</h4>
+                    <ol class="step-list">
+                      <li>Abra o aplicativo e acesse <strong>Mais</strong> → <strong>Configurações</strong> → <strong>Navegar</strong>.</li>
+                      <li>Entre em <strong>Repositórios de extensões</strong> e toque em <strong>Adicionar</strong>.</li>
+                      <li>Cole a URL <code>index.pb</code> (ou use o botão de adição automática no navegador do Android).</li>
+                      <li>Volte à aba <strong>Extensões</strong>, atualize a lista e instale as fontes desejadas.</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Painel Anime -->
+              <div class="tab-panel" id="panel-anime" role="tabpanel" aria-labelledby="tab-anime" hidden>
+                <div class="install-grid" id="aniyomi">
+                  <div class="url-list">
+                    <div class="url-item recommended">
+                      <div class="url-label-row">
+                        <span class="url-label">Protobuf (<code>index.pb</code>)</span>
+                        <span class="pill green">Recomendado</span>
+                      </div>
+                      <div class="copy-row">
+                        <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.pb</code>
+                        <button
+                          class="copy-btn"
+                          type="button"
+                          data-copy="https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.pb"
+                        >
+                          Copiar
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="url-item">
+                      <div class="url-label-row">
+                        <span class="url-label">JSON Legado (<code>index.json</code>)</span>
+                        <span class="pill">Compatibilidade</span>
+                      </div>
+                      <div class="copy-row">
+                        <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.json</code>
+                        <button
+                          class="copy-btn"
+                          type="button"
+                          data-copy="https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.json"
+                        >
+                          Copiar
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="url-item">
+                      <div class="url-label-row">
+                        <span class="url-label">JSON Compacto (<code>index.min.json</code>)</span>
+                        <span class="pill">Legado Compacto</span>
+                      </div>
+                      <div class="copy-row">
+                        <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.min.json</code>
+                        <button
+                          class="copy-btn"
+                          type="button"
+                          data-copy="https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.min.json"
+                        >
+                          Copiar
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <a
+                        class="button primary"
+                        href="aniyomi://add-repo?url=https%3A%2F%2Fraw.githubusercontent.com%2FProjectNox-org%2Fanime-extensoes%2Frepo%2Findex.min.json"
+                      >
+                        Adicionar Automaticamente no Celular (Android)
+                      </a>
+                    </div>
+                  </div>
+
+                  <div class="steps-box">
+                    <h4>Como configurar no Aniyomi ou fork</h4>
+                    <ol class="step-list">
+                      <li>Abra o Aniyomi e vá em <strong>Mais</strong> → <strong>Configurações</strong> → <strong>Navegar</strong>.</li>
+                      <li>Toque em <strong>Repositórios de extensões de anime</strong> → <strong>Adicionar</strong>.</li>
+                      <li>Cole a URL <code>index.pb</code> (ou toque no botão automático acima no Android).</li>
+                      <li>Atualize a lista de extensões de anime e confie nos APKs assinados do Project Nox.</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+
+              <div class="callout">
+                <strong>Nota sobre adição automática:</strong> os links <code>tachiyomi://</code> e <code>aniyomi://</code> utilizam <code>index.min.json</code> para compatibilidade com a especificação de deep-link dos aplicativos Android. Para colagem manual, dê preferência ao endereço <code>index.pb</code>.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section section-compact section-divider" aria-labelledby="ext-support-title">
+          <div class="container">
+            <div class="grid-2">
+              <article class="card">
+                <h2 id="ext-support-title" style="margin:0;font-size:1.25rem;">Precisa pedir ou reportar uma extensão?</h2>
+                <p>
+                  Envie solicitações de novas fontes, relatos de erro, mudanças de domínio ou sugestões diretamente pela central de tickets.
+                </p>
+                <div class="card-actions">
+                  <a
+                    class="button primary sm"
+                    href="https://github.com/ProjectNox-org/project-nox-requests/issues/new/choose"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Abrir ticket de extensão
+                  </a>
+                  <a class="button gold sm" href="https://projectnox-org.github.io/project-nox-tracker/">
+                    Tracker de Extensões
+                  </a>
+                </div>
+              </article>
+
+              <article class="card">
+                <h2 style="margin:0;font-size:1.25rem;">Código-fonte e licenciamento</h2>
+                <p>
+                  Os repositórios de código-fonte e catálogos de extensões utilizam a licença <strong>GNU AGPL-3.0</strong>, preservando atribuições e licenças de terceiros aplicáveis.
+                </p>
+                <div class="card-actions">
+                  <a
+                    class="button secondary sm"
+                    href="https://github.com/ProjectNox-org/manga-fonte-extensoes"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Fonte Mangá
+                  </a>
+                  <a
+                    class="button secondary sm"
+                    href="https://github.com/ProjectNox-org/anime-fonte-extensoes"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Fonte Anime
+                  </a>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="container footer-inner">
+          <div class="footer-brand">
+            <img src="../assets/brand/nox-emblem.webp" alt="" width="28" height="28" />
+            <div class="footer-meta">
+              <span><strong>Project Nox</strong> · Fundado por <a href="https://github.com/Awerkori" target="_blank" rel="noopener noreferrer" style="color: inherit;">Awerkori</a></span>
+              <span class="footer-sub">Central Oficial · Documentação de Extensões</span>
+            </div>
+          </div>
+
+          <nav class="footer-links" aria-label="Links do rodapé">
+            <a href="../">Central Oficial</a>
+            <a href="https://projectnox-org.github.io/project-nox-tracker/">Tracker de Extensões</a>
+            <a href="https://github.com/ProjectNox-org" target="_blank" rel="noopener noreferrer">GitHub</a>
+          </nav>
+        </div>
+      </footer>
+    </div>
+
+    <script src="../app.js?v=3.0.0" defer></script>
+  </body>
+</html>

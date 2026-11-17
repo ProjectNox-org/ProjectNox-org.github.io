@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 236" width="380" height="236" role="img" aria-labelledby="philTitle-mobile-dark philDesc-mobile-dark">
+  <title id="philTitle-mobile-dark">Princípios do Project Nox</title>
+  <desc id="philDesc-mobile-dark">Construir: software sólido para uso real. Compartilhar: código aberto e transparente. Evoluir: melhoria contínua com a comunidade.</desc>
+  <defs>
+    <linearGradient id="philLine-mobile-dark" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#22263D" stop-opacity="0"/>
+      <stop offset="20%" stop-color="#22263D" stop-opacity="1"/>
+      <stop offset="80%" stop-color="#22263D" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#22263D" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="1" width="380" height="1" fill="url(#philLine-mobile-dark)"/>
+  <rect x="0" y="234" width="380" height="1" fill="url(#philLine-mobile-dark)"/>
+
+  <g transform="translate(190, 36)" text-anchor="middle">
+    <text x="0" y="0" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="1.5" fill="#F8FAFC">CONSTRUIR</text>
+    <text x="0" y="22" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#CBD5E1">Software sólido para uso real</text>
+  </g>
+  <circle cx="190" cy="79" r="2" fill="#D4AF37" opacity="0.8"/>
+
+  <g transform="translate(190, 112)" text-anchor="middle">
+    <text x="0" y="0" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="1.5" fill="#B59AF5">COMPARTILHAR</text>
+    <text x="0" y="22" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#CBD5E1">Código aberto e transparente</text>
+  </g>
+  <circle cx="190" cy="155" r="2" fill="#D4AF37" opacity="0.8"/>
+
+  <g transform="translate(190, 188)" text-anchor="middle">
+    <text x="0" y="0" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="1.5" fill="#F8FAFC">EVOLUIR</text>
+    <text x="0" y="22" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" fill="#CBD5E1">Melhoria contínua com a comunidade</text>
+  </g>
+</svg>
