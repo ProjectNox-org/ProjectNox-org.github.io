@@ -7,7 +7,7 @@
       name="description"
       content="Documentação oficial e guia de instalação das extensões do Project Nox para Mihon, Aniyomi e forks compatíveis."
     />
-    <meta name="theme-color" content="#05070e" />
+    <meta name="theme-color" content="#04060d" />
 
     <link rel="icon" href="../favicon.ico" sizes="any" />
     <link rel="icon" href="../assets/favicon-32x32.png" type="image/png" sizes="32x32" />
@@ -21,12 +21,14 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="../styles.css?v=3.0.0" />
+    <link rel="stylesheet" href="../styles.css?v=4.0.0" />
     <title>Guia de Extensões — Project Nox</title>
   </head>
   <body>
     <a class="skip-link" href="#conteudo-principal">Pular para o conteúdo</a>
-    <div class="cosmic-backdrop" aria-hidden="true"></div>
+    <div class="cosmic-backdrop" aria-hidden="true">
+      <div class="cosmic-orb"></div>
+    </div>
 
     <div class="app-shell">
       <header class="site-header">
@@ -44,37 +46,35 @@
             </span>
           </a>
 
-          <button
-            class="nav-toggle"
-            id="nav-toggle"
-            type="button"
-            aria-expanded="false"
-            aria-controls="nav-links"
-            aria-label="Abrir menu de navegação"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-          </button>
-
-          <nav class="nav-links" id="nav-links" aria-label="Navegação principal">
-            <div class="nav-anchors">
-              <a class="nav-anchor" href="../">Central Oficial</a>
-              <a class="nav-anchor" href="../#repositorios">Repositórios</a>
-              <a class="nav-anchor" href="./" aria-current="page">Extensões</a>
-              <a class="nav-anchor" href="https://projectnox-org.github.io/project-nox-tracker/">Tracker de Extensões</a>
-            </div>
+          <div class="header-community-group" aria-label="Comunidades oficiais">
             <a
-              class="button primary sm"
-              href="https://github.com/ProjectNox-org/project-nox-requests/issues/new/choose"
+              class="header-community-btn fluxer-btn"
+              href="https://web.canary.fluxer.app/invite/q456UCVt"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Fluxer Oficial"
+              title="Fluxer Oficial"
             >
-              Abrir ticket de extensão
+              <svg viewBox="0 0 512 512" fill="none" class="community-svg" aria-hidden="true">
+                <path d="M187.53 266.057C171.987 266.057 157.206 269.562 143.187 276.571C129.321 283.581 118.044 294.781 109.359 310.171C103.743 320.3 100.041 332.574 98.2529 346.993C96.5986 360.334 107.829 371.2 121.271 371.2C135.049 371.2 145.336 359.626 148.673 346.259C150.564 338.68 153.612 332.67 157.815 328.229C165.891 319.695 176.101 315.429 188.444 315.429C196.673 315.429 204.216 317.486 211.073 321.6C217.93 325.562 226.844 332.343 237.815 341.943C254.577 356.724 269.359 367.467 282.159 374.171C294.959 380.724 309.13 384 324.673 384C340.216 384 354.997 380.495 369.016 373.486C383.035 366.476 394.387 355.276 403.073 339.886C408.811 329.718 412.521 317.389 414.202 302.899C415.745 289.597 404.498 278.857 391.106 278.857C377.243 278.858 366.904 290.561 363.218 303.927C361.421 310.442 358.706 315.952 355.073 320.457C347.454 329.905 337.016 334.629 323.759 334.629C315.53 334.629 308.063 332.647 301.359 328.686C294.806 324.571 285.816 317.714 274.387 308.114C257.473 293.943 242.615 283.429 229.815 276.571C217.168 269.562 203.073 266.057 187.53 266.057Z" fill="currentColor"/>
+                <path d="M187.53 128C171.987 128 157.206 131.505 143.187 138.514C129.321 145.524 118.044 156.724 109.359 172.114C103.743 182.243 100.041 194.517 98.2529 208.935C96.5985 222.276 107.829 233.142 121.271 233.143C135.049 233.143 145.336 221.569 148.673 208.202C150.564 200.623 153.612 194.613 157.815 190.171C165.891 181.638 176.101 177.371 188.444 177.371C196.673 177.371 204.216 179.429 211.073 183.543C217.93 187.505 226.844 194.286 237.815 203.886C254.577 218.667 269.359 229.41 282.159 236.114C294.959 242.667 309.13 245.943 324.673 245.943C340.216 245.943 354.997 242.438 369.016 235.429C383.035 228.419 394.387 217.219 403.073 201.829C408.811 191.661 412.521 179.332 414.202 164.842C415.745 151.539 404.498 140.8 391.106 140.8C377.243 140.8 366.904 152.504 363.218 165.87C361.421 172.385 358.706 177.895 355.073 182.4C347.454 191.848 337.016 196.571 323.759 196.571C315.53 196.571 308.063 194.59 301.359 190.629C294.806 186.514 285.816 179.657 274.387 170.057C257.473 155.886 242.615 145.371 229.815 138.514C217.168 131.505 203.073 128 187.53 128Z" fill="currentColor"/>
+              </svg>
+              <span class="community-btn-text">Fluxer</span>
             </a>
-          </nav>
+            <a
+              class="header-community-btn discord-btn"
+              href="https://discord.com/invite/qNAMYUEmGj"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Discord Oficial"
+              title="Discord Oficial"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" class="community-svg" aria-hidden="true">
+                <path d="M19.54 4.46A16.5 16.5 0 0 0 15.4 3.2l-.5 1.02a15.3 15.3 0 0 0-5.8 0L8.6 3.2a16.5 16.5 0 0 0-4.14 1.26C1.84 8.4 1.13 12.24 1.48 16.03A16.65 16.65 0 0 0 6.56 18.6l1.23-1.68a10.33 10.33 0 0 1-1.94-.93l.47-.36a11.92 11.92 0 0 0 11.36 0l.47.36c-.62.37-1.27.69-1.94.93l1.23 1.68a16.62 16.62 0 0 0 5.08-2.57c.41-4.4-.7-8.2-2.98-11.57ZM8.68 13.7c-1.1 0-2-1.01-2-2.25s.88-2.25 2-2.25 2.02 1.01 2 2.25c0 1.24-.88 2.25-2 2.25Zm6.64 0c-1.1 0-2-1.01-2-2.25s.88-2.25 2-2.25 2.02 1.01 2 2.25c0 1.24-.88 2.25-2 2.25Z"/>
+              </svg>
+              <span class="community-btn-text">Discord</span>
+            </a>
+          </div>
         </div>
       </header>
 
@@ -317,14 +317,14 @@
       <footer class="site-footer">
         <div class="container footer-inner">
           <div class="footer-brand">
-            <img src="../assets/brand/nox-emblem.webp" alt="" width="28" height="28" />
+            <img src="../assets/brand/nox-emblem.webp" alt="" width="30" height="30" />
             <div class="footer-meta">
               <span><strong>Project Nox</strong> · Fundado por <a href="https://github.com/Awerkori" target="_blank" rel="noopener noreferrer" style="color: inherit;">Awerkori</a></span>
               <span class="footer-sub">Central Oficial · Documentação de Extensões</span>
             </div>
           </div>
 
-          <nav class="footer-links" aria-label="Links do rodapé">
+          <nav class="footer-links" aria-label="Links essenciais">
             <a href="../">Central Oficial</a>
             <a href="https://projectnox-org.github.io/project-nox-tracker/">Tracker de Extensões</a>
             <a href="https://github.com/ProjectNox-org" target="_blank" rel="noopener noreferrer">GitHub</a>
@@ -333,6 +333,6 @@
       </footer>
     </div>
 
-    <script src="../app.js?v=3.0.0" defer></script>
+    <script src="../app.js?v=4.0.0" defer></script>
   </body>
 </html>

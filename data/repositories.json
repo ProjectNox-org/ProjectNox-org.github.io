@@ -2,283 +2,192 @@
   "organization": "ProjectNox-org",
   "founder": "Awerkori",
   "policy_license": "GNU AGPL-3.0",
-  "updated_at": "2026-11-17T20:59:04Z",
+  "updated_at": "2026-11-18T00:06:24Z",
   "repositories": [
     {
       "name": "project-nox-manga",
       "title": "Project Nox Manga",
       "category": "platforms",
       "category_label": "Plataformas & Web",
-      "kind": "Plataforma Web & Código-fonte",
+      "icon": "book",
       "description": "Plataforma web oficial e leitor de mangás do Project Nox em SvelteKit e Cloudflare Workers.",
-      "purpose": "Oferecer leitura web contínua ou por página, sincronização de progresso e gestão integrada de acervo.",
-      "features": [
-        "Leitura em cascata vertical e página por página",
-        "Sincronização de histórico e progresso na nuvem",
-        "Renderização SSR no Edge com Cloudflare Workers"
-      ],
+      "meta": "SvelteKit · Edge SSR",
       "license": "AGPL-3.0",
-      "license_status": "verified",
       "default_branch": "main",
-      "tech": "SvelteKit / TypeScript",
       "source_url": "https://github.com/ProjectNox-org/project-nox-manga",
       "docs_url": "https://github.com/ProjectNox-org/project-nox-manga#readme",
-      "app_url": "https://manga.project-nox-awerkori.workers.dev",
-      "app_label": "Abrir Plataforma Web",
-      "related": [
-        "project-nox-importer"
-      ]
+      "specific_action": {
+        "label": "Acessar plataforma",
+        "url": "https://manga.project-nox-awerkori.workers.dev",
+        "external": true
+      },
+      "search_keywords": "sveltekit cloudflare workers leitor web mangas plataforma"
     },
     {
       "name": "project-nox-tracker",
       "title": "Tracker de Extensões",
       "category": "platforms",
       "category_label": "Plataformas & Web",
-      "kind": "Aplicação Web & Código-fonte",
-      "description": "Painel web interativo para acompanhamento em tempo real do status e pedidos de extensões do Project Nox.",
-      "purpose": "Dar visibilidade pública às solicitações da comunidade abertas em project-nox-requests.",
-      "features": [
-        "Sincronização automática a cada 15 minutos via GitHub Actions",
-        "Filtros por estado, categoria, busca e ordenação por demanda",
-        "Separação clara entre estado da issue e status editorial"
-      ],
+      "icon": "activity",
+      "description": "Painel web interativo para acompanhamento em tempo real do status e pedidos de extensões.",
+      "meta": "GitHub Pages · Automação",
       "license": "AGPL-3.0",
-      "license_status": "verified",
       "default_branch": "main",
-      "tech": "HTML / CSS / JS / Python",
       "source_url": "https://github.com/ProjectNox-org/project-nox-tracker",
       "docs_url": "https://github.com/ProjectNox-org/project-nox-tracker#readme",
-      "app_url": "https://projectnox-org.github.io/project-nox-tracker/",
-      "app_label": "Abrir Tracker de Extensões",
-      "related": [
-        "project-nox-requests"
-      ]
+      "specific_action": {
+        "label": "Acessar tracker",
+        "url": "https://projectnox-org.github.io/project-nox-tracker/",
+        "external": false
+      },
+      "search_keywords": "tracker painel status pedidos solicitacoes extensoes"
     },
     {
       "name": "manga-fonte-extensoes",
       "title": "Fontes de Extensões de Mangá",
       "category": "extensions",
       "category_label": "Extensões",
-      "kind": "Código-fonte Kotlin",
-      "description": "Código-fonte em Kotlin e pipeline de compilação das extensões de mangá do Project Nox para Mihon e forks.",
-      "purpose": "Manter, compilar, assinar e publicar automaticamente os APKs e o índice do catálogo de mangás.",
-      "features": [
-        "Implementação em Kotlin seguindo padrão Keiyoushi/Mihon",
-        "Pipeline CI/CD com compilação e assinatura consistentes",
-        "Publicação automatizada no repositório de distribuição"
-      ],
+      "icon": "code",
+      "description": "Código-fonte em Kotlin e pipeline de compilação das extensões de mangá para Mihon e forks.",
+      "meta": "Kotlin · Gradle CI",
       "license": "AGPL-3.0",
-      "license_status": "verified",
       "default_branch": "main",
-      "tech": "Kotlin / Gradle",
       "source_url": "https://github.com/ProjectNox-org/manga-fonte-extensoes",
       "docs_url": "https://github.com/ProjectNox-org/manga-fonte-extensoes#readme",
-      "app_url": null,
-      "app_label": null,
-      "related": [
-        "manga-extensoes"
-      ]
+      "specific_action": null,
+      "search_keywords": "kotlin gradle mihon codigo fonte compilacao manga"
     },
     {
       "name": "manga-extensoes",
       "title": "Catálogo de Extensões de Mangá",
       "category": "extensions",
       "category_label": "Extensões",
-      "kind": "Distribuição / Catálogo",
-      "description": "Catálogo compilado e distribuição oficial de extensões de mangá do Project Nox para Mihon e forks.",
-      "purpose": "Servir os índices oficiais (index.pb, index.json, index.min.json) e APKs assinados para aplicativos móveis.",
-      "features": [
-        "Índice principal em Protobuf (index.pb)",
-        "Compatibilidade mantida com index.json e index.min.json",
-        "APKs assinados publicados na branch repo"
-      ],
+      "icon": "package",
+      "description": "Catálogo compilado e distribuição oficial de extensões de mangá para Mihon e forks.",
+      "meta": "Protobuf · JSON · APKs",
       "license": "AGPL-3.0",
-      "license_status": "verified",
       "default_branch": "repo",
-      "tech": "Protobuf / JSON / APKs",
       "source_url": "https://github.com/ProjectNox-org/manga-extensoes",
       "docs_url": "https://github.com/ProjectNox-org/manga-extensoes#readme",
-      "app_url": "./extensoes/#mihon",
-      "app_label": "Guia de Instalação",
-      "related": [
-        "manga-fonte-extensoes"
-      ]
+      "specific_action": {
+        "label": "Guia de instalação",
+        "url": "extensoes/#mihon",
+        "external": false
+      },
+      "search_keywords": "catalogo distribuicao mihon index.pb index.json apk manga"
     },
     {
       "name": "anime-fonte-extensoes",
       "title": "Fontes de Extensões de Anime",
       "category": "extensions",
       "category_label": "Extensões",
-      "kind": "Código-fonte Kotlin",
+      "icon": "code",
       "description": "Código-fonte, CI e publicação automática de extensões de anime para Aniyomi e forks.",
-      "purpose": "Desenvolver extractors, compilar APKs de anime e publicar catálogos atualizados automaticamente.",
-      "features": [
-        "Código-fonte Kotlin com suporte a múltiplos extractors",
-        "Geração automática de index.pb e formatos JSON legados",
-        "Assinatura e validação automatizadas via GitHub Actions"
-      ],
+      "meta": "Kotlin · Gradle CI",
       "license": "AGPL-3.0",
-      "license_status": "verified",
       "default_branch": "main",
-      "tech": "Kotlin / Gradle",
       "source_url": "https://github.com/ProjectNox-org/anime-fonte-extensoes",
       "docs_url": "https://github.com/ProjectNox-org/anime-fonte-extensoes#readme",
-      "app_url": null,
-      "app_label": null,
-      "related": [
-        "anime-extensoes"
-      ]
+      "specific_action": null,
+      "search_keywords": "kotlin gradle aniyomi codigo fonte extractors anime"
     },
     {
       "name": "anime-extensoes",
       "title": "Catálogo de Extensões de Anime",
       "category": "extensions",
       "category_label": "Extensões",
-      "kind": "Distribuição / Catálogo",
-      "description": "Catálogo oficial de extensões de anime para Aniyomi e forks com index.pb e JSON sincronizados.",
-      "purpose": "Distribuir o repositório oficial instalável no Aniyomi e aplicativos derivados.",
-      "features": [
-        "Formato principal index.pb (Protobuf oficial)",
-        "Sincronização contínua com index.json e index.min.json",
-        "Metadados e assinatura verificável em repo.json"
-      ],
+      "icon": "package",
+      "description": "Catálogo oficial de extensões de anime para Aniyomi e forks com Protobuf e JSON sincronizados.",
+      "meta": "Protobuf · JSON · APKs",
       "license": "AGPL-3.0",
-      "license_status": "verified",
       "default_branch": "repo",
-      "tech": "Protobuf / JSON / APKs",
       "source_url": "https://github.com/ProjectNox-org/anime-extensoes",
       "docs_url": "https://github.com/ProjectNox-org/anime-extensoes#readme",
-      "app_url": "./extensoes/#aniyomi",
-      "app_label": "Guia de Instalação",
-      "related": [
-        "anime-fonte-extensoes"
-      ]
+      "specific_action": {
+        "label": "Guia de instalação",
+        "url": "extensoes/#aniyomi",
+        "external": false
+      },
+      "search_keywords": "catalogo distribuicao aniyomi index.pb index.json apk anime"
     },
     {
       "name": "project-nox-importer",
       "title": "Project Nox Importer",
       "category": "infrastructure",
-      "category_label": "Infraestrutura & Automação",
-      "kind": "Serviço / Daemon",
+      "category_label": "Infraestrutura",
+      "icon": "server",
       "description": "Serviço autônomo 24/7 de ingestão, validação e armazenamento de catálogo para o Project Nox Manga.",
-      "purpose": "Automatizar o rastreamento, verificação de integridade e atualização contínua de acervos.",
-      "features": [
-        "Validação binária e deduplicação por hash",
-        "Execução contínua e autônoma em segundo plano",
-        "Integração direta com a base do project-nox-manga"
-      ],
+      "meta": "TypeScript · Node.js",
       "license": "AGPL-3.0",
-      "license_status": "verified",
       "default_branch": "main",
-      "tech": "TypeScript / Node.js",
       "source_url": "https://github.com/ProjectNox-org/project-nox-importer",
       "docs_url": "https://github.com/ProjectNox-org/project-nox-importer#readme",
-      "app_url": null,
-      "app_label": null,
-      "related": [
-        "project-nox-manga"
-      ]
+      "specific_action": null,
+      "search_keywords": "daemon ingestao validacao storage typescript nodejs"
     },
     {
       "name": "nox-extension-developer",
       "title": "Nox Extension Developer",
       "category": "tools",
       "category_label": "Ferramentas & IA",
-      "kind": "Skill para Agentes de IA",
-      "description": "Skill para agentes de IA desenvolverem extensões de mangá, anime e novel seguindo os padrões Keiyoushi, Yuzono e LNReader.",
-      "purpose": "Acelerar a criação, manutenção e revisão de extensões com consulta à documentação oficial atualizada.",
-      "features": [
-        "Suporte aos ecossistemas Mihon/Keiyoushi, Aniyomi/Yuzono e LNReader",
-        "Fluxos padronizados de criação, migração e diagnóstico",
-        "Documentação e scripts auxiliares reutilizáveis por agentes"
-      ],
+      "icon": "sparkles",
+      "description": "Skill para agentes de IA desenvolverem extensões nos padrões Keiyoushi, Yuzono e LNReader.",
+      "meta": "Agent Skill · Python",
       "license": "AGPL-3.0",
-      "license_status": "verified",
       "default_branch": "main",
-      "tech": "Python / Agent Skill",
       "source_url": "https://github.com/ProjectNox-org/nox-extension-developer",
       "docs_url": "https://github.com/ProjectNox-org/nox-extension-developer#readme",
-      "app_url": null,
-      "app_label": null,
-      "related": [
-        "manga-fonte-extensoes",
-        "anime-fonte-extensoes"
-      ]
+      "specific_action": null,
+      "search_keywords": "skill ia agentes keiyoushi yuzono lnreader python"
     },
     {
       "name": "project-nox-requests",
-      "title": "Central de Tickets de Extensões",
+      "title": "Central de Solicitações",
       "category": "community",
-      "category_label": "Comunidade & Suporte",
-      "kind": "Central de Solicitações",
+      "category_label": "Suporte",
+      "icon": "ticket",
       "description": "Central oficial de solicitações, reporte de problemas e pedidos de novas extensões de mangá e anime.",
-      "purpose": "Receber, padronizar e triar pedidos e relatos da comunidade via GitHub Issues.",
-      "features": [
-        "5 formulários estruturados (pedido, bug, domínio, fonte, melhoria)",
-        "Triagem automatizada por workflows do GitHub Actions",
-        "Integrado diretamente ao Tracker de Extensões"
-      ],
+      "meta": "GitHub Issues · Triagem",
       "license": "AGPL-3.0",
-      "license_status": "verified",
       "default_branch": "main",
-      "tech": "GitHub Issues / Python",
       "source_url": "https://github.com/ProjectNox-org/project-nox-requests",
       "docs_url": "https://github.com/ProjectNox-org/project-nox-requests#readme",
-      "app_url": "https://github.com/ProjectNox-org/project-nox-requests/issues/new/choose",
-      "app_label": "Abrir ticket de extensão",
-      "related": [
-        "project-nox-tracker"
-      ]
+      "specific_action": {
+        "label": "Abrir ticket de extensão",
+        "url": "https://github.com/ProjectNox-org/project-nox-requests/issues/new/choose",
+        "external": true
+      },
+      "search_keywords": "tickets solicitacoes issues bugs pedidos extensoes"
     },
     {
       "name": "ProjectNox-org.github.io",
-      "title": "Central Oficial (GitHub Pages)",
+      "title": "Central Oficial (Portal)",
       "category": "institutional",
-      "category_label": "Institucional & Portal",
-      "kind": "Portal Web Estático",
+      "category_label": "Institucional",
+      "icon": "globe",
       "description": "Portal institucional e diretório oficial da organização Project Nox publicado no GitHub Pages.",
-      "purpose": "Centralizar a identidade institucional, documentação de acesso, diretório de repositórios e rotas de suporte.",
-      "features": [
-        "Site estático leve sem dependências pesadas de runtime",
-        "Diretório centralizado de repositórios e guias de extensões",
-        "Preservação de rotas públicas e redirecionamentos de compatibilidade"
-      ],
+      "meta": "HTML · CSS · JS",
       "license": "AGPL-3.0",
-      "license_status": "verified",
       "default_branch": "main",
-      "tech": "HTML / CSS / JS",
       "source_url": "https://github.com/ProjectNox-org/ProjectNox-org.github.io",
       "docs_url": "https://github.com/ProjectNox-org/ProjectNox-org.github.io#readme",
-      "app_url": "https://projectnox-org.github.io/",
-      "app_label": "Portal Atual",
-      "related": [
-        ".github"
-      ]
+      "specific_action": null,
+      "search_keywords": "central oficial portal github pages html css js"
     },
     {
       "name": ".github",
-      "title": "Organização & Identidade (.github)",
+      "title": "Organização & Identidade",
       "category": "institutional",
-      "category_label": "Institucional & Portal",
-      "kind": "Configuração & Governança",
-      "description": "Repositório institucional da organização com apresentação pública, identidade visual e guia de contribuição.",
-      "purpose": "Definir o perfil da organização no GitHub, os ativos oficiais da marca e as diretrizes de colaboração.",
-      "features": [
-        "Perfil institucional da organização (profile/README.md)",
-        "Guia oficial de contribuição (CONTRIBUTING.md)",
-        "Ativos vetoriais, emblema oficial e scripts de sincronização"
-      ],
+      "category_label": "Institucional",
+      "icon": "shield",
+      "description": "Perfil público da organização no GitHub, ativos oficiais da marca e guia de contribuição.",
+      "meta": "Markdown · SVG · Marca",
       "license": "AGPL-3.0",
-      "license_status": "verified",
       "default_branch": "main",
-      "tech": "Markdown / SVG / Python",
       "source_url": "https://github.com/ProjectNox-org/.github",
       "docs_url": "https://github.com/ProjectNox-org/.github/blob/main/CONTRIBUTING.md",
-      "app_url": "https://github.com/ProjectNox-org",
-      "app_label": "Perfil da Organização",
-      "related": [
-        "ProjectNox-org.github.io"
-      ]
+      "specific_action": null,
+      "search_keywords": "organizacao identidade perfil contributing marca svg"
     }
   ]
 }

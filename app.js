@@ -1,61 +1,14 @@
 (() => {
   'use strict';
 
-  // Mobile navigation toggle
-  const navToggle = document.getElementById('nav-toggle');
-  const navLinks = document.getElementById('nav-links');
-
-  function closeMobileNav() {
-    if (!navToggle || !navLinks) return;
-    navToggle.setAttribute('aria-expanded', 'false');
-    navLinks.classList.remove('is-open');
+  function normalizeText(value) {
+    return (value || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
   }
 
-  if (navToggle && navLinks) {
-    navToggle.addEventListener('click', () => {
-      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
-      navToggle.setAttribute('aria-expanded', String(!expanded));
-      navLinks.classList.toggle('is-open', !expanded);
-    });
-
-    navLinks.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => {
-        if (window.innerWidth <= 1080) {
-          closeMobileNav();
-        }
-      });
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && navLinks.classList.contains('is-open')) {
-        closeMobileNav();
-        navToggle.focus();
-      }
-    });
-  }
-
-  // Subtle progressive scroll reveal (respects prefers-reduced-motion)
-  const revealItems = Array.from(document.querySelectorAll('.reveal'));
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (revealItems.length > 0 && !prefersReducedMotion && 'IntersectionObserver' in window) {
-    document.documentElement.classList.add('has-reveal');
-    const observer = new IntersectionObserver(
-      (entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.08, rootMargin: '0px 0px -24px 0px' }
-    );
-    revealItems.forEach((el) => observer.observe(el));
-  } else {
-    revealItems.forEach((el) => el.classList.add('is-visible'));
-  }
-
-  // Accessible installation tabs (Manga vs Anime)
+  // Accessible installation tabs (Manga vs Anime) on /extensoes/
   const tabButtons = Array.from(document.querySelectorAll('[role="tab"]'));
   const tabPanels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
 
@@ -95,15 +48,24 @@
     if (hash === '#mihon' && mangaTab) activateTab(mangaTab);
   }
 
-  // Copyable URL buttons with live region feedback
+  // Copyable URL buttons with verified success feedback
   const liveStatus = document.getElementById('copy-status');
   document.querySelectorAll('.copy-btn').forEach((btn) => {
     btn.addEventListener('click', async () => {
       const value = btn.getAttribute('data-copy');
       if (!value) return;
-      try {
-        await navigator.clipboard.writeText(value);
-      } catch {
+
+      let success = false;
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        try {
+          await navigator.clipboard.writeText(value);
+          success = true;
+        } catch {
+          success = false;
+        }
+      }
+
+      if (!success) {
         const tmp = document.createElement('textarea');
         tmp.value = value;
         tmp.setAttribute('readonly', '');
@@ -111,23 +73,33 @@
         tmp.style.left = '-9999px';
         document.body.appendChild(tmp);
         tmp.select();
-        document.execCommand('copy');
+        try {
+          success = document.execCommand('copy');
+        } catch {
+          success = false;
+        }
         document.body.removeChild(tmp);
       }
+
       const orig = btn.textContent;
-      btn.textContent = 'Copiado!';
-      btn.classList.add('copied');
-      if (liveStatus) {
-        liveStatus.textContent = `URL copiada: ${value}`;
+      if (success) {
+        btn.textContent = 'Copiado!';
+        btn.classList.add('copied');
+        if (liveStatus) liveStatus.textContent = `URL copiada: ${value}`;
+      } else {
+        btn.textContent = 'Erro ao copiar';
+        btn.classList.add('error');
+        if (liveStatus) liveStatus.textContent = 'Não foi possível copiar automaticamente.';
       }
+
       setTimeout(() => {
         btn.textContent = orig;
-        btn.classList.remove('copied');
+        btn.classList.remove('copied', 'error');
       }, 1800);
     });
   });
 
-  // Repository directory search & category filter
+  // Repository directory accent-insensitive search & keyboard-accessible filters
   const searchInput = document.getElementById('repo-search');
   const filterChips = Array.from(document.querySelectorAll('.filter-chip'));
   const repoCards = Array.from(document.querySelectorAll('.repo-card'));
@@ -140,12 +112,12 @@
     let searchTerm = '';
 
     function applyDirectoryFilters() {
-      const query = searchTerm.trim().toLowerCase();
+      const query = normalizeText(searchTerm.trim());
       let visibleCount = 0;
 
       repoCards.forEach((card) => {
         const cardCat = card.getAttribute('data-category') || '';
-        const haystack = (card.getAttribute('data-search') || card.textContent || '').toLowerCase();
+        const haystack = normalizeText(card.getAttribute('data-search') || card.textContent || '');
         const matchesCat = activeCategory === 'all' || cardCat === activeCategory;
         const matchesQuery = !query || haystack.includes(query);
         const visible = matchesCat && matchesQuery;
@@ -165,11 +137,22 @@
       }
     }
 
-    filterChips.forEach((chip) => {
+    filterChips.forEach((chip, idx) => {
       chip.addEventListener('click', () => {
         activeCategory = chip.getAttribute('data-category') || 'all';
         filterChips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
         applyDirectoryFilters();
+      });
+
+      chip.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          const nextIdx =
+            e.key === 'ArrowRight'
+              ? (idx + 1) % filterChips.length
+              : (idx - 1 + filterChips.length) % filterChips.length;
+          filterChips[nextIdx].focus();
+        }
       });
     });
 
