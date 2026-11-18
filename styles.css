@@ -638,11 +638,6 @@ section[id] {
   flex-shrink: 0;
 }
 
-.intent-card.gold .intent-icon {
-  background: rgba(245, 158, 11, 0.12);
-  color: var(--accent-gold-text);
-}
-
 .intent-head h2 {
   margin: 0;
   font-size: 1rem;
@@ -681,78 +676,11 @@ section[id] {
   text-decoration: underline;
 }
 
-/* Compact 4-Pillar Product Showcase */
-.showcase-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  margin-bottom: 36px;
-}
-
-.showcase-item {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 16px;
-  border-radius: var(--radius-md);
-  background: rgba(12, 18, 34, 0.85);
-  border: 1px solid var(--border-subtle);
-}
-
-.showcase-media {
-  position: relative;
-  aspect-ratio: 16 / 10;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-  border: 1px solid var(--border-subtle);
-  background: #060913;
-}
-
-.showcase-media img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-}
-
-.showcase-vector {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px;
-  height: 100%;
-  background:
-    radial-gradient(circle at 85% 15%, rgba(124, 58, 237, 0.2), transparent 60%),
-    linear-gradient(145deg, #0b1020, #060913);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-}
-
-.showcase-vector-tag {
-  color: var(--accent-gold-text);
-  font-weight: 600;
-}
-
-.showcase-item h3 {
+.repo-status-note {
   margin: 0;
-  font-size: 0.98rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.showcase-item p {
-  margin: 0;
-  font-size: 0.84rem;
-  line-height: 1.5;
-  color: var(--text-secondary);
-}
-
-.showcase-item .intent-link {
-  margin-top: auto;
-  min-height: 36px;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
 }
 
 /* Two-Audience Open Source & Free Policy Note */
@@ -1845,10 +1773,6 @@ code {
 
 /* Responsive Breakpoints */
 @media (max-width: 1080px) {
-  .showcase-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .repo-card {
     flex: 0 1 calc((100% - 22px) / 2);
   }
@@ -1893,10 +1817,6 @@ code {
 }
 
 @media (max-width: 680px) {
-  .showcase-grid {
-    grid-template-columns: 1fr;
-  }
-
   .intent-link,
   .filter-chip,
   .footer-links a,

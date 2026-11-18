@@ -142,19 +142,25 @@ def check_readme_exists(
     org: str,
     repo_name: str,
     urlopen_fn: Callable = _default_urlopen,
-) -> bool:
-    """Verify whether a public repository exposes a README via GitHub API."""
+) -> str:
+    """Verify whether a public repository exposes a README via GitHub API.
+
+    Returns:
+        "confirmed" when HTTP 200 is returned,
+        "missing" when HTTP 404 is returned,
+        "unavailable" on rate-limit, transient HTTP errors, timeouts, or network errors.
+    """
     url = f"https://api.github.com/repos/{org}/{repo_name}/readme"
     req = urllib.request.Request(url, headers=_build_headers())
     try:
         with urlopen_fn(req, timeout=10) as resp:
-            return getattr(resp, "status", 200) == 200
+            return "confirmed" if getattr(resp, "status", 200) == 200 else "unavailable"
     except urllib.error.HTTPError as err:
         if err.code == 404:
-            return False
-        return True
+            return "missing"
+        return "unavailable"
     except Exception:
-        return True
+        return "unavailable"
 
 
 def resolve_license(remote: dict) -> tuple[str, str]:
@@ -227,6 +233,11 @@ def render_card(repo: dict) -> str:
             f'                    </span>'
         )
 
+    status_note_html = ""
+    status_note = repo.get("status_note")
+    if status_note:
+        status_note_html = f'                <p class="repo-status-note">{esc(status_note)}</p>\n'
+
     return (
         f'              <article class="card repo-card" data-category="{esc(cat_key)}" data-search="{esc(search_blob)}">\n'
         f'                <div class="repo-card-top">\n'
@@ -244,6 +255,7 @@ def render_card(repo: dict) -> str:
         f'                  <span class="repo-meta-chip">{esc(cat_label)}</span>\n'
         f'                  <span class="repo-meta-chip">{esc(repo.get("meta") or repo.get("default_branch", "main"))}</span>\n'
         f'                </div>\n'
+        f'{status_note_html}'
         f'                <div class="repo-actions-wrap">\n'
         f'{specific_html}'
         f'                  <div class="repo-universal-actions">\n'
@@ -362,11 +374,22 @@ def sync_repositories(
             continue
         known_names.add(name)
         lic_text, lic_status = resolve_license(remote)
+        safe_html_url = validate_url(remote.get("html_url"), allow_relative=False) or repo.get("source_url") or f"https://github.com/{org}/{name}"
         repo["default_branch"] = remote.get("default_branch") or repo.get("default_branch", "main")
         repo["license"] = lic_text
         repo["license_status"] = lic_status
         if not repo.get("description"):
             repo["description"] = remote.get("description") or "Repositório público da organização ProjectNox-org."
+
+        readme_status = check_readme_exists(org, name, urlopen_fn=urlopen_fn)
+        prev_docs = repo.get("docs_url")
+        if readme_status == "confirmed":
+            if not prev_docs:
+                repo["docs_url"] = f"{safe_html_url}#readme"
+        elif readme_status == "missing":
+            if isinstance(prev_docs, str) and prev_docs.endswith("#readme"):
+                repo["docs_url"] = None
+
         updated_repos.append(repo)
 
     for name in sorted(set(live.keys()) - known_names):
@@ -374,7 +397,7 @@ def sync_repositories(
         lic_text, lic_status = resolve_license(remote)
         safe_html_url = validate_url(remote.get("html_url"), allow_relative=False) or f"https://github.com/{org}/{name}"
         safe_homepage = validate_url(remote.get("homepage"), allow_relative=False)
-        has_readme = check_readme_exists(org, name, urlopen_fn=urlopen_fn)
+        readme_status = check_readme_exists(org, name, urlopen_fn=urlopen_fn)
         updated_repos.append(
             {
                 "name": name,
@@ -388,7 +411,7 @@ def sync_repositories(
                 "license_status": lic_status,
                 "default_branch": remote.get("default_branch") or "main",
                 "source_url": safe_html_url,
-                "docs_url": f"{safe_html_url}#readme" if has_readme else None,
+                "docs_url": f"{safe_html_url}#readme" if readme_status == "confirmed" else None,
                 "specific_action": (
                     {"label": "Acessar serviço", "url": safe_homepage, "external": True}
                     if safe_homepage

@@ -21,16 +21,16 @@ Sua função é apresentar a identidade institucional da organização, explicar
 
 ## Estrutura do projeto
 
-- `index.html` — Página institucional principal, trajetória, seção GNU AGPL-3.0, vitrine, diretório de repositórios, suporte e encerramento.
+- `index.html` — Página institucional principal, trajetória, seção GNU AGPL-3.0, diretório igualitário de repositórios, suporte e encerramento.
 - `extensoes/index.html` — Guia dedicado de instalação das extensões para Mihon, Aniyomi e forks (com progressive enhancement sem JavaScript).
 - `styles.css` — Sistema de design, paleta cósmica institucional, layout responsivo e suporte a `prefers-reduced-motion`.
-- `app.js` — Busca sem acentos, filtros por categoria, alternância acessível de abas, navegação por hash, cópia de URLs e controle opcional de movimento ambiental.
+- `app.js` — Busca sem acentos, filtros por categoria, alternância acessível de abas, navegação por hash, cópia de URLs e controle opcional de movimento ambiental (incluindo pausa de animações SVG do banner).
 - `data/repositories.json` — Fonte canônica dos metadados exibidos no diretório de repositórios.
 - `scripts/sync-repos.py` — Script em Python (biblioteca padrão) que sincroniza metadados da API do GitHub e renderiza os cards estáticos e contagens diretamente em `index.html`.
 - `tests/test_sync_repos.py` — Suíte de testes unitários para o gerador do catálogo.
-- `assets/` — Emblema, banners SVG animados (`assets/brand/`), capturas otimizadas da vitrine (`assets/showcase/`), imagem Open Graph (`assets/brand/nox-og.png`) e favicons.
-- `.github/workflows/sync-repos.yml` — Workflow automatizado de testes e sincronização semanal do catálogo.
-- `project-nox-tracker/` e `project-nox-scan-staff/` — Redirecionamentos preservados para compatibilidade de rotas antigas.
+- `assets/` — Emblema, banners SVG animados (`assets/brand/`), imagem Open Graph (`assets/brand/nox-og.png`) e favicons.
+- `.github/workflows/sync-repos.yml` — Workflow automatizado de testes, sincronização diária do catálogo e publicação via GitHub Actions Pages.
+- `project-nox-tracker/` e `project-nox-scan-staff/` — Redirecionamentos estáticos preservados para compatibilidade de rotas antigas (sendo `project-nox-scan-staff/` legado do antigo portal de staff).
 
 ## Arquitetura
 
@@ -74,7 +74,7 @@ python3 -m unittest discover -s tests -v
 
 ## Publicação
 
-O site é publicado automaticamente pelo GitHub Pages a partir da branch `main` (diretório raiz `/`). Após um push em `main`, o status do build pode ser acompanhado nas configurações de Pages do repositório ou via API (`repos/ProjectNox-org/ProjectNox-org.github.io/pages/builds/latest`).
+O site é publicado automaticamente pelo GitHub Pages via GitHub Actions (`.github/workflows/sync-repos.yml`, `build_type: workflow`) a partir da branch `main`, tanto em pushes diretos quanto nas sincronizações diárias agendadas ou manuais (`workflow_dispatch`).
 
 ## Identidade visual
 
@@ -83,6 +83,8 @@ Os ativos em `assets/brand/` (`nox-emblem.webp`, `nox-hero-dark.svg`, `nox-hero-
 ## Contribuição
 
 Consulte o [Guia de Contribuição](https://github.com/ProjectNox-org/.github/blob/main/CONTRIBUTING.md) da organização antes de abrir issues ou pull requests.
+
+> **Pendência externa documentada:** Na linha 7 de `ProjectNox-org/.github/CONTRIBUTING.md`, a referência `https://github.com/Awerkori/project-nox-requests` ainda aponta para o namespace pessoal em vez de `https://github.com/ProjectNox-org/project-nox-requests` (mantida apenas documentada aqui sem alterar o repositório `.github`).
 
 ## Licença
 

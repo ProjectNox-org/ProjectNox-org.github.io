@@ -64,13 +64,87 @@
     window.addEventListener('hashchange', syncTabFromHash);
   }
 
-  // Optional ambient motion pause control
+  // Optional ambient motion pause control (CSS + external banner SVG animations)
   const motionToggle = document.getElementById('motion-toggle');
+  const svgTextCache = new Map();
+
+  async function pauseBannerSvgs() {
+    const imgs = document.querySelectorAll('.banner-inner img');
+    await Promise.all(
+      Array.from(imgs).map(async (img) => {
+        if (!img.dataset.origSrc) {
+          img.dataset.origSrc = img.getAttribute('src') || '';
+        }
+        const picture = img.closest('picture');
+        const sources = picture ? Array.from(picture.querySelectorAll('source')) : [];
+        let activeUrl = img.dataset.origSrc;
+        sources.forEach((source) => {
+          if (!source.dataset.origSrcset) {
+            source.dataset.origSrcset = source.getAttribute('srcset') || '';
+          }
+          const media = source.getAttribute('media');
+          if (media && window.matchMedia && window.matchMedia(media).matches && source.dataset.origSrcset) {
+            activeUrl = source.dataset.origSrcset;
+          }
+        });
+        if (!activeUrl) return;
+
+        try {
+          let rawSvg = svgTextCache.get(activeUrl);
+          if (!rawSvg) {
+            const resp = await fetch(activeUrl, { cache: 'force-cache' });
+            if (!resp.ok) return;
+            rawSvg = await resp.text();
+            svgTextCache.set(activeUrl, rawSvg);
+          }
+          if (document.documentElement.getAttribute('data-motion') !== 'paused') return;
+          if (!rawSvg.includes('</svg>')) return;
+
+          const pausedSvg = rawSvg.replace(
+            '</svg>',
+            '<style data-nox-paused="true">*,*::before,*::after{animation-play-state:paused!important;}</style></svg>'
+          );
+          if (img.dataset.pausedBlobUrl) {
+            URL.revokeObjectURL(img.dataset.pausedBlobUrl);
+          }
+          const blobUrl = URL.createObjectURL(new Blob([pausedSvg], { type: 'image/svg+xml' }));
+          img.dataset.pausedBlobUrl = blobUrl;
+          sources.forEach((source) => source.setAttribute('srcset', blobUrl));
+          img.setAttribute('src', blobUrl);
+        } catch {
+          // Fallback silently to CSS-only pause if fetch/blob is unavailable
+        }
+      })
+    );
+  }
+
+  function resumeBannerSvgs() {
+    document.querySelectorAll('.banner-inner img').forEach((img) => {
+      const picture = img.closest('picture');
+      if (picture) {
+        picture.querySelectorAll('source').forEach((source) => {
+          if (source.dataset.origSrcset) {
+            source.setAttribute('srcset', source.dataset.origSrcset);
+          }
+        });
+      }
+      if (img.dataset.origSrc) {
+        img.setAttribute('src', img.dataset.origSrc);
+      }
+      if (img.dataset.pausedBlobUrl) {
+        URL.revokeObjectURL(img.dataset.pausedBlobUrl);
+        delete img.dataset.pausedBlobUrl;
+      }
+    });
+  }
+
   function applyMotionState(paused) {
     if (paused) {
       document.documentElement.setAttribute('data-motion', 'paused');
+      pauseBannerSvgs();
     } else {
       document.documentElement.removeAttribute('data-motion');
+      resumeBannerSvgs();
     }
     if (motionToggle) {
       motionToggle.setAttribute('aria-pressed', String(paused));

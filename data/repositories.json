@@ -17,11 +17,8 @@
       "default_branch": "main",
       "source_url": "https://github.com/ProjectNox-org/project-nox-manga",
       "docs_url": "https://github.com/ProjectNox-org/project-nox-manga#readme",
-      "specific_action": {
-        "label": "Acessar plataforma",
-        "url": "https://manga.project-nox-awerkori.workers.dev",
-        "external": true
-      },
+      "specific_action": null,
+      "status_note": "Plataforma temporariamente indisponível",
       "search_keywords": "sveltekit cloudflare workers leitor web mangas plataforma"
     },
     {

@@ -227,6 +227,197 @@ class SyncReposTests(unittest.TestCase):
             )
         self.assertEqual(data_file.read_text(encoding="utf-8"), before_json)
 
+    def test_check_readme_exists_statuses(self):
+        self.assertEqual(
+            sync_repos.check_readme_exists("ProjectNox-org", "ok", urlopen_fn=lambda req, timeout=10: _FakeResp({}, status=200)),
+            "confirmed",
+        )
+
+        def raise_404(req, timeout=10):
+            raise urllib.error.HTTPError(req.full_url, 404, "Not Found", {}, io.BytesIO(b""))
+
+        def raise_403(req, timeout=10):
+            raise urllib.error.HTTPError(req.full_url, 403, "Rate Limit", {}, io.BytesIO(b""))
+
+        def raise_timeout(req, timeout=10):
+            raise TimeoutError("timed out")
+
+        def raise_url_err(req, timeout=10):
+            raise urllib.error.URLError("dns error")
+
+        self.assertEqual(sync_repos.check_readme_exists("ProjectNox-org", "missing", urlopen_fn=raise_404), "missing")
+        self.assertEqual(sync_repos.check_readme_exists("ProjectNox-org", "ratelimit", urlopen_fn=raise_403), "unavailable")
+        self.assertEqual(sync_repos.check_readme_exists("ProjectNox-org", "timeout", urlopen_fn=raise_timeout), "unavailable")
+        self.assertEqual(sync_repos.check_readme_exists("ProjectNox-org", "neterr", urlopen_fn=raise_url_err), "unavailable")
+
+    def test_existing_repo_readme_added_removed_and_transient_unavailable(self):
+        tmp, data_file, index_file = self._make_env(
+            [
+                {
+                    "name": "repo-gains-readme",
+                    "title": "Gains",
+                    "category": "tools",
+                    "category_label": "Ferramentas & IA",
+                    "description": "Gains README.",
+                    "source_url": "https://github.com/ProjectNox-org/repo-gains-readme",
+                    "docs_url": None,
+                },
+                {
+                    "name": "repo-loses-readme",
+                    "title": "Loses",
+                    "category": "tools",
+                    "category_label": "Ferramentas & IA",
+                    "description": "Loses README.",
+                    "source_url": "https://github.com/ProjectNox-org/repo-loses-readme",
+                    "docs_url": "https://github.com/ProjectNox-org/repo-loses-readme#readme",
+                },
+                {
+                    "name": "repo-curated-docs",
+                    "title": "Curated",
+                    "category": "docs",
+                    "category_label": "Documentação & Comunidade",
+                    "description": "Curated docs.",
+                    "source_url": "https://github.com/ProjectNox-org/repo-curated-docs",
+                    "docs_url": "https://github.com/ProjectNox-org/repo-curated-docs/blob/main/CONTRIBUTING.md",
+                },
+                {
+                    "name": "repo-transient-keep",
+                    "title": "Keep",
+                    "category": "tools",
+                    "category_label": "Ferramentas & IA",
+                    "description": "Transient keep.",
+                    "source_url": "https://github.com/ProjectNox-org/repo-transient-keep",
+                    "docs_url": "https://github.com/ProjectNox-org/repo-transient-keep#readme",
+                },
+                {
+                    "name": "repo-transient-null",
+                    "title": "Null",
+                    "category": "tools",
+                    "category_label": "Ferramentas & IA",
+                    "description": "Transient null.",
+                    "source_url": "https://github.com/ProjectNox-org/repo-transient-null",
+                    "docs_url": None,
+                },
+            ]
+        )
+        self.addCleanup(tmp.cleanup)
+
+        names = [
+            "repo-gains-readme",
+            "repo-loses-readme",
+            "repo-curated-docs",
+            "repo-transient-keep",
+            "repo-transient-null",
+            "repo-new-unavailable",
+        ]
+        api_items = [
+            {
+                "name": n,
+                "private": False,
+                "default_branch": "main",
+                "license": {"spdx_id": "AGPL-3.0"},
+                "html_url": f"https://github.com/ProjectNox-org/{n}",
+            }
+            for n in names
+        ]
+
+        def fake_urlopen(req, timeout=20):
+            url = req.full_url
+            if "/readme" in url:
+                if "repo-gains-readme" in url:
+                    return _FakeResp({"name": "README.md"}, status=200)
+                if "repo-loses-readme" in url or "repo-curated-docs" in url:
+                    raise urllib.error.HTTPError(url, 404, "Not Found", {}, io.BytesIO(b""))
+                if "repo-transient-keep" in url or "repo-new-unavailable" in url:
+                    raise urllib.error.HTTPError(url, 403, "Forbidden", {}, io.BytesIO(b""))
+                raise TimeoutError("network timeout")
+            return _FakeResp(api_items)
+
+        repos, changed = sync_repos.sync_repositories(
+            data_file=data_file,
+            index_file=index_file,
+            urlopen_fn=fake_urlopen,
+        )
+        self.assertTrue(changed)
+        by_name = {r["name"]: r for r in repos}
+        self.assertEqual(by_name["repo-gains-readme"]["docs_url"], "https://github.com/ProjectNox-org/repo-gains-readme#readme")
+        self.assertIsNone(by_name["repo-loses-readme"]["docs_url"])
+        self.assertEqual(
+            by_name["repo-curated-docs"]["docs_url"],
+            "https://github.com/ProjectNox-org/repo-curated-docs/blob/main/CONTRIBUTING.md",
+        )
+        self.assertEqual(by_name["repo-transient-keep"]["docs_url"], "https://github.com/ProjectNox-org/repo-transient-keep#readme")
+        self.assertIsNone(by_name["repo-transient-null"]["docs_url"])
+        self.assertIsNone(by_name["repo-new-unavailable"]["docs_url"])
+
+    def test_catalog_scaling_and_over_100_paginated_repos(self):
+        for count in (1, 2, 4, 11, 12, 20):
+            tmp, _, index_file = self._make_env([])
+            sample = [
+                {
+                    "name": f"repo-{i}",
+                    "title": f"Repo {i}",
+                    "category": "tools",
+                    "category_label": "Ferramentas & IA",
+                    "description": f"Desc {i}",
+                    "license": "AGPL-3.0",
+                    "license_status": "verified_agpl",
+                    "source_url": f"https://github.com/ProjectNox-org/repo-{i}",
+                    "docs_url": f"https://github.com/ProjectNox-org/repo-{i}#readme",
+                    "status_note": "Nota de status" if i == 0 else None,
+                }
+                for i in range(count)
+            ]
+            sync_repos.update_index_html(sample, index_file)
+            rendered = index_file.read_text(encoding="utf-8")
+            tmp.cleanup()
+            self.assertEqual(rendered.count('<article class="card repo-card"'), count)
+            self.assertIn(f"{count} projetos disponíveis", rendered)
+            self.assertIn('<p class="repo-status-note">Nota de status</p>', rendered)
+
+        # >100 repos paginated across 2 API pages
+        tmp, data_file, index_file = self._make_env([])
+        self.addCleanup(tmp.cleanup)
+        page1 = [
+            {
+                "name": f"org-repo-{i:03d}",
+                "private": False,
+                "default_branch": "main",
+                "license": {"spdx_id": "AGPL-3.0"},
+                "html_url": f"https://github.com/ProjectNox-org/org-repo-{i:03d}",
+            }
+            for i in range(100)
+        ]
+        page2 = [
+            {
+                "name": f"org-repo-{i:03d}",
+                "private": False,
+                "default_branch": "main",
+                "license": {"spdx_id": "AGPL-3.0"},
+                "html_url": f"https://github.com/ProjectNox-org/org-repo-{i:03d}",
+            }
+            for i in range(100, 105)
+        ]
+
+        def many_urlopen(req, timeout=20):
+            url = req.full_url
+            if "/readme" in url:
+                return _FakeResp({"name": "README.md"}, status=200)
+            if "page=1" in url:
+                return _FakeResp(page1, link='<https://api.github.com/orgs/ProjectNox-org/repos?page=2>; rel="next"')
+            return _FakeResp(page2)
+
+        repos, changed = sync_repos.sync_repositories(
+            data_file=data_file,
+            index_file=index_file,
+            urlopen_fn=many_urlopen,
+        )
+        self.assertTrue(changed)
+        self.assertEqual(len(repos), 105)
+        html_out = index_file.read_text(encoding="utf-8")
+        self.assertEqual(html_out.count('<article class="card repo-card"'), 105)
+        self.assertIn("105 projetos disponíveis", html_out)
+
 
 if __name__ == "__main__":
     unittest.main()
