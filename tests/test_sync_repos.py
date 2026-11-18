@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib.util
 import io
 import json
+import subprocess
 import tempfile
 import unittest
 import urllib.error
@@ -495,6 +496,157 @@ class SyncReposTests(unittest.TestCase):
         self.assertIn(r"Regex escape \1 \n \u1234", html_out)
         self.assertEqual(data_file.stat().st_mode & 0o777, 0o644)
         self.assertEqual(index_file.stat().st_mode & 0o777, 0o644)
+
+    def test_workflow_git_staging_idempotency_scenarios_a_to_g(self):
+        """Reproduce GitHub Actions staging + --render-only + git diff workflow across scenarios A-G."""
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo_dir = Path(tmp.name)
+        (repo_dir / "data").mkdir()
+        data_file = repo_dir / "data" / "repositories.json"
+        index_file = repo_dir / "index.html"
+
+        initial_repo = {
+            "name": "repo-alpha",
+            "title": "Repo Alpha",
+            "category": "tools",
+            "category_label": "Ferramentas & IA",
+            "description": "Initial tool.",
+            "license": "AGPL-3.0",
+            "license_status": "verified_agpl",
+            "default_branch": "main",
+            "source_url": "https://github.com/ProjectNox-org/repo-alpha",
+            "docs_url": "https://github.com/ProjectNox-org/repo-alpha#readme",
+        }
+        data_file.write_text(
+            json.dumps(
+                {
+                    "organization": "ProjectNox-org",
+                    "updated_at": "2026-11-17T00:00:00Z",
+                    "repositories": [initial_repo],
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        index_file.write_text(SAMPLE_INDEX, encoding="utf-8")
+        sync_repos.sync_repositories(data_file=data_file, index_file=index_file, render_only=True)
+
+        def git(*args: str, check: bool = True) -> subprocess.CompletedProcess:
+            return subprocess.run(
+                ["git", *args],
+                cwd=repo_dir,
+                text=True,
+                capture_output=True,
+                check=check,
+            )
+
+        git("init")
+        git("config", "user.name", "test")
+        git("config", "user.email", "test@example.com")
+        git("add", "data/repositories.json", "index.html")
+        git("commit", "-m", "initial")
+
+        def run_workflow_sync(urlopen_fn):
+            sync_repos.sync_repositories(data_file=data_file, index_file=index_file, urlopen_fn=urlopen_fn)
+            git("add", "data/repositories.json", "index.html")
+            sync_repos.sync_repositories(data_file=data_file, index_file=index_file, render_only=True)
+            # Must match staged content (idempotent)
+            diff_res = git("diff", "--exit-code", "--", "index.html", "data/repositories.json", check=False)
+            self.assertEqual(diff_res.returncode, 0, msg=f"Idempotency diff failed:\n{diff_res.stdout}\n{diff_res.stderr}")
+            has_staged = git("diff", "--cached", "--quiet", "--", "data/repositories.json", "index.html", check=False).returncode != 0
+            if has_staged:
+                git("commit", "-m", "chore: sync repository metadata")
+            return has_staged
+
+        base_alpha = {
+            "name": "repo-alpha",
+            "private": False,
+            "default_branch": "main",
+            "license": {"spdx_id": "AGPL-3.0"},
+            "html_url": "https://github.com/ProjectNox-org/repo-alpha",
+        }
+
+        # Scenario A: unchanged catalog -> no commit
+        committed_a = run_workflow_sync(
+            lambda req, timeout=20: _FakeResp({"name": "README.md"}) if "/readme" in req.full_url else _FakeResp([base_alpha])
+        )
+        self.assertFalse(committed_a)
+
+        # Scenario B: new public repo -> updates JSON/HTML, passes staged idempotency, commits
+        new_beta = {
+            "name": "repo-beta",
+            "private": False,
+            "default_branch": "main",
+            "license": {"spdx_id": "AGPL-3.0"},
+            "description": "Beta project.",
+            "language": "Python",
+            "html_url": "https://github.com/ProjectNox-org/repo-beta",
+        }
+        committed_b = run_workflow_sync(
+            lambda req, timeout=20: _FakeResp({"name": "README.md"}) if "/readme" in req.full_url else _FakeResp([base_alpha, new_beta])
+        )
+        self.assertTrue(committed_b)
+        html_b = index_file.read_text(encoding="utf-8")
+        self.assertIn("2 projetos disponíveis", html_b)
+        self.assertIn("Outros projetos (1)", html_b)
+        self.assertIn("repo-beta", html_b)
+
+        # Scenario C: license change on existing repo -> updates & commits cleanly
+        alpha_apache = {**base_alpha, "license": {"spdx_id": "Apache-2.0"}}
+        committed_c = run_workflow_sync(
+            lambda req, timeout=20: _FakeResp({"name": "README.md"}) if "/readme" in req.full_url else _FakeResp([alpha_apache, new_beta])
+        )
+        self.assertTrue(committed_c)
+        self.assertIn("Apache-2.0", index_file.read_text(encoding="utf-8"))
+
+        # Scenario D: documentation change (README removed on repo-beta) -> updates & passes
+        def readme_removed_urlopen(req, timeout=20):
+            if "/readme" in req.full_url:
+                if "repo-beta" in req.full_url:
+                    raise urllib.error.HTTPError(req.full_url, 404, "Not Found", {}, None)
+                return _FakeResp({"name": "README.md"})
+            return _FakeResp([alpha_apache, new_beta])
+
+        committed_d = run_workflow_sync(readme_removed_urlopen)
+        self.assertTrue(committed_d)
+        self.assertIn("Sem README", index_file.read_text(encoding="utf-8"))
+
+        # Scenario E: repo removed / turned private -> updates cleanly
+        beta_private = {**new_beta, "private": True}
+        committed_e = run_workflow_sync(
+            lambda req, timeout=20: _FakeResp({"name": "README.md"}) if "/readme" in req.full_url else _FakeResp([alpha_apache, beta_private])
+        )
+        self.assertTrue(committed_e)
+        self.assertIn("1 projeto disponível", index_file.read_text(encoding="utf-8"))
+
+        # Scenario F: idempotency failure -> unexpected change after git add MUST fail git diff --exit-code
+        index_file.write_text(index_file.read_text(encoding="utf-8") + "\n<!-- drift -->\n", encoding="utf-8")
+        fail_res = git("diff", "--exit-code", "--", "index.html", "data/repositories.json", check=False)
+        self.assertNotEqual(fail_res.returncode, 0)
+        git("checkout", "--", "index.html")
+
+        # Scenario G: API failure (403, timeout, invalid JSON, page-2 failure) preserves catalog
+        before_json = data_file.read_text(encoding="utf-8")
+        before_html = index_file.read_text(encoding="utf-8")
+
+        def fail_403(req, timeout=20):
+            raise urllib.error.HTTPError(req.full_url, 403, "Forbidden", {}, None)
+
+        def fail_timeout(req, timeout=20):
+            raise TimeoutError("timed out")
+
+        def fail_page2(req, timeout=20):
+            if "page=1" in req.full_url:
+                return _FakeResp([alpha_apache], link='<https://api.github.com/orgs/ProjectNox-org/repos?page=2>; rel="next"')
+            raise urllib.error.URLError("page 2 network failure")
+
+        for broken_fn in (fail_403, fail_timeout, fail_page2):
+            with self.assertRaises(Exception):
+                sync_repos.sync_repositories(data_file=data_file, index_file=index_file, urlopen_fn=broken_fn)
+            self.assertEqual(data_file.read_text(encoding="utf-8"), before_json)
+            self.assertEqual(index_file.read_text(encoding="utf-8"), before_html)
 
 
 if __name__ == "__main__":

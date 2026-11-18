@@ -78,7 +78,7 @@ python3 -m unittest discover -s tests -v
 
 O site é publicado automaticamente pelo GitHub Pages via GitHub Actions (`.github/workflows/sync-repos.yml`, `build_type: workflow`) em duas etapas encadeadas:
 
-1. **Sincronização e validação (`sync`):** executa a suíte de testes unitários, sincroniza os metadados públicos com a API do GitHub, valida sintaxe JavaScript (`node --check app.js`) e idempotência de renderização (`--render-only` + `git diff --exit-code index.html`), realiza commit automático quando há mudanças no catálogo e exporta o SHA exato validado.
+1. **Sincronização e validação (`sync`):** executa a suíte de testes unitários, sincroniza os metadados públicos com a API do GitHub, prepara os arquivos gerados no staging (`git add data/repositories.json index.html`), executa uma segunda renderização (`--render-only`) verificando a idempotência contra o conteúdo preparado (`git diff --exit-code -- index.html data/repositories.json`), valida a sintaxe JavaScript (`node --check app.js`), realiza commit automático quando há alterações em staging (`! git diff --cached --quiet`) e exporta o SHA exato validado.
 2. **Publicação (`deploy`):** faz checkout explícito do SHA validado pelo job `sync`, empacota exclusivamente os arquivos estáticos públicos em `_site/` e publica via `actions/deploy-pages@v4`.
 
 ## Identidade visual
