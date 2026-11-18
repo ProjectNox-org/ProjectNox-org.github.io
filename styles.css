@@ -1,11 +1,11 @@
 /* Project Nox — Central Oficial v4 (Artistic Direction & Premium Finish) */
 :root {
-  --bg-base: #04060d;
-  --bg-surface: #0a0e1b;
-  --bg-surface-alt: #0d1222;
-  --bg-card: rgba(14, 20, 38, 0.88);
-  --bg-card-hover: rgba(20, 28, 52, 0.96);
-  --bg-elevated: #161f38;
+  --bg-base: #07050d;
+  --bg-surface: #0e0a19;
+  --bg-surface-alt: #120d20;
+  --bg-card: rgba(18, 14, 30, 0.88);
+  --bg-card-hover: rgba(26, 20, 44, 0.94);
+  --bg-elevated: #1b1430;
 
   --text-primary: #f8fafc;
   --text-secondary: #cbd5e1;
@@ -20,7 +20,7 @@
   --accent-gold-text: #fbbf24;
   --accent-green: #34d399;
 
-  --border-subtle: rgba(148, 163, 184, 0.14);
+  --border-subtle: rgba(167, 139, 250, 0.14);
   --border-strong: rgba(167, 139, 250, 0.42);
   --border-gold: rgba(245, 158, 11, 0.3);
 
@@ -221,7 +221,7 @@ html[data-motion="paused"] .particle-canvas {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(4, 6, 13, 0.88);
+  background: rgba(9, 6, 17, 0.88);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border-subtle);
@@ -251,7 +251,7 @@ html[data-motion="paused"] .particle-canvas {
   border-radius: var(--radius-sm);
   display: grid;
   place-items: center;
-  background: rgba(14, 20, 38, 0.94);
+  background: rgba(18, 14, 30, 0.94);
   border: 1px solid var(--border-gold);
   box-shadow: 0 0 16px rgba(245, 158, 11, 0.12);
   overflow: hidden;
@@ -484,14 +484,12 @@ section[id] {
 
 .section-historia {
   padding-block: 80px;
-  background: linear-gradient(180deg, rgba(10, 14, 27, 0.55) 0%, rgba(10, 14, 27, 0.2) 100%);
-  border-top: 1px solid rgba(167, 139, 250, 0.14);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .section-agpl {
   position: relative;
   padding-block: 88px;
-  background: radial-gradient(ellipse 75% 60% at 50% 0%, rgba(245, 158, 11, 0.07), transparent 72%);
 }
 
 .section-agpl::before {
@@ -507,7 +505,6 @@ section[id] {
 
 .section-repos {
   padding-block: 72px;
-  background: rgba(6, 9, 18, 0.65);
   border-top: 1px solid var(--border-subtle);
 }
 
@@ -520,7 +517,7 @@ section[id] {
   position: relative;
   padding-block: 56px 64px;
   overflow: hidden;
-  background: linear-gradient(180deg, transparent 0%, rgba(124, 58, 237, 0.05) 55%, transparent 100%);
+  border-top: 1px solid var(--border-subtle);
 }
 
 /* Banner & Institutional Opening */
@@ -872,7 +869,7 @@ section[id] {
   align-items: center;
   padding: 28px 32px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(145deg, rgba(16, 22, 42, 0.92), rgba(10, 14, 27, 0.96));
+  background: linear-gradient(145deg, rgba(22, 16, 38, 0.92), rgba(14, 10, 25, 0.96));
   border: 1px solid var(--border-gold);
   margin-bottom: 24px;
 }
@@ -920,7 +917,7 @@ section[id] {
   gap: 10px;
   padding: 12px 14px;
   border-radius: var(--radius-sm);
-  background: rgba(4, 6, 13, 0.6);
+  background: rgba(9, 6, 17, 0.6);
   border: 1px solid var(--border-subtle);
   font-weight: 600;
   font-size: 0.9rem;
@@ -959,7 +956,7 @@ section[id] {
 .editorial-panel {
   padding: 26px;
   border-radius: var(--radius-md);
-  background: rgba(10, 14, 27, 0.72);
+  background: rgba(14, 10, 25, 0.72);
   border: 1px solid var(--border-subtle);
   border-top: 2px solid var(--accent-green);
 }
@@ -1370,7 +1367,7 @@ code {
   gap: 24px;
   padding: 32px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(155deg, rgba(14, 20, 38, 0.92), rgba(10, 14, 27, 0.96));
+  background: linear-gradient(155deg, rgba(18, 14, 30, 0.92), rgba(14, 10, 25, 0.96));
   border: 1px solid var(--border-subtle);
 }
 
@@ -1443,7 +1440,7 @@ code {
   gap: 14px;
   padding: 24px;
   border-radius: var(--radius-md);
-  background: rgba(4, 6, 13, 0.65);
+  background: rgba(9, 6, 17, 0.65);
   border: 1px solid var(--border-subtle);
 }
 
@@ -1476,7 +1473,7 @@ code {
   gap: 24px;
   padding: 36px 40px;
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, rgba(16, 22, 42, 0.9), rgba(10, 14, 27, 0.95));
+  background: linear-gradient(135deg, rgba(22, 16, 38, 0.9), rgba(14, 10, 25, 0.95));
   border: 1px solid var(--border-gold);
   overflow: hidden;
 }
@@ -1691,7 +1688,7 @@ code {
 .site-footer {
   margin-top: auto;
   border-top: 1px solid var(--border-subtle);
-  background: rgba(4, 6, 13, 0.95);
+  background: rgba(9, 6, 17, 0.88);
   padding-block: 28px;
 }
 
