@@ -36,7 +36,7 @@ Sua função é apresentar a identidade institucional da organização, explicar
 
 - **Site 100% estático:** HTML, CSS e JavaScript puros, sem frameworks ou dependências de runtime no navegador.
 - **Geração estática a partir de fonte canônica:** Os cards de repositórios, filtros e contagens presentes em `index.html` são gerados estaticamente a partir de `data/repositories.json` via `scripts/sync-repos.py`.
-- **Zero chamadas à API do GitHub por visita:** Visitantes não disparam requisições à API do GitHub; a página funciona integralmente mesmo com JavaScript desabilitado.
+- **Zero chamadas à API do GitHub por visita:** Visitantes não disparam requisições à API do GitHub. O conteúdo essencial permanece acessível mesmo com JavaScript desabilitado. Os recursos interativos, como busca, filtros, alternância de abas, cópia automática e controle de animações, utilizam JavaScript como aprimoramento progressivo.
 
 ## Desenvolvimento local
 
@@ -47,6 +47,8 @@ python3 -m http.server 8000
 ```
 
 Acesse `http://localhost:8000/` e `http://localhost:8000/extensoes/` no navegador.
+
+> **Nota de ambiente local:** Rotas hospedadas em outros repositórios da organização (como `/project-nox-tracker/`) são servidas pelo GitHub Pages em produção e não estão presentes no servidor local deste repositório.
 
 ## Atualização do catálogo
 
@@ -74,7 +76,10 @@ python3 -m unittest discover -s tests -v
 
 ## Publicação
 
-O site é publicado automaticamente pelo GitHub Pages via GitHub Actions (`.github/workflows/sync-repos.yml`, `build_type: workflow`) a partir da branch `main`, tanto em pushes diretos quanto nas sincronizações diárias agendadas ou manuais (`workflow_dispatch`).
+O site é publicado automaticamente pelo GitHub Pages via GitHub Actions (`.github/workflows/sync-repos.yml`, `build_type: workflow`) em duas etapas encadeadas:
+
+1. **Sincronização e validação (`sync`):** executa a suíte de testes unitários, sincroniza os metadados públicos com a API do GitHub, valida sintaxe JavaScript (`node --check app.js`) e idempotência de renderização (`--render-only` + `git diff --exit-code index.html`), realiza commit automático quando há mudanças no catálogo e exporta o SHA exato validado.
+2. **Publicação (`deploy`):** faz checkout explícito do SHA validado pelo job `sync`, empacota exclusivamente os arquivos estáticos públicos em `_site/` e publica via `actions/deploy-pages@v4`.
 
 ## Identidade visual
 
@@ -84,8 +89,6 @@ Os ativos em `assets/brand/` (`nox-emblem.webp`, `nox-hero-dark.svg`, `nox-hero-
 
 Consulte o [Guia de Contribuição](https://github.com/ProjectNox-org/.github/blob/main/CONTRIBUTING.md) da organização antes de abrir issues ou pull requests.
 
-> **Pendência externa documentada:** Na linha 7 de `ProjectNox-org/.github/CONTRIBUTING.md`, a referência `https://github.com/Awerkori/project-nox-requests` ainda aponta para o namespace pessoal em vez de `https://github.com/ProjectNox-org/project-nox-requests` (mantida apenas documentada aqui sem alterar o repositório `.github`).
-
 ## Licença
 
-Este repositório é licenciado sob a **GNU Affero General Public License v3.0 (GNU AGPL-3.0)**, conforme o arquivo [`LICENSE`](LICENSE). Atribuições e licenças de terceiros aplicáveis são preservadas integralmente.
+Este repositório é licenciado sob a **GNU Affero General Public License v3.0 (GNU AGPL-3.0)**, conforme o arquivo [`LICENSE`](LICENSE). Atribuições e licenças de terceiros aplicáveis estão documentadas em [`NOTICE`](NOTICE) e preservadas integralmente.

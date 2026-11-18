@@ -64,58 +64,96 @@
     window.addEventListener('hashchange', syncTabFromHash);
   }
 
-  // Optional ambient motion pause control (CSS + external banner SVG animations)
+  // Optional ambient motion pause control (CSS + external banner SVG animations per variant)
   const motionToggle = document.getElementById('motion-toggle');
   const svgTextCache = new Map();
+  let motionRequestSeq = 0;
 
-  async function pauseBannerSvgs() {
-    const imgs = document.querySelectorAll('.banner-inner img');
+  async function createPausedSvgBlob(url, seq) {
+    if (!url || !url.toLowerCase().includes('.svg')) return null;
+    try {
+      let rawSvg = svgTextCache.get(url);
+      if (!rawSvg) {
+        const resp = await fetch(url, { cache: 'force-cache' });
+        if (!resp.ok) return null;
+        rawSvg = await resp.text();
+        svgTextCache.set(url, rawSvg);
+      }
+      if (seq !== motionRequestSeq || document.documentElement.getAttribute('data-motion') !== 'paused') {
+        return null;
+      }
+      if (!rawSvg.includes('</svg>')) return null;
+      const pausedSvg = rawSvg.replace(
+        '</svg>',
+        '<style data-nox-paused="true">*,*::before,*::after{animation-play-state:paused!important;}</style></svg>'
+      );
+      return URL.createObjectURL(new Blob([pausedSvg], { type: 'image/svg+xml' }));
+    } catch {
+      return null;
+    }
+  }
+
+  function revokeNodeBlob(node) {
+    if (node && node.dataset && node.dataset.pausedBlobUrl) {
+      URL.revokeObjectURL(node.dataset.pausedBlobUrl);
+      delete node.dataset.pausedBlobUrl;
+    }
+  }
+
+  async function pauseBannerSvgs(seq) {
+    const imgs = Array.from(document.querySelectorAll('.banner-inner img'));
+    if (imgs.length === 0) return { ok: true };
+
+    let allOk = true;
     await Promise.all(
-      Array.from(imgs).map(async (img) => {
+      imgs.map(async (img) => {
         if (!img.dataset.origSrc) {
           img.dataset.origSrc = img.getAttribute('src') || '';
         }
         const picture = img.closest('picture');
         const sources = picture ? Array.from(picture.querySelectorAll('source')) : [];
-        let activeUrl = img.dataset.origSrc;
-        sources.forEach((source) => {
+
+        const sourceTasks = sources.map(async (source) => {
           if (!source.dataset.origSrcset) {
             source.dataset.origSrcset = source.getAttribute('srcset') || '';
           }
-          const media = source.getAttribute('media');
-          if (media && window.matchMedia && window.matchMedia(media).matches && source.dataset.origSrcset) {
-            activeUrl = source.dataset.origSrcset;
+          const orig = source.dataset.origSrcset;
+          if (!orig) return;
+          const blobUrl = await createPausedSvgBlob(orig, seq);
+          if (seq !== motionRequestSeq || document.documentElement.getAttribute('data-motion') !== 'paused') {
+            if (blobUrl) URL.revokeObjectURL(blobUrl);
+            return;
           }
+          if (!blobUrl) {
+            allOk = false;
+            return;
+          }
+          revokeNodeBlob(source);
+          source.dataset.pausedBlobUrl = blobUrl;
+          source.setAttribute('srcset', blobUrl);
         });
-        if (!activeUrl) return;
 
-        try {
-          let rawSvg = svgTextCache.get(activeUrl);
-          if (!rawSvg) {
-            const resp = await fetch(activeUrl, { cache: 'force-cache' });
-            if (!resp.ok) return;
-            rawSvg = await resp.text();
-            svgTextCache.set(activeUrl, rawSvg);
+        const imgTask = (async () => {
+          const orig = img.dataset.origSrc;
+          if (!orig) return;
+          const blobUrl = await createPausedSvgBlob(orig, seq);
+          if (seq !== motionRequestSeq || document.documentElement.getAttribute('data-motion') !== 'paused') {
+            if (blobUrl) URL.revokeObjectURL(blobUrl);
+            return;
           }
-          if (document.documentElement.getAttribute('data-motion') !== 'paused') return;
-          if (!rawSvg.includes('</svg>')) return;
-
-          const pausedSvg = rawSvg.replace(
-            '</svg>',
-            '<style data-nox-paused="true">*,*::before,*::after{animation-play-state:paused!important;}</style></svg>'
-          );
-          if (img.dataset.pausedBlobUrl) {
-            URL.revokeObjectURL(img.dataset.pausedBlobUrl);
+          if (!blobUrl) {
+            allOk = false;
+            return;
           }
-          const blobUrl = URL.createObjectURL(new Blob([pausedSvg], { type: 'image/svg+xml' }));
+          revokeNodeBlob(img);
           img.dataset.pausedBlobUrl = blobUrl;
-          sources.forEach((source) => source.setAttribute('srcset', blobUrl));
           img.setAttribute('src', blobUrl);
-        } catch {
-          // Fallback silently to CSS-only pause if fetch/blob is unavailable
-        }
+        })();
+
+        await Promise.all([...sourceTasks, imgTask]);
       })
     );
+    return { ok: allOk };
   }
 
   function resumeBannerSvgs() {
@@ -126,40 +164,58 @@
           if (source.dataset.origSrcset) {
             source.setAttribute('srcset', source.dataset.origSrcset);
           }
+          revokeNodeBlob(source);
         });
       }
       if (img.dataset.origSrc) {
         img.setAttribute('src', img.dataset.origSrc);
       }
-      if (img.dataset.pausedBlobUrl) {
-        URL.revokeObjectURL(img.dataset.pausedBlobUrl);
-        delete img.dataset.pausedBlobUrl;
-      }
+      revokeNodeBlob(img);
     });
   }
 
-  function applyMotionState(paused) {
+  function updateMotionToggleUi(paused, svgOk = true) {
+    if (!motionToggle) return;
+    motionToggle.setAttribute('aria-pressed', String(paused));
+    if (!paused) {
+      delete motionToggle.dataset.svgStatus;
+      motionToggle.textContent = 'Pausar animações';
+    } else if (svgOk) {
+      motionToggle.dataset.svgStatus = 'paused';
+      motionToggle.textContent = 'Retomar animações';
+    } else {
+      motionToggle.dataset.svgStatus = 'partial';
+      motionToggle.textContent = 'Retomar animações (CSS pausado)';
+    }
+  }
+
+  async function applyMotionState(paused) {
+    const seq = ++motionRequestSeq;
     if (paused) {
       document.documentElement.setAttribute('data-motion', 'paused');
-      pauseBannerSvgs();
+      updateMotionToggleUi(true, true);
+      const { ok } = await pauseBannerSvgs(seq);
+      if (seq === motionRequestSeq && document.documentElement.getAttribute('data-motion') === 'paused') {
+        updateMotionToggleUi(true, ok);
+      }
     } else {
       document.documentElement.removeAttribute('data-motion');
       resumeBannerSvgs();
-    }
-    if (motionToggle) {
-      motionToggle.setAttribute('aria-pressed', String(paused));
-      motionToggle.textContent = paused ? 'Retomar animações' : 'Pausar animações';
+      updateMotionToggleUi(false, true);
     }
   }
 
   if (motionToggle) {
-    let savedPaused = false;
+    let savedPref = null;
     try {
-      savedPaused = localStorage.getItem('nox-motion') === 'paused';
+      savedPref = localStorage.getItem('nox-motion');
     } catch {
-      savedPaused = false;
+      savedPref = null;
     }
-    applyMotionState(savedPaused);
+    const prefersReduced =
+      typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const initialPaused = savedPref === 'paused' || (savedPref === null && prefersReduced);
+    applyMotionState(initialPaused);
     motionToggle.addEventListener('click', () => {
       const nextPaused = document.documentElement.getAttribute('data-motion') !== 'paused';
       applyMotionState(nextPaused);

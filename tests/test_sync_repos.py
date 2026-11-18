@@ -138,7 +138,7 @@ class SyncReposTests(unittest.TestCase):
             url = req.full_url
             if "/readme" in url:
                 if "repo-unlicensed" in url:
-                    raise urllib.error.HTTPError(url, 404, "Not Found", {}, io.BytesIO(b""))
+                    raise urllib.error.HTTPError(url, 404, "Not Found", {}, None)
                 return _FakeResp({"name": "README.md"})
             return _FakeResp(api_items)
 
@@ -234,10 +234,10 @@ class SyncReposTests(unittest.TestCase):
         )
 
         def raise_404(req, timeout=10):
-            raise urllib.error.HTTPError(req.full_url, 404, "Not Found", {}, io.BytesIO(b""))
+            raise urllib.error.HTTPError(req.full_url, 404, "Not Found", {}, None)
 
         def raise_403(req, timeout=10):
-            raise urllib.error.HTTPError(req.full_url, 403, "Rate Limit", {}, io.BytesIO(b""))
+            raise urllib.error.HTTPError(req.full_url, 403, "Rate Limit", {}, None)
 
         def raise_timeout(req, timeout=10):
             raise TimeoutError("timed out")
@@ -327,9 +327,9 @@ class SyncReposTests(unittest.TestCase):
                 if "repo-gains-readme" in url:
                     return _FakeResp({"name": "README.md"}, status=200)
                 if "repo-loses-readme" in url or "repo-curated-docs" in url:
-                    raise urllib.error.HTTPError(url, 404, "Not Found", {}, io.BytesIO(b""))
+                    raise urllib.error.HTTPError(url, 404, "Not Found", {}, None)
                 if "repo-transient-keep" in url or "repo-new-unavailable" in url:
-                    raise urllib.error.HTTPError(url, 403, "Forbidden", {}, io.BytesIO(b""))
+                    raise urllib.error.HTTPError(url, 403, "Forbidden", {}, None)
                 raise TimeoutError("network timeout")
             return _FakeResp(api_items)
 
@@ -351,7 +351,7 @@ class SyncReposTests(unittest.TestCase):
         self.assertIsNone(by_name["repo-new-unavailable"]["docs_url"])
 
     def test_catalog_scaling_and_over_100_paginated_repos(self):
-        for count in (1, 2, 4, 11, 12, 20):
+        for count in (1, 2, 4, 11, 12, 20, 50):
             tmp, _, index_file = self._make_env([])
             sample = [
                 {
@@ -372,7 +372,8 @@ class SyncReposTests(unittest.TestCase):
             rendered = index_file.read_text(encoding="utf-8")
             tmp.cleanup()
             self.assertEqual(rendered.count('<article class="card repo-card"'), count)
-            self.assertIn(f"{count} projetos disponíveis", rendered)
+            expected_label = "1 projeto disponível" if count == 1 else f"{count} projetos disponíveis"
+            self.assertIn(expected_label, rendered)
             self.assertIn('<p class="repo-status-note">Nota de status</p>', rendered)
 
         # >100 repos paginated across 2 API pages
@@ -417,6 +418,83 @@ class SyncReposTests(unittest.TestCase):
         html_out = index_file.read_text(encoding="utf-8")
         self.assertEqual(html_out.count('<article class="card repo-card"'), 105)
         self.assertIn("105 projetos disponíveis", html_out)
+
+    def test_backslashes_atomic_permissions_private_rename_and_branch_license_updates(self):
+        tmp, data_file, index_file = self._make_env(
+            [
+                {
+                    "name": "repo-existing",
+                    "title": "Existing",
+                    "category": "unknown_cat",
+                    "category_label": "Categoria Custom",
+                    "description": r"Windows path C:\Users\test\1 and \g<0>",
+                    "default_branch": "master",
+                    "license": "MIT",
+                    "license_status": "verified_other",
+                    "source_url": "https://github.com/ProjectNox-org/old-url",
+                    "docs_url": "https://github.com/ProjectNox-org/repo-existing#readme",
+                },
+                {
+                    "name": "repo-turned-private",
+                    "title": "Private",
+                    "category": "tools",
+                    "category_label": "Ferramentas & IA",
+                    "description": "Will become private.",
+                },
+            ]
+        )
+        self.addCleanup(tmp.cleanup)
+
+        api_items = [
+            {
+                "name": "repo-existing",
+                "private": False,
+                "default_branch": "main",
+                "license": {"spdx_id": "AGPL-3.0"},
+                "html_url": "https://github.com/ProjectNox-org/repo-existing",
+            },
+            {
+                "name": "repo-turned-private",
+                "private": True,
+                "default_branch": "main",
+                "license": {"spdx_id": "AGPL-3.0"},
+                "html_url": "https://github.com/ProjectNox-org/repo-turned-private",
+            },
+            {
+                "name": "repo-renamed-new",
+                "private": False,
+                "default_branch": "develop",
+                "license": {"spdx_id": "AGPL-3.0"},
+                "description": r"Regex escape \1 \n \u1234",
+                "homepage": None,
+                "html_url": "https://github.com/ProjectNox-org/repo-renamed-new",
+            },
+        ]
+
+        def fake_urlopen(req, timeout=20):
+            if "/readme" in req.full_url:
+                return _FakeResp({"name": "README.md"}, status=200)
+            return _FakeResp(api_items)
+
+        repos, changed = sync_repos.sync_repositories(
+            data_file=data_file,
+            index_file=index_file,
+            urlopen_fn=fake_urlopen,
+        )
+        self.assertTrue(changed)
+        by_name = {r["name"]: r for r in repos}
+        self.assertNotIn("repo-turned-private", by_name)
+        self.assertIn("repo-renamed-new", by_name)
+        self.assertEqual(by_name["repo-existing"]["default_branch"], "main")
+        self.assertEqual(by_name["repo-existing"]["license"], "AGPL-3.0")
+        self.assertEqual(by_name["repo-existing"]["source_url"], "https://github.com/ProjectNox-org/repo-existing")
+        self.assertEqual(by_name["repo-renamed-new"]["category"], "other")
+
+        html_out = index_file.read_text(encoding="utf-8")
+        self.assertIn(r"C:\Users\test\1 and \g&lt;0&gt;", html_out)
+        self.assertIn(r"Regex escape \1 \n \u1234", html_out)
+        self.assertEqual(data_file.stat().st_mode & 0o777, 0o644)
+        self.assertEqual(index_file.stat().st_mode & 0o777, 0o644)
 
 
 if __name__ == "__main__":

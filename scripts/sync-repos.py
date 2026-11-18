@@ -60,6 +60,7 @@ def _atomic_write(path: Path, content: str) -> None:
     try:
         with os.fdopen(fd, "w", encoding="utf-8") as handle:
             handle.write(content)
+        os.chmod(tmp_name, 0o644)
         os.replace(tmp_name, path)
     except Exception:
         if os.path.exists(tmp_name):
@@ -310,31 +311,36 @@ def update_index_html(repos: list[dict], index_file: Path = INDEX_FILE, org: str
     updated = original
 
     cards_html = "\n\n".join(render_card(r) for r in repos)
+    grid_block = f"<!-- REPO_GRID_START -->\n{cards_html}\n              <!-- REPO_GRID_END -->"
     updated = re.sub(
         r"<!-- REPO_GRID_START -->.*?<!-- REPO_GRID_END -->",
-        f"<!-- REPO_GRID_START -->\n{cards_html}\n              <!-- REPO_GRID_END -->",
+        lambda _m: grid_block,
         updated,
         flags=re.DOTALL,
     )
 
     filters_html = render_filters(repos)
+    filters_block = f"<!-- REPO_FILTERS_START -->\n{filters_html}\n              <!-- REPO_FILTERS_END -->"
     updated = re.sub(
         r"<!-- REPO_FILTERS_START -->.*?<!-- REPO_FILTERS_END -->",
-        f"<!-- REPO_FILTERS_START -->\n{filters_html}\n              <!-- REPO_FILTERS_END -->",
+        lambda _m: filters_block,
         updated,
         flags=re.DOTALL,
     )
 
+    status_label = "1 projeto disponível" if len(repos) == 1 else f"{len(repos)} projetos disponíveis"
+    status_block = f"<!-- REPO_STATUS_START -->{status_label}<!-- REPO_STATUS_END -->"
     updated = re.sub(
         r"<!-- REPO_STATUS_START -->.*?<!-- REPO_STATUS_END -->",
-        f"<!-- REPO_STATUS_START -->{len(repos)} projetos disponíveis<!-- REPO_STATUS_END -->",
+        lambda _m: status_block,
         updated,
         flags=re.DOTALL,
     )
 
+    agpl_block = f"<!-- REPO_AGPL_SUMMARY_START -->{esc(render_agpl_summary(repos, org))}<!-- REPO_AGPL_SUMMARY_END -->"
     updated = re.sub(
         r"<!-- REPO_AGPL_SUMMARY_START -->.*?<!-- REPO_AGPL_SUMMARY_END -->",
-        f"<!-- REPO_AGPL_SUMMARY_START -->{esc(render_agpl_summary(repos, org))}<!-- REPO_AGPL_SUMMARY_END -->",
+        lambda _m: agpl_block,
         updated,
         flags=re.DOTALL,
     )
@@ -358,7 +364,7 @@ def sync_repositories(
 
     if render_only:
         repos = data.get("repositories", [])
-        html_changed = update_index_html(repos, index_file)
+        html_changed = update_index_html(repos, index_file, org=org)
         return repos, html_changed
 
     live = fetch_org_repos(org=org, urlopen_fn=urlopen_fn)
@@ -371,10 +377,12 @@ def sync_repositories(
         name = repo["name"]
         remote = live.get(name)
         if remote is None:
+            print(f"Repositório removido ou tornado privado: {name}", file=sys.stderr)
             continue
         known_names.add(name)
         lic_text, lic_status = resolve_license(remote)
         safe_html_url = validate_url(remote.get("html_url"), allow_relative=False) or repo.get("source_url") or f"https://github.com/{org}/{name}"
+        repo["source_url"] = safe_html_url
         repo["default_branch"] = remote.get("default_branch") or repo.get("default_branch", "main")
         repo["license"] = lic_text
         repo["license_status"] = lic_status
@@ -428,7 +436,7 @@ def sync_repositories(
         data["updated_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
         _atomic_write(data_file, json.dumps(data, indent=2, ensure_ascii=False) + "\n")
 
-    html_changed = update_index_html(updated_repos, index_file)
+    html_changed = update_index_html(updated_repos, index_file, org=org)
     return updated_repos, (data_changed or html_changed)
 
 

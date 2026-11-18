@@ -8,11 +8,6 @@ on:
   schedule:
     - cron: '0 6 * * *'
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -20,13 +15,17 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      sha: ${{ steps.final_sha.outputs.sha }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - name: Run unit tests before sync
-        run: python3 -m unittest discover -s tests -v
+        run: PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
       - name: Update repository metadata and render static cards
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -35,7 +34,8 @@ jobs:
         run: |
           node --check app.js
           python3 scripts/sync-repos.py --render-only
-          python3 -m unittest discover -s tests -v
+          git diff --exit-code index.html
+          PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
       - name: Commit synced catalog changes if any
         run: |
           if [ -n "$(git status --porcelain data/repositories.json index.html)" ]; then
@@ -45,21 +45,28 @@ jobs:
             git commit -m "chore: sync repository metadata"
             git push
           fi
+      - name: Record validated SHA
+        id: final_sha
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
   deploy:
     needs: sync
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ needs.sync.outputs.sha }}
       - name: Prepare static site artifact
         run: |
           mkdir -p _site
-          cp -a index.html styles.css app.js assets data extensoes project-nox-tracker project-nox-scan-staff LICENSE _site/
+          cp -a index.html styles.css app.js assets data extensoes project-nox-tracker project-nox-scan-staff LICENSE NOTICE _site/
           for f in 404.html robots.txt sitemap.xml favicon.ico; do
             if [ -e "$f" ]; then cp -a "$f" _site/; fi
           done
