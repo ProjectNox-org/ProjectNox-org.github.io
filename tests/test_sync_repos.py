@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import importlib.util
+import io
 import json
 import tempfile
 import unittest
+import urllib.error
 from pathlib import Path
 
 SCRIPT_PATH = Path(__file__).resolve().parent.parent / "scripts" / "sync-repos.py"
@@ -71,7 +73,14 @@ class SyncReposTests(unittest.TestCase):
         index_file.write_text(SAMPLE_INDEX, encoding="utf-8")
         return tmp, data_file, index_file
 
-    def test_agpl_unlicensed_other_and_new_repo(self):
+    def test_url_validation(self):
+        self.assertEqual(sync_repos.validate_url("https://github.com/ProjectNox-org"), "https://github.com/ProjectNox-org")
+        self.assertEqual(sync_repos.validate_url("extensoes/#mihon"), "extensoes/#mihon")
+        self.assertIsNone(sync_repos.validate_url("javascript:alert(1)"))
+        self.assertIsNone(sync_repos.validate_url("data:text/html,<script>"))
+        self.assertIsNone(sync_repos.validate_url("//evil.example.com"))
+
+    def test_agpl_variants_unlicensed_other_missing_readme_and_xss(self):
         tmp, data_file, index_file = self._make_env(
             [
                 {
@@ -82,6 +91,7 @@ class SyncReposTests(unittest.TestCase):
                     "description": "Plataforma.",
                     "source_url": "https://github.com/ProjectNox-org/repo-agpl",
                     "docs_url": "https://github.com/ProjectNox-org/repo-agpl#readme",
+                    "specific_action": {"label": "Bad", "url": "javascript:alert(1)", "external": True},
                 },
                 {
                     "name": "repo-removed",
@@ -99,7 +109,7 @@ class SyncReposTests(unittest.TestCase):
                 "name": "repo-agpl",
                 "private": False,
                 "default_branch": "main",
-                "license": {"spdx_id": "AGPL-3.0"},
+                "license": {"spdx_id": "AGPL-3.0-only"},
                 "html_url": "https://github.com/ProjectNox-org/repo-agpl",
             },
             {
@@ -117,43 +127,62 @@ class SyncReposTests(unittest.TestCase):
                 "private": False,
                 "default_branch": "main",
                 "license": {"spdx_id": "Apache-2.0"},
-                "description": "Special <script>alert(1)</script> & \"quotes\"",
+                "description": 'Special <script>alert(1)</script> & "quotes"',
                 "language": "Python",
-                "homepage": "https://example.com",
+                "homepage": "javascript:alert(2)",
                 "html_url": "https://github.com/ProjectNox-org/repo-apache",
             },
         ]
 
+        def fake_urlopen(req, timeout=20):
+            url = req.full_url
+            if "/readme" in url:
+                if "repo-unlicensed" in url:
+                    raise urllib.error.HTTPError(url, 404, "Not Found", {}, io.BytesIO(b""))
+                return _FakeResp({"name": "README.md"})
+            return _FakeResp(api_items)
+
         repos, changed = sync_repos.sync_repositories(
             data_file=data_file,
             index_file=index_file,
-            urlopen_fn=lambda req, timeout=20: _FakeResp(api_items),
+            urlopen_fn=fake_urlopen,
         )
         self.assertTrue(changed)
-        names = [r["name"] for r in repos]
-        self.assertEqual(names, ["repo-agpl", "repo-apache", "repo-unlicensed"])
-
         by_name = {r["name"]: r for r in repos}
         self.assertEqual(by_name["repo-agpl"]["license_status"], "verified_agpl")
         self.assertEqual(by_name["repo-unlicensed"]["license"], "Licença não identificada")
         self.assertEqual(by_name["repo-unlicensed"]["license_status"], "unidentified")
+        self.assertEqual(by_name["repo-unlicensed"]["category"], "other")
+        self.assertEqual(by_name["repo-unlicensed"]["category_label"], "Outros projetos")
+        self.assertIsNone(by_name["repo-unlicensed"]["docs_url"])
         self.assertEqual(by_name["repo-apache"]["license"], "Apache-2.0")
         self.assertEqual(by_name["repo-apache"]["license_status"], "verified_other")
+        self.assertIsNone(by_name["repo-apache"]["specific_action"])
 
         html_out = index_file.read_text(encoding="utf-8")
+        self.assertNotIn("javascript:alert", html_out)
         self.assertNotIn("<script>alert(1)</script>", html_out)
         self.assertIn("&lt;script&gt;alert(1)&lt;/script&gt;", html_out)
+        self.assertIn("Sem README", html_out)
         self.assertIn("3 projetos disponíveis", html_out)
         self.assertIn("1 de 3 repositórios públicos verificados", html_out)
-        self.assertIn("Todos (3)", html_out)
+        self.assertIn("Outros projetos (2)", html_out)
 
-        # Idempotency check: second run with identical data makes zero changes
         _, changed_again = sync_repos.sync_repositories(
             data_file=data_file,
             index_file=index_file,
-            urlopen_fn=lambda req, timeout=20: _FakeResp(api_items),
+            urlopen_fn=fake_urlopen,
         )
         self.assertFalse(changed_again)
+
+        # --render-only mode must render without network calls
+        repos_ro, changed_ro = sync_repos.sync_repositories(
+            data_file=data_file,
+            index_file=index_file,
+            render_only=True,
+        )
+        self.assertEqual(len(repos_ro), 3)
+        self.assertFalse(changed_ro)
 
     def test_pagination_and_api_failure_preservation(self):
         tmp, data_file, index_file = self._make_env(
@@ -171,6 +200,8 @@ class SyncReposTests(unittest.TestCase):
 
         def paged_urlopen(req, timeout=20):
             url = req.full_url
+            if "/readme" in url:
+                return _FakeResp({"name": "README.md"})
             if "page=1" in url:
                 return _FakeResp(
                     [{"name": "repo-1", "private": False, "license": {"spdx_id": "AGPL-3.0"}, "html_url": "https://github.com/ProjectNox-org/repo-1"}],
@@ -187,7 +218,6 @@ class SyncReposTests(unittest.TestCase):
         )
         self.assertEqual(len(repos), 2)
 
-        # API failure must raise and preserve existing catalog intact
         before_json = data_file.read_text(encoding="utf-8")
         with self.assertRaises(RuntimeError):
             sync_repos.sync_repositories(

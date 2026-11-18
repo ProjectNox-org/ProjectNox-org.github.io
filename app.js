@@ -8,11 +8,12 @@
       .replace(/[\u0300-\u036f]/g, '');
   }
 
-  // Accessible installation tabs (Manga vs Anime) on /extensoes/
+  // Accessible installation tabs (Progressive Enhancement: both panels visible when JS is disabled)
   const tabButtons = Array.from(document.querySelectorAll('[role="tab"]'));
   const tabPanels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
 
-  function activateTab(btn) {
+  function activateTab(btn, updateHash = false) {
+    if (!btn) return;
     const targetId = btn.getAttribute('aria-controls');
     tabButtons.forEach((b) => {
       const selected = b === btn;
@@ -22,10 +23,28 @@
     tabPanels.forEach((panel) => {
       panel.hidden = panel.id !== targetId;
     });
+    if (updateHash) {
+      const targetHash = btn.id === 'tab-anime' ? '#aniyomi' : '#mihon';
+      if (window.location.hash.toLowerCase() !== targetHash) {
+        history.replaceState(null, '', targetHash);
+      }
+    }
+  }
+
+  function syncTabFromHash() {
+    if (tabButtons.length === 0) return;
+    const hash = window.location.hash.toLowerCase();
+    const animeTab = document.getElementById('tab-anime');
+    const mangaTab = document.getElementById('tab-manga');
+    if (hash === '#aniyomi' && animeTab) {
+      activateTab(animeTab, false);
+    } else if (mangaTab) {
+      activateTab(mangaTab, false);
+    }
   }
 
   tabButtons.forEach((btn, idx) => {
-    btn.addEventListener('click', () => activateTab(btn));
+    btn.addEventListener('click', () => activateTab(btn, true));
     btn.addEventListener('keydown', (e) => {
       let nextIdx = null;
       if (e.key === 'ArrowRight') nextIdx = (idx + 1) % tabButtons.length;
@@ -35,17 +54,47 @@
       if (nextIdx !== null) {
         e.preventDefault();
         tabButtons[nextIdx].focus();
-        activateTab(tabButtons[nextIdx]);
+        activateTab(tabButtons[nextIdx], true);
       }
     });
   });
 
-  if (tabButtons.length > 0 && window.location.hash) {
-    const hash = window.location.hash.toLowerCase();
-    const animeTab = document.getElementById('tab-anime');
-    const mangaTab = document.getElementById('tab-manga');
-    if (hash === '#aniyomi' && animeTab) activateTab(animeTab);
-    if (hash === '#mihon' && mangaTab) activateTab(mangaTab);
+  if (tabButtons.length > 0) {
+    syncTabFromHash();
+    window.addEventListener('hashchange', syncTabFromHash);
+  }
+
+  // Optional ambient motion pause control
+  const motionToggle = document.getElementById('motion-toggle');
+  function applyMotionState(paused) {
+    if (paused) {
+      document.documentElement.setAttribute('data-motion', 'paused');
+    } else {
+      document.documentElement.removeAttribute('data-motion');
+    }
+    if (motionToggle) {
+      motionToggle.setAttribute('aria-pressed', String(paused));
+      motionToggle.textContent = paused ? 'Retomar animações' : 'Pausar animações';
+    }
+  }
+
+  if (motionToggle) {
+    let savedPaused = false;
+    try {
+      savedPaused = localStorage.getItem('nox-motion') === 'paused';
+    } catch {
+      savedPaused = false;
+    }
+    applyMotionState(savedPaused);
+    motionToggle.addEventListener('click', () => {
+      const nextPaused = document.documentElement.getAttribute('data-motion') !== 'paused';
+      applyMotionState(nextPaused);
+      try {
+        localStorage.setItem('nox-motion', nextPaused ? 'paused' : 'active');
+      } catch {
+        // ignore storage errors
+      }
+    });
   }
 
   // Copyable URL buttons with verified success feedback

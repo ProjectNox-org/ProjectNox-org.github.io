@@ -8,6 +8,9 @@ import json
 import os
 import re
 import sys
+import tempfile
+import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -17,6 +20,8 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA_FILE = ROOT / "data" / "repositories.json"
 INDEX_FILE = ROOT / "index.html"
 ORG = "ProjectNox-org"
+
+AGPL_SPDX_FAMILY = {"AGPL-3.0", "AGPL-3.0-only", "AGPL-3.0-or-later"}
 
 ICONS = {
     "book": '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
@@ -37,6 +42,7 @@ CATEGORY_ORDER = [
     ("tools", "Ferramentas & IA"),
     ("community", "Suporte"),
     ("institutional", "Institucional"),
+    ("other", "Outros projetos"),
 ]
 
 REPO_BTN_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>'
@@ -46,6 +52,36 @@ ACTION_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" strok
 
 def _default_urlopen(req: urllib.request.Request, timeout: int = 20):
     return urllib.request.urlopen(req, timeout=timeout)
+
+
+def _atomic_write(path: Path, content: str) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=str(path.parent))
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8") as handle:
+            handle.write(content)
+        os.replace(tmp_name, path)
+    except Exception:
+        if os.path.exists(tmp_name):
+            os.unlink(tmp_name)
+        raise
+
+
+def validate_url(url: str | None, allow_relative: bool = True) -> str | None:
+    """Allow only safe HTTP(S) URLs or safe relative paths; reject javascript:, data:, etc."""
+    if not url or not isinstance(url, str):
+        return None
+    cleaned = url.strip()
+    if not cleaned:
+        return None
+    parsed = urllib.parse.urlparse(cleaned)
+    if parsed.scheme:
+        if parsed.scheme.lower() in ("http", "https") and parsed.netloc:
+            return cleaned
+        return None
+    if allow_relative and not cleaned.startswith("//") and ":" not in cleaned.split("/", 1)[0]:
+        return cleaned
+    return None
 
 
 def _parse_next_link(link_header: str | None) -> str | None:
@@ -60,19 +96,23 @@ def _parse_next_link(link_header: str | None) -> str | None:
     return None
 
 
+def _build_headers() -> dict[str, str]:
+    headers = {
+        "Accept": "application/vnd.github+json",
+        "User-Agent": "ProjectNox-Portal-Sync/4.0",
+    }
+    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    return headers
+
+
 def fetch_org_repos(
     org: str = ORG,
     urlopen_fn: Callable = _default_urlopen,
 ) -> dict[str, dict]:
     """Fetch complete paginated list of public non-private repositories from GitHub."""
-    headers = {
-        "Accept": "application/vnd.github+json",
-        "User-Agent": "ProjectNox-Portal-Sync/3.0",
-    }
-    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-
+    headers = _build_headers()
     next_url: str | None = f"https://api.github.com/orgs/{org}/repos?per_page=100&type=public&page=1"
     collected: dict[str, dict] = {}
     pages_seen = 0
@@ -98,13 +138,32 @@ def fetch_org_repos(
     return collected
 
 
+def check_readme_exists(
+    org: str,
+    repo_name: str,
+    urlopen_fn: Callable = _default_urlopen,
+) -> bool:
+    """Verify whether a public repository exposes a README via GitHub API."""
+    url = f"https://api.github.com/repos/{org}/{repo_name}/readme"
+    req = urllib.request.Request(url, headers=_build_headers())
+    try:
+        with urlopen_fn(req, timeout=10) as resp:
+            return getattr(resp, "status", 200) == 200
+    except urllib.error.HTTPError as err:
+        if err.code == 404:
+            return False
+        return True
+    except Exception:
+        return True
+
+
 def resolve_license(remote: dict) -> tuple[str, str]:
     """Resolve license SPDX ID and verification status without guessing."""
     license_info = remote.get("license")
     if isinstance(license_info, dict):
         spdx = license_info.get("spdx_id")
         if spdx and spdx not in ("NOASSERTION", "NONE"):
-            status = "verified_agpl" if spdx == "AGPL-3.0" else "verified_other"
+            status = "verified_agpl" if spdx in AGPL_SPDX_FAMILY else "verified_other"
             return spdx, status
     return "Licença não identificada", "unidentified"
 
@@ -115,8 +174,8 @@ def esc(val: object) -> str:
 
 def render_card(repo: dict) -> str:
     icon_svg = ICONS.get(repo.get("icon", "code"), ICONS["code"])
-    cat_key = repo.get("category", "tools")
-    cat_label = repo.get("category_label", "Outros")
+    cat_key = repo.get("category", "other")
+    cat_label = repo.get("category_label", "Outros projetos")
     lic_text = repo.get("license") or "Licença não identificada"
     lic_status = repo.get("license_status", "unidentified")
     lic_class = "repo-license" if lic_status == "verified_agpl" else "repo-license neutral"
@@ -137,15 +196,35 @@ def render_card(repo: dict) -> str:
 
     specific_html = ""
     sa = repo.get("specific_action")
-    if isinstance(sa, dict) and sa.get("url") and sa.get("label"):
-        ext_attrs = ' target="_blank" rel="noopener noreferrer"' if sa.get("external") else ""
-        specific_html = (
-            f'                <div class="repo-primary-action">\n'
-            f'                  <a class="button primary sm repo-action-full" href="{esc(sa["url"])}"{ext_attrs}>\n'
-            f'                    {ACTION_ICON}\n'
-            f'                    <span>{esc(sa["label"])}</span>\n'
-            f'                  </a>\n'
-            f'                </div>\n'
+    if isinstance(sa, dict) and sa.get("label"):
+        safe_sa_url = validate_url(sa.get("url"), allow_relative=True)
+        if safe_sa_url:
+            ext_attrs = ' target="_blank" rel="noopener noreferrer"' if sa.get("external") else ""
+            specific_html = (
+                f'                <div class="repo-primary-action">\n'
+                f'                  <a class="button primary sm repo-action-full" href="{esc(safe_sa_url)}"{ext_attrs}>\n'
+                f'                    {ACTION_ICON}\n'
+                f'                    <span>{esc(sa["label"])}</span>\n'
+                f'                  </a>\n'
+                f'                </div>\n'
+            )
+
+    safe_source_url = validate_url(repo.get("source_url"), allow_relative=False) or "#"
+    safe_docs_url = validate_url(repo.get("docs_url"), allow_relative=True)
+
+    if safe_docs_url:
+        docs_btn = (
+            f'                    <a class="button secondary sm" href="{esc(safe_docs_url)}" target="_blank" rel="noopener noreferrer">\n'
+            f'                      {DOC_BTN_ICON}\n'
+            f'                      <span>Documentação</span>\n'
+            f'                    </a>'
+        )
+    else:
+        docs_btn = (
+            f'                    <span class="button secondary sm is-unavailable" aria-disabled="true">\n'
+            f'                      {DOC_BTN_ICON}\n'
+            f'                      <span>Sem README</span>\n'
+            f'                    </span>'
         )
 
     return (
@@ -168,14 +247,11 @@ def render_card(repo: dict) -> str:
         f'                <div class="repo-actions-wrap">\n'
         f'{specific_html}'
         f'                  <div class="repo-universal-actions">\n'
-        f'                    <a class="button secondary sm" href="{esc(repo.get("source_url") or "#")}" target="_blank" rel="noopener noreferrer">\n'
+        f'                    <a class="button secondary sm" href="{esc(safe_source_url)}" target="_blank" rel="noopener noreferrer">\n'
         f'                      {REPO_BTN_ICON}\n'
         f'                      <span>Repositório</span>\n'
         f'                    </a>\n'
-        f'                    <a class="button secondary sm" href="{esc(repo.get("docs_url") or "#")}" target="_blank" rel="noopener noreferrer">\n'
-        f'                      {DOC_BTN_ICON}\n'
-        f'                      <span>Documentação</span>\n'
-        f'                    </a>\n'
+        f'{docs_btn}\n'
         f'                  </div>\n'
         f'                </div>\n'
         f'              </article>'
@@ -186,7 +262,7 @@ def render_filters(repos: list[dict]) -> str:
     counts: dict[str, int] = {}
     labels: dict[str, str] = dict(CATEGORY_ORDER)
     for r in repos:
-        c = r.get("category", "tools")
+        c = r.get("category", "other")
         counts[c] = counts.get(c, 0) + 1
         if c not in labels:
             labels[c] = r.get("category_label", c.title())
@@ -207,15 +283,15 @@ def render_filters(repos: list[dict]) -> str:
     return "\n".join(chips)
 
 
-def render_agpl_summary(repos: list[dict]) -> str:
+def render_agpl_summary(repos: list[dict], org: str = ORG) -> str:
     total = len(repos)
     agpl_count = sum(1 for r in repos if r.get("license_status") == "verified_agpl")
     if total > 0 and agpl_count == total:
-        return f"Todos os {total} repositórios públicos verificados de ProjectNox-org adotam a GNU AGPL-3.0"
-    return f"{agpl_count} de {total} repositórios públicos verificados de ProjectNox-org adotam a GNU AGPL-3.0"
+        return f"Todos os {total} repositórios públicos verificados de {org} adotam a GNU AGPL-3.0"
+    return f"{agpl_count} de {total} repositórios públicos verificados de {org} adotam a GNU AGPL-3.0"
 
 
-def update_index_html(repos: list[dict], index_file: Path = INDEX_FILE) -> bool:
+def update_index_html(repos: list[dict], index_file: Path = INDEX_FILE, org: str = ORG) -> bool:
     if not index_file.exists():
         return False
     original = index_file.read_text(encoding="utf-8")
@@ -246,13 +322,13 @@ def update_index_html(repos: list[dict], index_file: Path = INDEX_FILE) -> bool:
 
     updated = re.sub(
         r"<!-- REPO_AGPL_SUMMARY_START -->.*?<!-- REPO_AGPL_SUMMARY_END -->",
-        f"<!-- REPO_AGPL_SUMMARY_START -->{esc(render_agpl_summary(repos))}<!-- REPO_AGPL_SUMMARY_END -->",
+        f"<!-- REPO_AGPL_SUMMARY_START -->{esc(render_agpl_summary(repos, org))}<!-- REPO_AGPL_SUMMARY_END -->",
         updated,
         flags=re.DOTALL,
     )
 
     if updated != original:
-        index_file.write_text(updated, encoding="utf-8")
+        _atomic_write(index_file, updated)
         return True
     return False
 
@@ -263,20 +339,20 @@ def sync_repositories(
     render_only: bool = False,
     urlopen_fn: Callable = _default_urlopen,
 ) -> tuple[list[dict], bool]:
-    """Sync metadata idempotently and update index.html."""
+    """Sync metadata idempotently and update index.html atomically."""
     data = json.loads(data_file.read_text(encoding="utf-8"))
     original_repos = json.loads(json.dumps(data.get("repositories", [])))
+    org = data.get("organization", ORG)
 
     if render_only:
         repos = data.get("repositories", [])
         html_changed = update_index_html(repos, index_file)
         return repos, html_changed
 
-    live = fetch_org_repos(org=data.get("organization", ORG), urlopen_fn=urlopen_fn)
+    live = fetch_org_repos(org=org, urlopen_fn=urlopen_fn)
     if not live:
         raise RuntimeError("Empty repository inventory returned; aborting to protect catalog")
 
-    # Keep only repositories confirmed still public in the full paginated inventory
     updated_repos: list[dict] = []
     known_names: set[str] = set()
     for repo in data.get("repositories", []):
@@ -293,28 +369,29 @@ def sync_repositories(
             repo["description"] = remote.get("description") or "Repositório público da organização ProjectNox-org."
         updated_repos.append(repo)
 
-    # Append newly discovered public repositories without inventing descriptions
     for name in sorted(set(live.keys()) - known_names):
         remote = live[name]
         lic_text, lic_status = resolve_license(remote)
-        homepage = remote.get("homepage")
+        safe_html_url = validate_url(remote.get("html_url"), allow_relative=False) or f"https://github.com/{org}/{name}"
+        safe_homepage = validate_url(remote.get("homepage"), allow_relative=False)
+        has_readme = check_readme_exists(org, name, urlopen_fn=urlopen_fn)
         updated_repos.append(
             {
                 "name": name,
                 "title": name,
-                "category": "tools",
-                "category_label": "Ferramentas & IA",
+                "category": "other",
+                "category_label": "Outros projetos",
                 "icon": "code",
                 "description": remote.get("description") or "Repositório público da organização ProjectNox-org.",
-                "meta": remote.get("language") or remote.get("default_branch") or "main",
+                "meta": remote.get("language") or remote.get("default_branch") or "Repositório público",
                 "license": lic_text,
                 "license_status": lic_status,
                 "default_branch": remote.get("default_branch") or "main",
-                "source_url": remote.get("html_url") or f"https://github.com/{ORG}/{name}",
-                "docs_url": f'{remote.get("html_url") or f"https://github.com/{ORG}/{name}"}#readme',
+                "source_url": safe_html_url,
+                "docs_url": f"{safe_html_url}#readme" if has_readme else None,
                 "specific_action": (
-                    {"label": "Acessar serviço", "url": homepage, "external": True}
-                    if homepage
+                    {"label": "Acessar serviço", "url": safe_homepage, "external": True}
+                    if safe_homepage
                     else None
                 ),
                 "search_keywords": (remote.get("language") or "").lower(),
@@ -326,7 +403,7 @@ def sync_repositories(
     if data_changed:
         data["repositories"] = updated_repos
         data["updated_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-        data_file.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        _atomic_write(data_file, json.dumps(data, indent=2, ensure_ascii=False) + "\n")
 
     html_changed = update_index_html(updated_repos, index_file)
     return updated_repos, (data_changed or html_changed)
