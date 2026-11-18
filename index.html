@@ -35,13 +35,18 @@
     />
 
     <script>document.documentElement.classList.add('js');</script>
-    <link rel="stylesheet" href="styles.css?v=7.0.0" />
+    <link rel="stylesheet" href="styles.css?v=7.1.0" />
     <title>Project Nox — Central Oficial</title>
   </head>
   <body>
     <a class="skip-link" href="#conteudo-principal">Pular para o conteúdo</a>
-    <div class="cosmic-backdrop" aria-hidden="true">
-      <div class="cosmic-orb"></div>
+    <div class="particle-system" id="particle-system" aria-hidden="true">
+      <div class="ambient-mesh"></div>
+      <div class="ambient-glow glow-top"></div>
+      <div class="ambient-glow glow-side"></div>
+      <div class="ambient-glow glow-bottom-left"></div>
+      <canvas class="particle-canvas"></canvas>
+      <div class="night-vignette"></div>
     </div>
 
     <div class="app-shell">
@@ -1007,6 +1012,7 @@
       </footer>
     </div>
 
-    <script src="app.js?v=7.0.0" defer></script>
+    <script src="particles.js?v=1.0.0" defer></script>
+    <script src="app.js?v=7.1.0" defer></script>
   </body>
 </html>

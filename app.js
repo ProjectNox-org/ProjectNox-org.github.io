@@ -193,6 +193,7 @@
     const seq = ++motionRequestSeq;
     if (paused) {
       document.documentElement.setAttribute('data-motion', 'paused');
+      if (window.__noxParticles) window.__noxParticles.pause();
       updateMotionToggleUi(true, true);
       const { ok } = await pauseBannerSvgs(seq);
       if (seq === motionRequestSeq && document.documentElement.getAttribute('data-motion') === 'paused') {
@@ -200,6 +201,7 @@
       }
     } else {
       document.documentElement.removeAttribute('data-motion');
+      if (window.__noxParticles) window.__noxParticles.resume();
       resumeBannerSvgs();
       updateMotionToggleUi(false, true);
     }

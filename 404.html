@@ -5,10 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Project Nox — Página não encontrada</title>
     <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="stylesheet" href="/styles.css?v=7.0.0" />
+    <link rel="stylesheet" href="/styles.css?v=7.1.0" />
   </head>
   <body>
-    <div class="cosmic-backdrop" aria-hidden="true"></div>
+    <div class="particle-system" id="particle-system" aria-hidden="true">
+      <div class="ambient-mesh"></div>
+      <div class="ambient-glow glow-top"></div>
+      <div class="ambient-glow glow-side"></div>
+      <div class="ambient-glow glow-bottom-left"></div>
+      <canvas class="particle-canvas"></canvas>
+      <div class="night-vignette"></div>
+    </div>
     <main style="min-height:100vh;display:grid;place-items:center;padding:24px;position:relative;z-index:1;">
       <section class="card" style="max-width:520px;text-align:center;align-items:center;">
         <img src="/assets/brand/nox-emblem.webp" alt="Project Nox" width="56" height="56" />
@@ -20,5 +27,6 @@
         </div>
       </section>
     </main>
+    <script src="/particles.js?v=1.0.0" defer></script>
   </body>
 </html>

@@ -85,58 +85,85 @@ body {
   overflow-x: hidden;
 }
 
-/* Tier 1: Global Cosmic Deep Space Backdrop */
-.cosmic-backdrop {
+html[data-motion="paused"] .particle-canvas {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particle-canvas {
+    display: none;
+  }
+}
+
+/* Tier 1: Global Cosmic Deep Space Backdrop (Canonical Project Nox Tracker b4e66a1) */
+.particle-system {
   position: fixed;
   inset: 0;
+  width: 100%;
+  height: 100%;
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse 80% 45% at 50% -6%, rgba(124, 58, 237, 0.19), transparent 62%),
-    radial-gradient(ellipse 50% 35% at 86% 12%, rgba(245, 158, 11, 0.08), transparent 58%),
-    radial-gradient(ellipse 60% 40% at 14% 85%, rgba(56, 189, 248, 0.05), transparent 60%),
-    linear-gradient(180deg, #04060d 0%, #070b16 52%, #04060d 100%);
+  contain: strict;
+  background: linear-gradient(145deg, #090611 0%, #07050d 48%, #0d0916 100%);
 }
 
-.cosmic-backdrop::before {
-  content: '';
+.ambient-mesh {
   position: absolute;
   inset: 0;
-  opacity: 0.42;
-  background-image:
-    radial-gradient(1px 1px at 11% 16%, rgba(248, 250, 252, 0.6) 50%, transparent 100%),
-    radial-gradient(1.3px 1.3px at 26% 38%, rgba(251, 191, 36, 0.48) 50%, transparent 100%),
-    radial-gradient(1px 1px at 44% 11%, rgba(248, 250, 252, 0.42) 50%, transparent 100%),
-    radial-gradient(1.4px 1.4px at 67% 28%, rgba(167, 139, 250, 0.52) 50%, transparent 100%),
-    radial-gradient(1px 1px at 85% 21%, rgba(248, 250, 252, 0.5) 50%, transparent 100%),
-    radial-gradient(1.2px 1.2px at 73% 64%, rgba(251, 191, 36, 0.32) 50%, transparent 100%),
-    radial-gradient(1px 1px at 19% 74%, rgba(248, 250, 252, 0.36) 50%, transparent 100%),
-    radial-gradient(1px 1px at 90% 80%, rgba(167, 139, 250, 0.38) 50%, transparent 100%);
+  background:
+    radial-gradient(ellipse 52% 38% at 50% 20%, rgba(226, 217, 245, 0.045) 0%, transparent 70%),
+    radial-gradient(ellipse 68% 54% at 14% 16%, rgba(103, 51, 168, 0.22) 0%, transparent 65%),
+    radial-gradient(ellipse 64% 58% at 86% 24%, rgba(73, 33, 133, 0.24) 0%, transparent 65%),
+    radial-gradient(ellipse 75% 60% at 50% 52%, rgba(124, 58, 237, 0.13) 0%, transparent 70%),
+    radial-gradient(ellipse 68% 58% at 18% 84%, rgba(92, 43, 154, 0.20) 0%, transparent 65%),
+    radial-gradient(ellipse 65% 56% at 85% 88%, rgba(67, 31, 119, 0.20) 0%, transparent 65%);
 }
 
-.cosmic-orb {
+.ambient-glow {
   position: absolute;
-  width: 560px;
-  height: 560px;
-  top: -200px;
+  border-radius: 50%;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+.glow-top {
+  width: min(1000px, 120vw);
+  height: 520px;
+  top: -160px;
   left: 50%;
   transform: translateX(-50%);
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(124, 58, 237, 0.2) 0%, rgba(245, 158, 11, 0.06) 45%, transparent 72%);
-  filter: blur(44px);
-  animation: orbDrift 22s ease-in-out infinite alternate;
+  background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.12) 0%, rgba(99, 102, 241, 0.05) 42%, transparent 72%);
 }
 
-@keyframes orbDrift {
-  0% {
-    transform: translate(-53%, 0) scale(0.96);
-    opacity: 0.72;
-  }
-  100% {
-    transform: translate(-47%, 16px) scale(1.05);
-    opacity: 0.92;
-  }
+.glow-side {
+  width: 680px;
+  height: 680px;
+  top: 28%;
+  right: -180px;
+  background: radial-gradient(circle, rgba(147, 51, 234, 0.10) 0%, rgba(79, 70, 229, 0.04) 48%, transparent 74%);
+}
+
+.glow-bottom-left {
+  width: 680px;
+  height: 680px;
+  bottom: -160px;
+  left: -140px;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.10) 0%, rgba(48, 23, 75, 0.05) 52%, transparent 74%);
+}
+
+.particle-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.night-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 54%, rgba(4, 3, 9, 0.52) 100%);
 }
 
 .app-shell {
