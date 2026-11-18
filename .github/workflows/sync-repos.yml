@@ -67,7 +67,7 @@ jobs:
       - name: Prepare static site artifact
         run: |
           mkdir -p _site
-          cp -a index.html styles.css app.js assets data extensoes project-nox-tracker project-nox-scan-staff LICENSE NOTICE _site/
+          cp -a index.html styles.css app.js particles.js assets data extensoes project-nox-tracker project-nox-scan-staff LICENSE NOTICE _site/
           for f in 404.html robots.txt sitemap.xml favicon.ico; do
             if [ -e "$f" ]; then cp -a "$f" _site/; fi
           done
