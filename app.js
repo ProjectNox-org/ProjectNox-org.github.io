@@ -81,7 +81,10 @@
         document.body.removeChild(tmp);
       }
 
-      const orig = btn.textContent;
+      const orig = btn.getAttribute('data-label') || btn.textContent;
+      btn.setAttribute('data-label', orig);
+      btn.classList.remove('copied', 'error');
+
       if (success) {
         btn.textContent = 'Copiado!';
         btn.classList.add('copied');
@@ -92,15 +95,17 @@
         if (liveStatus) liveStatus.textContent = 'Não foi possível copiar automaticamente.';
       }
 
-      setTimeout(() => {
+      clearTimeout(btn._copyTimer);
+      btn._copyTimer = setTimeout(() => {
         btn.textContent = orig;
         btn.classList.remove('copied', 'error');
       }, 1800);
     });
   });
 
-  // Repository directory accent-insensitive search & keyboard-accessible filters
+  // Repository directory accent-insensitive search, clear button & keyboard-accessible filters
   const searchInput = document.getElementById('repo-search');
+  const searchClear = document.getElementById('repo-clear');
   const filterChips = Array.from(document.querySelectorAll('.filter-chip'));
   const repoCards = Array.from(document.querySelectorAll('.repo-card'));
   const directoryStatus = document.getElementById('directory-status');
@@ -125,11 +130,15 @@
         if (visible) visibleCount += 1;
       });
 
+      if (searchClear) {
+        searchClear.hidden = searchTerm.length === 0;
+      }
+
       if (directoryStatus) {
         directoryStatus.textContent =
-          visibleCount === repoCards.length
-            ? `Exibindo todos os ${repoCards.length} repositórios públicos da organização.`
-            : `Exibindo ${visibleCount} de ${repoCards.length} repositórios públicos.`;
+          visibleCount === repoCards.length && activeCategory === 'all' && !query
+            ? `${repoCards.length} projetos disponíveis`
+            : `${visibleCount} de ${repoCards.length} projetos`;
       }
 
       if (emptyState) {
@@ -159,6 +168,17 @@
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
         searchTerm = e.target.value || '';
+        applyDirectoryFilters();
+      });
+    }
+
+    if (searchClear) {
+      searchClear.addEventListener('click', () => {
+        searchTerm = '';
+        if (searchInput) {
+          searchInput.value = '';
+          searchInput.focus();
+        }
         applyDirectoryFilters();
       });
     }
