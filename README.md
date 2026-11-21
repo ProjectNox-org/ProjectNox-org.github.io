@@ -23,6 +23,7 @@ Embora diversos membros conheçam o projeto pelas extensões gratuitas para mang
 
 - **Portal e diretório de projetos:** navegue pela [Central Oficial](https://projectnox-org.github.io/) ou vá direto ao [Diretório de Projetos](https://projectnox-org.github.io/#repositorios) com busca e filtros por categoria.
 - **Instalar extensões gratuitas:** siga o passo a passo no [Guia Oficial de Extensões](https://projectnox-org.github.io/extensoes/) para configurar Mihon, Aniyomi e aplicativos compatíveis.
+- **Abrir uma solicitação:** peça novas extensões, reporte problemas, envie sugestões ou informe mudanças de domínio pela [Central de Pedidos](https://github.com/ProjectNox-org/project-nox-requests/issues/new/choose) (requer conta gratuita no GitHub).
 - **Acompanhar pedidos e correções:** consulte solicitações abertas e encerradas no [Tracker de Extensões](https://projectnox-org.github.io/project-nox-tracker/).
 - **Explorar repositórios no GitHub:** acesse todos os projetos públicos na organização [`ProjectNox-org`](https://github.com/ProjectNox-org).
 - **Pedir ajuda e conversar:** participe da comunidade pelo [Discord oficial](https://discord.com/invite/qNAMYUEmGj) ou pelo [Fluxer oficial](https://web.canary.fluxer.app/invite/q456UCVt).
@@ -49,9 +50,9 @@ Cada canal do Project Nox tem uma finalidade específica:
 
 ## Código aberto e contribuição
 
-O Project Nox disponibiliza seus repositórios publicamente sob a licença **GNU Affero General Public License v3.0 (`AGPL-3.0`)** (consulte [`LICENSE`](LICENSE)). Isso garante a liberdade de usar, estudar, modificar e redistribuir o código-fonte, preservando atribuições e exigindo a disponibilização do código correspondente em distribuições e interações remotas por rede (Seção 13).
+O Project Nox disponibiliza seus repositórios publicamente sob a licença **GNU Affero General Public License v3.0 (`AGPL-3.0`)** (consulte [`LICENSE`](LICENSE)). A licença permite utilizar, estudar, modificar e redistribuir o software conforme seus termos — exigindo a preservação das atribuições e a disponibilização do código-fonte correspondente quando prevista pela licença, inclusive aos usuários de **versões modificadas** operadas com interação remota por rede (Seção 13).
 
-A licença AGPL-3.0 é compatível com diferentes usos previstos em seus termos legais; em paralelo, como política institucional do projeto, **todas as extensões oficiais do Project Nox são distribuídas gratuitamente**.
+Dentro dos termos legais da AGPL-3.0, diferentes usos são permitidos (inclusive comerciais); em paralelo, como política institucional do projeto, **todas as extensões oficiais do Project Nox são distribuídas gratuitamente**.
 
 Quer colaborar com código, correções ou documentação? Leia o [Guia de Contribuição oficial](https://github.com/ProjectNox-org/.github/blob/main/CONTRIBUTING.md) antes de abrir *issues* ou *pull requests*.
 
@@ -64,7 +65,7 @@ A Central Oficial é um site estático construído com HTML, CSS e JavaScript pu
 
 ### Requisitos e estrutura principal
 
-- **Execução local e scripts:** Python 3 (`scripts/sync-repos.py` usa apenas biblioteca padrão e anotações modernas de tipo; o workflow oficial utiliza Python `3.12`).
+- **Execução local e scripts:** Python `3.12` é a versão utilizada e validada no workflow oficial do GitHub Actions (`scripts/sync-repos.py` usa apenas a biblioteca padrão, com recursos de tipagem como `X | Y` introduzidos no Python 3.10). Outras versões recentes de Python 3 podem funcionar, mas não são garantidas por essa configuração.
 - **Validação JavaScript:** Node.js (usado apenas na verificação de sintaxe `node --check app.js`).
 - **Arquivos principais:**
   - `index.html` e `styles.css`: página institucional, seção AGPL-3.0, diretório estático, design responsivo e suporte a `prefers-reduced-motion`.
@@ -86,7 +87,7 @@ python3 -m http.server 8000
 
 Acesse `http://localhost:8000/` e `http://localhost:8000/extensoes/` no navegador.
 
-> **Nota de ambiente local:** Rotas hospedadas em outros repositórios da organização (como `/project-nox-tracker/`) são servidas em produção pelo GitHub Pages e não estão incluídas no servidor local deste repositório.
+> **Nota de ambiente local:** Este repositório contém páginas de redirecionamento para algumas rotas históricas (como `/project-nox-tracker/` e `/project-nox-scan-staff/`), mas não inclui o código completo dessas aplicações. O Tracker é mantido e publicado separadamente em seu próprio repositório.
 
 ### Sincronização do catálogo
 
