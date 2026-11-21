@@ -1654,6 +1654,7 @@ code {
   min-width: 0;
 }
 
+.steps-box h2,
 .steps-box h4 {
   margin: 0 0 12px;
   font-size: 1rem;
@@ -1846,8 +1847,14 @@ code {
     gap: 8px;
   }
 
+  .brand-title-row {
+    overflow: hidden;
+  }
+
   .brand-name {
     font-size: 0.96rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .brand-badge {
@@ -1873,21 +1880,38 @@ code {
   }
 }
 
-@media (max-width: 390px) {
+@media (max-width: 540px) {
   .brand-badge {
     display: none;
   }
 
   .brand-name {
-    font-size: 0.86rem;
+    font-size: 0.9rem;
   }
 
-  .header-inner {
+  .header-inner,
+  .header-community-group {
     gap: 8px;
+  }
+
+  .header-community-btn {
+    gap: 6px;
+    padding: 0 10px;
   }
 }
 
-@media (max-width: 350px) {
+@media (max-width: 415px) {
+  .brand-name {
+    font-size: 0.86rem;
+  }
+}
+
+@media (max-width: 389px) {
+  .header-community-btn {
+    width: 44px;
+    padding: 0;
+  }
+
   .community-btn-text {
     display: none;
   }

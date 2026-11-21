@@ -31,7 +31,7 @@
     />
 
     <script>document.documentElement.classList.add('js');</script>
-    <link rel="stylesheet" href="../styles.css?v=7.2.0" />
+    <link rel="stylesheet" href="../styles.css?v=7.3.0" />
     <title>Instale as extensões — Project Nox</title>
   </head>
   <body>
@@ -48,7 +48,7 @@
     <div class="app-shell">
       <header class="site-header">
         <div class="container header-inner">
-          <a class="brand" href="../" aria-label="Voltar à Central Oficial do Project Nox">
+          <a class="brand" href="../" aria-label="Project Nox — Extensões (voltar à Central Oficial)">
             <span class="brand-mark">
               <img src="../assets/brand/nox-emblem.webp?v=8.1.0" alt="" width="28" height="28" />
             </span>
@@ -143,7 +143,7 @@
                         <span class="pill">Padrão atual</span>
                       </div>
                       <div class="copy-row">
-                        <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.pb</code>
+                        <code class="copy-code" tabindex="0">https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.pb</code>
                         <button
                           class="copy-btn"
                           type="button"
@@ -156,11 +156,11 @@
 
                     <div class="url-item">
                       <div class="url-label-row">
-                        <span class="url-label">3. Formatos alternativos (clientes mais antigos)</span>
+                        <span class="url-label">3. Alternativa em JSON (caso <code>index.pb</code> não seja aceito)</span>
                         <span class="pill">Compatibilidade</span>
                       </div>
                       <div class="copy-row" style="margin-bottom: 10px;">
-                        <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.min.json</code>
+                        <code class="copy-code" tabindex="0">https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.min.json</code>
                         <button
                           class="copy-btn"
                           type="button"
@@ -169,8 +169,11 @@
                           Copiar
                         </button>
                       </div>
+                      <p style="margin: 0 0 8px; font-size: 0.82rem; color: var(--text-muted);">
+                        Formato adicional v2 completo (<code>index.json</code>, com metadados e <code>extensionList</code>):
+                      </p>
                       <div class="copy-row">
-                        <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.json</code>
+                        <code class="copy-code" tabindex="0">https://raw.githubusercontent.com/ProjectNox-org/manga-extensoes/repo/index.json</code>
                         <button
                           class="copy-btn"
                           type="button"
@@ -183,12 +186,12 @@
                   </div>
 
                   <div class="steps-box">
-                    <h4>Passo a passo no Mihon ou fork</h4>
+                    <h2>Passo a passo no Mihon ou fork</h2>
                     <ol class="step-list">
-                      <li>Abra o aplicativo e acesse <strong>Mais</strong> → <strong>Configurações</strong> → <strong>Navegar</strong>.</li>
-                      <li>Entre em <strong>Repositórios de extensões</strong> e toque em <strong>Adicionar</strong>.</li>
-                      <li>Cole a URL <code>index.pb</code> (ou um dos formatos JSON caso seu fork exija).</li>
-                      <li>Volte à aba <strong>Extensões</strong>, atualize a lista e instale as fontes desejadas.</li>
+                      <li>Abra o <strong>Mihon</strong> (ou fork compatível) e acesse <strong>Mais</strong> → <strong>Configurações</strong> → <strong>Navegar</strong> → <strong>Loja de extensões</strong> <em>(em versões anteriores ou forks, pode aparecer como <strong>Repositórios de extensões</strong>)</em>.</li>
+                      <li>Toque em <strong>Adicionar loja de extensões</strong> (ou <strong>Adicionar</strong> / <code>+</code>).</li>
+                      <li>Cole a URL <code>index.pb</code> (ou <code>index.min.json</code> caso o aplicativo não aceite o formato principal).</li>
+                      <li>Confirme, volte à aba <strong>Navegar</strong> → <strong>Extensões</strong>, atualize a lista e instale as fontes desejadas.</li>
                     </ol>
                   </div>
                 </div>
@@ -220,7 +223,7 @@
                         <span class="pill">Padrão atual</span>
                       </div>
                       <div class="copy-row">
-                        <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.pb</code>
+                        <code class="copy-code" tabindex="0">https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.pb</code>
                         <button
                           class="copy-btn"
                           type="button"
@@ -233,11 +236,11 @@
 
                     <div class="url-item">
                       <div class="url-label-row">
-                        <span class="url-label">3. Formatos alternativos (clientes mais antigos)</span>
+                        <span class="url-label">3. Alternativa em JSON (caso <code>index.pb</code> não seja aceito)</span>
                         <span class="pill">Compatibilidade</span>
                       </div>
                       <div class="copy-row" style="margin-bottom: 10px;">
-                        <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.min.json</code>
+                        <code class="copy-code" tabindex="0">https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.min.json</code>
                         <button
                           class="copy-btn"
                           type="button"
@@ -246,33 +249,26 @@
                           Copiar
                         </button>
                       </div>
-                      <div class="copy-row">
-                        <code class="copy-code">https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.json</code>
-                        <button
-                          class="copy-btn"
-                          type="button"
-                          data-copy="https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.json"
-                        >
-                          Copiar
-                        </button>
-                      </div>
+                      <p style="margin: 0; font-size: 0.82rem; color: var(--text-muted); overflow-wrap: anywhere;">
+                        Arquivo adicional do catálogo legado (não recomendado para importação manual padrão; prefira <code>index.pb</code> ou <code>index.min.json</code>): <a href="https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.json" target="_blank" rel="noopener noreferrer" style="color: var(--text-secondary);"><code>https://raw.githubusercontent.com/ProjectNox-org/anime-extensoes/repo/index.json</code></a>
+                      </p>
                     </div>
                   </div>
 
                   <div class="steps-box">
-                    <h4>Passo a passo no Aniyomi ou fork</h4>
+                    <h2>Passo a passo no Aniyomi ou fork</h2>
                     <ol class="step-list">
-                      <li>Abra o Aniyomi e vá em <strong>Mais</strong> → <strong>Configurações</strong> → <strong>Navegar</strong>.</li>
-                      <li>Toque em <strong>Repositórios de extensões de anime</strong> → <strong>Adicionar</strong>.</li>
-                      <li>Cole a URL <code>index.pb</code> (ou um dos formatos JSON caso seu fork exija).</li>
-                      <li>Atualize a lista de extensões de anime e confie nos pacotes assinados do Project Nox.</li>
+                      <li>Abra o <strong>Aniyomi</strong> e vá em <strong>Mais</strong> → <strong>Configurações</strong> → <strong>Navegar</strong> → <strong>Repositório de extensões de anime</strong> <em>(no <strong>Anikku</strong> e em alguns forks, aparece como <strong>Repositórios de extensões</strong>)</em>.</li>
+                      <li>Toque em <strong>Adicionar</strong> (<code>+</code>).</li>
+                      <li>Cole a URL <code>index.pb</code> (ou <code>index.min.json</code> caso o aplicativo não aceite o formato principal).</li>
+                      <li>Confirme, volte à aba <strong>Navegar</strong> → <strong>Extensões de Anime</strong> (ou <strong>Extensões</strong>), atualize a lista e confie nos pacotes assinados do Project Nox.</li>
                     </ol>
                   </div>
                 </div>
               </div>
 
               <div class="callout">
-                <strong>Nota técnica sobre compatibilidade:</strong> os links automáticos <code>tachiyomi://</code> e <code>aniyomi://</code> utilizam <code>index.min.json</code> para compatibilidade com a especificação de deep-link dos aplicativos Android. Nem todos os forks oferecem suporte ao formato <code>index.pb</code>; caso ocorra erro ao adicionar manualmente, utilize <code>index.min.json</code> ou <code>index.json</code>.
+                <strong>Nota técnica sobre compatibilidade:</strong> os links automáticos <code>tachiyomi://</code> e <code>aniyomi://</code> utilizam <code>index.min.json</code> para compatibilidade com a especificação de deep-link dos aplicativos Android. Na importação manual, utilize preferencialmente <code>index.pb</code>; caso o aplicativo não aceite esse formato, utilize <code>index.min.json</code> como alternativa.
               </div>
             </div>
           </div>
